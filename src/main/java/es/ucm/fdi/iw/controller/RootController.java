@@ -36,4 +36,11 @@ public class RootController {
     public String index(Model model) {
         return "index";
     }
+
+    
+	@GetMapping("/clasificacion")
+    public String clasificacion(Model model) {
+        return "clasificacion";
+    }
+
 }
