@@ -32,6 +32,11 @@ public class RootController {
         return "login";
     }
 
+    @GetMapping("/game")
+    public String game(Model model) {
+        return "game";
+    }
+
 	@GetMapping("/")
     public String index(Model model) {
         return "index";
