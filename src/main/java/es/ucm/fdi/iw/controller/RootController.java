@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  *  Non-authenticated requests only.
@@ -36,6 +38,12 @@ public class RootController {
     public String game(Model model) {
         return "game";
     }
+    
+    @GetMapping("/configuracion")
+    public String configuracion(Model model) {
+        return "configuracion";
+    }
+    
 
 	@GetMapping("/")
     public String index(Model model) {

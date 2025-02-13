@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>IW: Configuración</title>
+</head>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav :: nav}"></header>
+    <main class="flex-shrink-0">
+        <div class="container">
+            <form action="/" method="post" class="container mt-4"> <!--Inlcuir ruta al crear partida-->
+                <h2>Configuración de partida</h2>
+            
+                <!-- Número de jugadores -->
+                <div class="mb-3">
+                    <label for="numJugadores" class="form-label">Número de jugadores</label>
+                    <select class="form-select" id="numJugadores" name="numJugadores" required>
+                        <option value="2">2 jugadores</option>
+                        <option value="3">3 jugadores</option>
+                        <option value="4">4 jugadores</option>
+                        <option value="5">5 jugadores</option>
+                        <option value="6">6 jugadores</option>
+                    </select>
+                </div>
+            
+                <!-- Modo de juego -->
+                <div class="mb-3">
+                    <label class="form-label">Modo de juego</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="modoJuego" id="clasico" value="clasico" checked>
+                        <label class="form-check-label" for="clasico">Clásico</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="modoJuego" id="equipos" value="equipos">
+                        <label class="form-check-label" for="equipos">Por equipos</label>
+                    </div>
+                </div>
+            
+                <!-- Tipo de partida -->
+                <div class="mb-3">
+                    <label class="form-label">Tipo de partida</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoPartida" id="enLinea" value="enLinea" checked>
+                        <label class="form-check-label" for="enLinea">En línea</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="tipoPartida" id="localBots" value="localBots">
+                        <label class="form-check-label" for="localBots">Local</label>
+                    </div>
+                </div>
+            
+                <!-- Botón para enviar -->
+                <button type="submit" class="btn btn-primary">Crear partida</button>
+            </form>
+            
+        </div>
+    </main>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+</html>

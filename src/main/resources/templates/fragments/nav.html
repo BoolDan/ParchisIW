@@ -15,6 +15,7 @@
                 <a class="navbar-brand" th:href="@{/}" href="/">
                     <img th:src="@{/img/logo.png}" src="/img/logo.png" alt="logo IW" width="32" height="32" class="d-inline-block align-text-top"> IW 2024-25
                 </a>
+
                 <!-- menu hamburguesa si no cabe todo -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon">
@@ -23,7 +24,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item mx-3">
+                            <a class="nav-link" th:href="@{/configuracion}" href="/configuracion">Configuración</a>
+                        </li>
+
                         <th:block th:if="${u}">
+                            
                             <li class="nav-item mx-3">
                                 <a class="nav-link" th:if="${u.hasRole('ADMIN')}" th:href="@{/admin/}">Administrador</a>
                             </li>
@@ -46,6 +52,7 @@
                             </li>
                         </th:block>
                         <th:block th:unless="${u}">
+
                             <li class="nav-item mx-2">
                                 <a class="nav-link" th:href="@{/login}" href="/login">Iniciar sesión </a>
                             </li>

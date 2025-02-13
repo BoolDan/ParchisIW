@@ -58,7 +58,7 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/api/**")
 			)
             .authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/error", "/reglas", "/game").permitAll()
+				.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/configuracion", "/error", "/reglas", "/game").permitAll()
 				.requestMatchers("/api/**").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**").hasRole("USER")	   // <-- logged-in users
