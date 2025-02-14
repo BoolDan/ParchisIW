@@ -58,4 +58,10 @@ public class RootController {
     public String lobby(Model model) {
         return "lobby";
     }
+
+    @GetMapping("/reglas")
+    public String reglas(Model model) {
+        return "reglas";
+    }
+    
 }
