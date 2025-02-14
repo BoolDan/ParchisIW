@@ -4,11 +4,11 @@
     <th:block th:replace="~{fragments/head :: header}" />
     <title>IW: Configuración</title>
 </head>
-<body class="d-flex flex-column h-100">
+<body class="d-flex justify-content-center flex-column vh-100">
     <header th:replace="~{fragments/nav :: nav}"></header>
     <main class="flex-shrink-0">
-        <div class="container">
-            <form action="/" method="post" class="container mt-4"> <!--Inlcuir ruta al crear partida-->
+        <div class="container p-4 bg-white shadow rounded" style="max-width: 600px;">
+            <form class="container mt-4">
                 <h2>Configuración de partida</h2>
             
                 <!-- Número de jugadores -->

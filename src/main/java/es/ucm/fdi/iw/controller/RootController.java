@@ -43,10 +43,15 @@ public class RootController {
     public String configuracion(Model model) {
         return "configuracion";
     }
-    
 
 	@GetMapping("/")
     public String index(Model model) {
         return "index";
+    }
+
+    @GetMapping("/lobby")
+    public String lobby(Model model) {
+
+        return "lobby";
     }
 }
