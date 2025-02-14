@@ -29,7 +29,43 @@ img.preview {
     height: 100px;
     border-radius: 10px;
 }
+.clasificacion{
+    max-width: 800px;
+    background: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(255, 137, 2);
+    margin: 20px auto;
+}
 
+.clasificacion h1 {
+    text-align: center;
+    color: #1b0457;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.clasificacion table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clasificacion th, 
+.clasificacion td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.clasificacion th {
+    background-color: #007bff;
+    color: white;
+}
+
+.clasificacion .puntos {
+    text-align: right;
+    font-weight: bold;
+}
 
 .game{
     vertical-align: top;
