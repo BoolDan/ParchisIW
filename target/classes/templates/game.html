@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Parchís Pachá: Juego</title>
+</head>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <main class="flex-shrink-0 mt-5">
+        <div class="container text-center vh-100 d-flex align-items-center justify-content-center">
+            <div class="row align-items-center gap-4">
+            <div class="col mb-3">
+                <div class="container mt-4">
+                    <div class="card mx-auto" style="max-width:400px">
+                        <div class="card-header bg-transparent">
+                            <div class="navbar navbar-expand p-0">
+                                <ul class="navbar-nav me-auto align-items-center">
+                                    <li class="nav-item">
+                                        <a href="#!" class="nav-link">
+                                            <div class="position-relative"
+                                                style="width:50px; height: 50px; border-radius: 50%; border: 2px solid #e84118; padding: 2px">
+                                                <img src="/img/logo.png"
+                                                    class="img-fluid rounded-circle" alt="">
+                                                <span
+                                                    class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                                    <span class="visually-hidden">New alerts</span>
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#!" class="nav-link">Game chat</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body p-4" style="height: 500px; overflow: auto;">
+            
+                            <div class="d-flex align-items-baseline mb-4">
+                                <div class="position-relative avatar">
+                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
+                                        class="img-fluid rounded-circle" alt="">
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+                                </div>
+                                <div class="pe-2">
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">GLHF
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small">01:11PM</div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
+                                <div class="pe-2">
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">Same GLHF</div>
+                                    </div>
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">Rollign a five at the first try thats some luck you got mate!
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small">01:13PM</div>
+                                    </div>
+                                </div>
+                                <div class="position-relative avatar">
+                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
+                                        class="img-fluid rounded-circle" alt="">
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+                                </div>
+                            </div>
+            
+                            <div class="d-flex align-items-baseline mb-4">
+                                <div class="position-relative avatar">
+                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
+                                        class="img-fluid rounded-circle" alt="">
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+                                </div>
+                                <div class="pe-2">
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">I call it natural talent XD</div>
+                                    </div>
+                                    <div>
+                                        <div class="small" style="center:left">01:13PM</div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
+                                <div class="pe-2">
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">Bro this is a chance game &#128128</div>
+                                    </div>
+                                    <div>
+                                        <div class="small" style="center:left">01:14PM</div>
+                                    </div>
+                                </div>
+                                <div class="position-relative avatar">
+                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
+                                        class="img-fluid rounded-circle" alt="">
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
+                                <div class="pe-2">
+                                    <div>
+                                        <div class="card card-text d-inline-block p-2 px-3 m-1">Well there is no chance you are winning that´s for sure &#128514</div>
+                                    </div>
+                                    <div>
+                                        <div class="small" style="center:left">01:14PM</div>
+                                    </div>
+                                </div>
+                                <div class="position-relative avatar">
+                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
+                                        class="img-fluid rounded-circle" alt="">
+                                    <span
+                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
+                                        <span class="visually-hidden">New alerts</span>
+                                    </span>
+                                </div>
+                            </div>
+            
+                        </div>
+                        <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+                            <div class="input-group">
+                                <div class="input-group-text bg-transparent border-0">
+                                    <button class="btn btn-light text-secondary">
+                                        <i class="fas fa-paperclip"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control border-0" placeholder="Write a message...">
+                                <div class="input-group-text bg-transparent border-0">
+                                    <button class="btn btn-light text-secondary">
+                                        <i class="fas fa-smile"></i>
+                                    </button>
+                                </div>
+                                <div class="input-group-text bg-transparent border-0">
+                                    <button class="btn btn-light text-secondary">
+                                        <i class="fas fa-microphone"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="tablero">
+                    <img src="/img/tablero-de-parchis.jpg" alt="Placeholder tablero de parchis" class="img-fluid">
+                </div>
+                <div class="justify-content-center mt-4">
+                    <button type="button" class="btn btn-danger" enabled>Abandonar partida</button>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="container mt-4">
+                    <div class="card mx-auto" style="max-width:400px">
+                        <div class="card-header bg-transparent">
+                            <div class="navbar navbar-expand p-0">
+                                <a href="#!" class="nav-link">Lobby</a>
+                            </div>
+                        </div>
+                        <div class="card-body p-4" style="height: 500px; overflow: auto;">
+                            <ul>
+                                <li>
+                                    <div class="d-flex align-items-baseline mb-4">
+                                        <div class="position-relative avatar">
+                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
+                                                class="img-fluid rounded-circle" alt="User Avatar">
+                                        </div>
+                                        <div>
+                                            <div style= "padding:12px"> <strong>You</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="d-flex align-items-baseline mb-4">
+                                        <div class="position-relative avatar">
+                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
+                                                class="img-fluid rounded-circle" alt="User Avatar">
+                                        </div>
+                                        <div>
+                                            <div style="padding:12px"><strong>Vitlyn_Forever</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="d-flex align-items-baseline mb-4">
+                                        <div class="position-relative avatar">
+                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
+                                                class="img-fluid rounded-circle" alt="User Avatar">
+                                        </div>
+                                        <div>
+                                            <div style="padding:12px"><strong>Jill_Valentine2</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="d-flex align-items-baseline mb-4">
+                                        <div class="position-relative avatar">
+                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
+                                                class="img-fluid rounded-circle" alt="User Avatar">
+                                        </div>
+                                        <div>
+                                            <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
