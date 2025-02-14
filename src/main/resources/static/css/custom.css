@@ -73,3 +73,84 @@ input:focus {
     border: 2px solid #ddd;
     border-radius: 8px;
 }
+/* Estilos personalizados */
+.hero-section {
+    background-image: url('/img/parchis_fondo.jpg'); /* Cambia por tu imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #FF6F61; /* Color llamativo para el botón principal */
+    border: none;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #FF3B2F;
+}
+
+.feature-section {
+    background-color: #F8F9FA; /* Fondo claro para la sección de características */
+    padding: 50px 0;
+}
+
+.feature-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.feature-icon {
+    height: 150px; /* Ajusta el tamaño de las imágenes */
+    width: auto;
+    margin-bottom: 15px;
+}
+
+.btn-custom {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+}
+
+.btn-lobby {
+    background-color: #28a745; /* Verde para el botón de lobby */
+    border: none;
+}
+
+.btn-lobby:hover {
+    background-color: #218838;
+}
+
+.btn-rankings {
+    background-color: #f0cb28; /* Amarillo para el botón de clasificaciones */
+    border: none;
+}
+
+.btn-rankings:hover {
+    background-color: #aba92e;
+}
+
+.btn-reglas {
+    background-color: #f02828; /* Rojo para el botón de reglas */
+    border: none;
+}
+
+.btn-reglas:hover {
+    background-color: #b02930;
+}
