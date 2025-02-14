@@ -28,16 +28,16 @@ img.preview {
 
 .clasificacion{
     max-width: 800px;
-    background: white;
+    background: rgb(255, 255, 255);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgb(255, 137, 2);
     margin: 20px auto;
 }
 
 .clasificacion h1 {
     text-align: center;
-    color: #333;
+    color: #1b0457;
     font-weight: bold;
     margin-bottom: 20px;
 }
