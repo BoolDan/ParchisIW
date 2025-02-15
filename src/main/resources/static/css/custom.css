@@ -128,6 +128,11 @@ input:focus {
     font-weight: bold;
 }
 
+.btn-outline-secondary:hover, .btn-outline-primary:hover, .btn-outline-danger:hover {
+    background-color: black;
+    color: white;
+}
+
 .btn-primary:hover {
     background-color: #FF3B2F;
 }
@@ -244,7 +249,7 @@ input:focus {
 }
 
 .admin-page .section-card ul li button:hover {
-    background-color: #e2e6ea;
+    background-color: black;
 }
 
 .admin-page .footer {
