@@ -86,7 +86,7 @@ img.preview {
 }
 
 a.nav-link {
-    color: gray;
+    color: white;
     font-size: 18px;
     padding: 0;
 }
@@ -108,6 +108,7 @@ input:focus {
 .card-text {
     border: 2px solid #ddd;
     border-radius: 8px;
+    text-align: center;
 }
 /* Estilos personalizados */
 .hero-section {
@@ -189,4 +190,66 @@ input:focus {
 
 .btn-reglas:hover {
     background-color: #b02930;
+}
+
+/* Estilos específicos solo para la página de administrador */
+.admin-page body {
+    background-color: #f8f9fa;
+}
+
+.admin-page .container {
+    max-width: 1200px;
+}
+
+.admin-page h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-top: 20px;
+    color: #dc3545;
+}
+
+.admin-page .section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 1.5rem;
+}
+
+.admin-page .section-card {
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.admin-page .section-card ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.admin-page .section-card ul li {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.admin-page .section-card ul li button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.admin-page .section-card ul li button:hover {
+    background-color: #e2e6ea;
+}
+
+.admin-page .footer {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
 }

@@ -86,7 +86,7 @@ img.preview {
 }
 
 a.nav-link {
-    color: gray;
+    color: white;
     font-size: 18px;
     padding: 0;
 }
@@ -108,6 +108,7 @@ input:focus {
 .card-text {
     border: 2px solid #ddd;
     border-radius: 8px;
+    text-align: center;
 }
 /* Estilos personalizados */
 .hero-section {
