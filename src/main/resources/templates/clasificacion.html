@@ -40,15 +40,23 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="clasificacion">
+    <main class="clasificacion mt-4">
         <h1>Clasificación</h1>
-        <table>
+        <table class="table table-bordered text-center">
             <thead>
                 <tr>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <div class="row mb-3">
                         <!-- A los botones les falta la funcionalidad de poder tener dos clasificaciones distintas dependiendo de la localizacion -->
-                        <button class="btn btn-primary me-md-2" type="button" title="Clasificación de todos los jugadores a nivel mundial">Global</button>
-                        <button class="btn btn-primary" type="button" title="Clasificación de jugadores en tu área local">Local</button>
+                        <div class="col-6">
+                            <button class="btn btn-primary w-100" type="button" title="Clasificación de jugadores en tu área local">
+                                Local
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-primary w-100" type="button" title="Clasificación de todos los jugadores a nivel mundial">
+                                Global
+                            </button>
+                        </div>
                     </div>
                     <th>Posición</th>
                     <th>Jugador</th>

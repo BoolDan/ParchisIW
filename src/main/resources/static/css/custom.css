@@ -48,13 +48,14 @@ img.preview {
 .clasificacion table {
     width: 100%;
     border-collapse: collapse;
+    border: 2px solid white!important;
 }
 
 .clasificacion th, 
 .clasificacion td {
     padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    text-align: center;
+    border-bottom: 1px solid black;
 }
 
 .clasificacion th {
@@ -63,7 +64,7 @@ img.preview {
 }
 
 .clasificacion .puntos {
-    text-align: right;
+    text-align: center;
     font-weight: bold;
 }
 
