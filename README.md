@@ -89,6 +89,10 @@ Vista diseñada para que los admins puedan realizar sus funciones propias de adm
 - Una columna de ***Partidas*** que mostrará botones con todas las partidas jugadas por nuestros usuarios. Al clickar en una partida se podrá observar lo ocurrido en la partida.
 - Una columna de ***Reportes*** que mostrará botones con todos los reportes creados por los usuarios. En el título estará la razón por la que se manda el reporte y la fecha de creación.
 
+
+
+
+
 Material utilizado para la implementación:
 - Estilo de botones: https://www.eniun.com/botones-css-estilos/
 - Estilo de cartas: https://getbootstrap.com/docs/4.0/components/card/
