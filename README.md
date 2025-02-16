@@ -21,7 +21,9 @@ La aplicación incluye los siguientes componentes clave:
 
 4. **Lobby de Partidas**: Esta área permite a los usuarios visualizar y seleccionar partidas disponibles. Aunque actualmente es una vista estática, está diseñada para facilitar la interacción y la creación de partidas en futuras versiones.
 
-5. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. 
+5. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. Cuenta con la vista del tablero sobre el que se juega además de un chat con el que poder conmunicarse con el resto de jugadores, los cuales son visibles en la lista de jugadores. 
+
+6. **Vista de Administrador**: Se ha modificado la página de administrador previamente dada para que se muestren todos los usuarios, partidas y reportes que tendremos almacenados en la base de datos.
 
 ## Funcionalidades
 ## Landing Page - Página de Bienvenida
@@ -33,8 +35,30 @@ Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer o
 - El botón ***Cómo jugar*** permite acceder a la página donde se encuentran las reglas del juego.
 - El botón ***Clasificación de jugadores*** permite acceder a la clasificación de jugadores.
 
+## Vista de Administrador - Requerido rol de Administrador
+
+Vista diseñada para que los admins puedan realizar sus funciones propias de administración de nuestro juego. Esta vista está conformada por:
+
+- Una columna de ***Usuarios*** que mostrará todos los usuarios que tendremos almacenados. Cada usuario estará en un botón que llevará a su usuario.
+- Una columna de ***Partidas*** que mostrará botones con todas las partidas jugadas por nuestros usuarios. Al clickar en una partida se podrá observar lo ocurrido en la partida.
+- Una columna de ***Reportes*** que mostrará botones con todos los reportes creados por los usuarios. En el título estará la razón por la que se manda el reporte y la fecha de creación.
+
 Material utilizado para la implementación:
 - Estilo de botones: https://www.eniun.com/botones-css-estilos/
 - Estilo de cartas: https://getbootstrap.com/docs/4.0/components/card/
 - Espacio de elementos: https://getbootstrap.com/docs/4.0/utilities/spacing/
 
+## Página de juego - Requerido rol de usuario
+
+Vista de juego que permite al usuario interactuar con el tablero así como observar los jugadores que se encuentran dentro de la sala de juego e interactuar con ellos usando el chat, distribuidos usando Bootstrap 5.3 columns. Así esta vista cuenta con los siguientes elementos:
+
+- Una columna que contiene un ***Chat Interactivo*** que permite a los usuarios enviar y recibir mensajes de todos los participantes de una partida.
+- Una columna que contiene la ***Vista del Tablero*** que permitirá al usuario interactuar con la partida, además de un botón ***Salir de la Partida*** que permitirá al usuario abandonar la partida si así lo desean.
+- Una columna que contiene la ***Lista de Usuarios*** que permitirá al usuario ver los jugadores presentes en la partida. 
+
+Material utilizado para la implementación:
+- Estilo del chat: https://www.youtube.com/watch?v=3JyQ2_wBqBU
+- Columnas de bootstrap: https://getbootstrap.com/docs/5.0/layout/columns/
+- Estilo de botones: https://getbootstrap.com/docs/5.3/components/close-button/
+- Emojis en html: https://www.w3schools.com/html/html_emojis.asp
+- Posicion bootstrap: https://getbootstrap.com/docs/5.0/utilities/position/
