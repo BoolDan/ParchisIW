@@ -15,7 +15,7 @@ La aplicación incluye los siguientes componentes clave:
 
 1. **Landing Page**: Esta página sirve como punto de entrada principal, donde los usuarios pueden obtener una visión general de la aplicación y acceder a las diferentes secciones disponibles.
 
-2. **Clasificación**: Se ha incorporado una sección que muestra una clasificación, la cual, en futuras iteraciones, podría reflejar el rendimiento de los jugadores, puntuaciones o logros dentro del juego. Incluye dos botones los cuales diferencia la clasificacion de manera global  de manera local dependiendo de la localización del jugador
+2. **Clasificación**: Se ha incorporado una sección que muestra una clasificación, la cual, en futuras iteraciones, podría reflejar el rendimiento de los jugadores, puntuaciones o logros dentro del juego.
 
 3. **Página de Reglas**: Aquí se presenta una explicación detallada de las reglas del juego, proporcionando a los usuarios la información necesaria para entender cómo jugar.
 
@@ -56,13 +56,6 @@ Vista de juego que permite al usuario interactuar con el tablero así como obser
 - Una columna que contiene la ***Vista del Tablero*** que permitirá al usuario interactuar con la partida, además de un botón ***Salir de la Partida*** que permitirá al usuario abandonar la partida si así lo desean.
 - Una columna que contiene la ***Lista de Usuarios*** que permitirá al usuario ver los jugadores presentes en la partida. 
 
-## Página de Clasificación
-
-Vista diseñada para que los jugadores puedan ver su puntuación y comparar esta con otros jugadores. Conformada por: 
-
--   ***Tabla de Clasificación***: Muestra la posición, nombre y puntos de los jugadores divididos en tres columnas.
--   ***Botones de Filtro***: Alterna entre la clasificación local y global.
-
 Material utilizado para la implementación:
 - Estilo del chat: https://www.youtube.com/watch?v=3JyQ2_wBqBU
 - Columnas de bootstrap: https://getbootstrap.com/docs/5.0/layout/columns/
@@ -70,7 +63,7 @@ Material utilizado para la implementación:
 - Emojis en html: https://www.w3schools.com/html/html_emojis.asp
 - Posicion bootstrap: https://getbootstrap.com/docs/5.0/utilities/position/
 
-## Página de configuración - Requerido rol de usuario
+## Página de configuración - Cualquier rol
 
 Vista que permite a los usuarios configurar sus partidas en cuanto al numero de jugadores modo de juego y el tipo de partida. Contiene los siguientes elementos:
 
@@ -78,4 +71,9 @@ Vista que permite a los usuarios configurar sus partidas en cuanto al numero de 
 - Un selector de tipo drop down en la que se selecciona el número de jugadores.
 - Dos selectores de tipo selector circular para confirmar el modo de juego y el tipo de partida.
 
+## Página de Clasificación - Cualquier rol
 
+Vista diseñada para que los jugadores puedan ver su puntuación y comparar esta con otros jugadores. Conformada por: 
+
+-   ***Tabla de Clasificación***: Muestra la posición, nombre y puntos de los jugadores divididos en tres columnas.
+-   ***Botones de Filtro***: Alterna entre la clasificación local y global.
