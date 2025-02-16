@@ -62,3 +62,13 @@ Material utilizado para la implementación:
 - Estilo de botones: https://getbootstrap.com/docs/5.3/components/close-button/
 - Emojis en html: https://www.w3schools.com/html/html_emojis.asp
 - Posicion bootstrap: https://getbootstrap.com/docs/5.0/utilities/position/
+
+## Página de configuración - Requerido rol de usuario
+
+Vista que permite a los usuarios configurar sus partidas en cuanto al numero de jugadores modo de juego y el tipo de partida. Contiene los siguientes elementos:
+
+- Una tabla en la que se engloban las opciones disponibles para los usuarios.
+- Un selector de tipo drop down en la que se selecciona el número de jugadores.
+- Dos selectores de tipo selector circular para confirmar el modo de juego y el tipo de partida.
+
+
