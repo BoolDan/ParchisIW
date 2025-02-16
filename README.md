@@ -35,3 +35,6 @@ Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer o
 
 Material utilizado para la implementación:
 - Estilo de botones: https://www.eniun.com/botones-css-estilos/
+- Estilo de cartas: https://getbootstrap.com/docs/4.0/components/card/
+- Espacio de elementos: https://getbootstrap.com/docs/4.0/utilities/spacing/
+
