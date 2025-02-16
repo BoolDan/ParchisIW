@@ -15,7 +15,7 @@ La aplicación incluye los siguientes componentes clave:
 
 1. **Landing Page**: Esta página sirve como punto de entrada principal, donde los usuarios pueden obtener una visión general de la aplicación y acceder a las diferentes secciones disponibles.
 
-2. **Clasificación**: Se ha incorporado una sección que muestra una clasificación, la cual, en futuras iteraciones, podría reflejar el rendimiento de los jugadores, puntuaciones o logros dentro del juego.
+2. **Clasificación**: Se ha incorporado una sección que muestra una clasificación, la cual, en futuras iteraciones, podría reflejar el rendimiento de los jugadores, puntuaciones o logros dentro del juego. Incluye dos botones los cuales diferencia la clasificacion de manera global  de manera local dependiendo de la localización del jugador
 
 3. **Página de Reglas**: Aquí se presenta una explicación detallada de las reglas del juego, proporcionando a los usuarios la información necesaria para entender cómo jugar.
 
