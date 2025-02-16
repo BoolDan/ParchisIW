@@ -1,12 +1,16 @@
 # ParchisIW
 Practica de la asignatura de Ingenieria Web.
 
+
+
 ## Integrantes
 - Carlos Clemente Sánchez
 - Daniel de Andrés Fernández
 - Mauricio Nilton Calderón Barazorda
 - Carla Acebes Montalvillo
 - Mario Gallego Hernández
+
+
 
 ## Versión actual
 La versión actualmente desarrollada de la aplicación funciona como una demostración visual preliminar, diseñada para presentar la estructura y el flujo básico de la interfaz de usuario. En esta fase, las funcionalidades completas no están implementadas, pero se han establecido los fundamentos para su posterior desarrollo e integración.
@@ -21,11 +25,16 @@ La aplicación incluye los siguientes componentes clave:
 
 4. **Lobby de Partidas**: Esta área permite a los usuarios visualizar y seleccionar partidas disponibles. Aunque actualmente es una vista estática, está diseñada para facilitar la interacción y la creación de partidas en futuras versiones.
 
-5. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. Cuenta con la vista del tablero sobre el que se juega además de un chat con el que poder conmunicarse con el resto de jugadores, los cuales son visibles en la lista de jugadores. 
+5. **Configuración del Juego**: En esta pagína se permite al usuario tener control de las opciones que vaya a tener la nueva partida de parchís. 
 
-6. **Vista de Administrador**: Se ha modificado la página de administrador previamente dada para que se muestren todos los usuarios, partidas y reportes que tendremos almacenados en la base de datos.
+6. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. Cuenta con la vista del tablero sobre el que se juega además de un chat con el que poder conmunicarse con el resto de jugadores, los cuales son visibles en la lista de jugadores. 
+
+7. **Vista de Administrador**: Se ha modificado la página de administrador previamente dada para que se muestren todos los usuarios, partidas y reportes que tendremos almacenados en la base de datos.
+
+
 
 ## Funcionalidades
+
 ## Landing Page - Página de Bienvenida
 
 Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer opciones de juego (multijugador o contra la IA), y proporcionar información sobre cómo jugar y otras características adicionales del juego como la clasificación de jugadores.
@@ -34,6 +43,43 @@ Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer o
 - El botón ***Juega Multijugador o Desafía a la IA*** permite acceder a la lobby de lista de partidas.
 - El botón ***Cómo jugar*** permite acceder a la página donde se encuentran las reglas del juego.
 - El botón ***Clasificación de jugadores*** permite acceder a la clasificación de jugadores.
+
+## Página de Clasificación - Cualquier rol
+
+Vista diseñada para que los jugadores puedan ver su puntuación y comparar esta con otros jugadores. Conformada por: 
+
+-   ***Tabla de Clasificación***: Muestra la posición, nombre y puntos de los jugadores divididos en tres columnas.
+-   ***Botones de Filtro***: Alterna entre la clasificación local y global.
+
+## Página de Reglas - Cualquier rol
+
+Vista diseñada para que los jugadores puedan conocer las reglas básicas del juego. Esta se encuentra formada por varias secciones:
+
+- Un subtitulo el cual describe el apartado al que se refiere la información de la regla.
+- Un parrafo con el contenido de la regla a la que se refiere cada apartado.
+
+## Lobby de Partidas - Requerido rol de usuario
+
+Vista generada a través de la lista de partidas que se encuentran en curso en espera de jugadores antes de iniciar la partida. Está esta formada por un contenedor con la siguiente información:
+
+- Botón de **crear nueva partida** que permite acceder a la vista de configuración de juego para elegir las opciones deseadas de un nuevo juego.
+- Card formada por una **lista de partidas** que representarán todas aquellas partidas que están esperando jugadores. Cada una cuenta con la información básica del tipo de partida, cuantos jugadores hay y el botón de **unirse partida**.
+
+## Página de configuración - Requerido rol de usuario
+
+Vista que permite a los usuarios configurar sus partidas en cuanto al numero de jugadores modo de juego y el tipo de partida. Contiene los siguientes elementos:
+
+- Una tabla en la que se engloban las opciones disponibles para los usuarios que podrán configurar.
+- Un selector de tipo drop down en la que se selecciona el número de jugadores.
+- Dos selectores de tipo selector circular para confirmar el modo de juego y el tipo de partida.
+
+## Página de juego - Requerido rol de usuario
+
+Vista de juego que permite al usuario interactuar con el tablero así como observar los jugadores que se encuentran dentro de la sala de juego e interactuar con ellos usando el chat, distribuidos usando Bootstrap 5.3 columns. Así esta vista cuenta con los siguientes elementos:
+
+- Una columna que contiene un ***Chat Interactivo*** que permite a los usuarios enviar y recibir mensajes de todos los participantes de una partida.
+- Una columna que contiene la ***Vista del Tablero*** que permitirá al usuario interactuar con la partida, además de un botón ***Salir de la Partida*** que permitirá al usuario abandonar la partida si así lo desean.
+- Una columna que contiene la ***Lista de Usuarios*** que permitirá al usuario ver los jugadores presentes en la partida. 
 
 ## Vista de Administrador - Requerido rol de Administrador
 
@@ -47,33 +93,8 @@ Material utilizado para la implementación:
 - Estilo de botones: https://www.eniun.com/botones-css-estilos/
 - Estilo de cartas: https://getbootstrap.com/docs/4.0/components/card/
 - Espacio de elementos: https://getbootstrap.com/docs/4.0/utilities/spacing/
-
-## Página de juego - Requerido rol de usuario
-
-Vista de juego que permite al usuario interactuar con el tablero así como observar los jugadores que se encuentran dentro de la sala de juego e interactuar con ellos usando el chat, distribuidos usando Bootstrap 5.3 columns. Así esta vista cuenta con los siguientes elementos:
-
-- Una columna que contiene un ***Chat Interactivo*** que permite a los usuarios enviar y recibir mensajes de todos los participantes de una partida.
-- Una columna que contiene la ***Vista del Tablero*** que permitirá al usuario interactuar con la partida, además de un botón ***Salir de la Partida*** que permitirá al usuario abandonar la partida si así lo desean.
-- Una columna que contiene la ***Lista de Usuarios*** que permitirá al usuario ver los jugadores presentes en la partida. 
-
-Material utilizado para la implementación:
 - Estilo del chat: https://www.youtube.com/watch?v=3JyQ2_wBqBU
 - Columnas de bootstrap: https://getbootstrap.com/docs/5.0/layout/columns/
-- Estilo de botones: https://getbootstrap.com/docs/5.3/components/close-button/
+- Estilo de botones cerrados: https://getbootstrap.com/docs/5.3/components/close-button/
 - Emojis en html: https://www.w3schools.com/html/html_emojis.asp
 - Posicion bootstrap: https://getbootstrap.com/docs/5.0/utilities/position/
-
-## Página de configuración - Cualquier rol
-
-Vista que permite a los usuarios configurar sus partidas en cuanto al numero de jugadores modo de juego y el tipo de partida. Contiene los siguientes elementos:
-
-- Una tabla en la que se engloban las opciones disponibles para los usuarios.
-- Un selector de tipo drop down en la que se selecciona el número de jugadores.
-- Dos selectores de tipo selector circular para confirmar el modo de juego y el tipo de partida.
-
-## Página de Clasificación - Cualquier rol
-
-Vista diseñada para que los jugadores puedan ver su puntuación y comparar esta con otros jugadores. Conformada por: 
-
--   ***Tabla de Clasificación***: Muestra la posición, nombre y puntos de los jugadores divididos en tres columnas.
--   ***Botones de Filtro***: Alterna entre la clasificación local y global.
