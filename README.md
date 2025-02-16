@@ -23,6 +23,8 @@ La aplicación incluye los siguientes componentes clave:
 
 5. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. 
 
+6. **Vista de Administrador**: Se ha modificado la página de administrador previamente dada para que se muestren todos los usuarios, partidas y reportes que tendremos almacenados en la base de datos.
+
 ## Funcionalidades
 ## Landing Page - Página de Bienvenida
 
@@ -32,6 +34,14 @@ Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer o
 - El botón ***Juega Multijugador o Desafía a la IA*** permite acceder a la lobby de lista de partidas.
 - El botón ***Cómo jugar*** permite acceder a la página donde se encuentran las reglas del juego.
 - El botón ***Clasificación de jugadores*** permite acceder a la clasificación de jugadores.
+
+## Vista de Administrador - Requerido rol de Administrador
+
+Vista diseñada para que los admins puedan realizar sus funciones propias de administración de nuestro juego. Esta vista está conformada por:
+
+- Una columna de ***Usuarios*** que mostrará todos los usuarios que tendremos almacenados. Cada usuario estará en un botón que llevará a su usuario.
+- Una columna de ***Partidas*** que mostrará botones con todas las partidas jugadas por nuestros usuarios. Al clickar en una partida se podrá observar lo ocurrido en la partida.
+- Una columna de ***Reportes*** que mostrará botones con todos los reportes creados por los usuarios. En el título estará la razón por la que se manda el reporte y la fecha de creación.
 
 Material utilizado para la implementación:
 - Estilo de botones: https://www.eniun.com/botones-css-estilos/
