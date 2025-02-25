@@ -19,6 +19,7 @@ CREATE TABLE Partida (
     numero_jugadores INT NOT NULL,
     jugadores_maximos INT NOT NULL,
     resultado_final TEXT NULL,
+    informacion_partida JSON NOT NULL, 
     FOREIGN KEY (ID_torneo) REFERENCES Torneo(ID) ON DELETE SET NULL
 );
 
@@ -27,7 +28,6 @@ CREATE TABLE Jugador_Partida (
     ID_Partida INT NOT NULL,
     ID_usuario INT NOT NULL,
     color_ficha ENUM('Rojo', 'Azul', 'Verde', 'Amarillo') NOT NULL,
-    estado_juego JSON NOT NULL,
     FOREIGN KEY (ID_Partida) REFERENCES Partida(ID) ON DELETE CASCADE,
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE
 );
@@ -49,17 +49,6 @@ CREATE TABLE Jugador_Torneo (
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE
 );
 
-CREATE TABLE Clasificación (
-    ID_clasificación INT AUTO_INCREMENT PRIMARY KEY,
-    ID_usuario INT NOT NULL,
-    ID_torneo INT NOT NULL,
-    puntos INT NOT NULL,
-    posición INT NOT NULL,
-    tipo_clasificación VARCHAR(50) NOT NULL,
-    fecha_actualización DATETIME NOT NULL,
-    FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_torneo) REFERENCES Torneo(ID) ON DELETE CASCADE
-);
 
 CREATE TABLE Mensaje (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -67,26 +56,7 @@ CREATE TABLE Mensaje (
     ID_partida INT NOT NULL,
     contenido TEXT NOT NULL,
     fecha_envio DATETIME NOT NULL,
+    reporte ENUM ("No reportado", "Reportado") NOT NULL DEFAULT "No reportado",
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE,
     FOREIGN KEY (ID_partida) REFERENCES Partida(ID) ON DELETE CASCADE
-);
-
-CREATE TABLE Reporte (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    ID_usuario INT NOT NULL,
-    contenido TEXT NOT NULL,
-    fecha_reporte DATETIME NOT NULL,
-    estado ENUM('Aceptado', 'Denegado') NOT NULL DEFAULT 'Denegado',
-    FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE
-);
-
-CREATE TABLE Usuarios_Baneados (
-    ID_tabla INT AUTO_INCREMENT PRIMARY KEY,
-    ID_usuario_baneado INT NOT NULL,
-    ID_usuario_emisor INT NOT NULL,
-    motivo TEXT NOT NULL,
-    fecha_inicio DATETIME NOT NULL,
-    fecha_fin DATETIME NOT NULL,
-    FOREIGN KEY (ID_usuario_baneado) REFERENCES Usuarios(ID) ON DELETE CASCADE,
-    FOREIGN KEY (ID_usuario_emisor) REFERENCES Usuarios(ID) ON DELETE CASCADE
 );
