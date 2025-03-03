@@ -8,10 +8,10 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="flex-shrink-0 mt-5">
+    <main class="flex-shrink-0 overflow-auto mt-5">
         <div class="container text-center vh-100 d-flex align-items-center justify-content-center">
             <div class="row align-items-center gap-4">
-            <div class="col mb-3">
+            <div class="col mb-3 align-items-left" >
                 <div class="container mt-4">
                     <div class="card mx-auto" style="max-width:400px">
                         <div class="card-header bg-transparent">
@@ -134,74 +134,86 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6 d-flex flex-column align-items-center">
+                <div class="tablero mb-3">
+                    <img src="/img/tablero-de-parchis.jpg" alt="Tablero de Parchís" class="img-fluid" style="width:75%">
+                </div>
+                <button type="button" class="btn btn-danger">Abandonar partida</button>
+            </div>
+            
             <div class="col mb-3">
-                <div class="tablero">
-                    <img src="/img/tablero-de-parchis.jpg" alt="Placeholder tablero de parchis" class="img-fluid">
-                </div>
-                <div class="justify-content-center mt-4">
-                    <button type="button" class="btn btn-danger" enabled>Abandonar partida</button>
-                </div>
+                
             </div>
             <div class="col mb-3">
-                <div class="container mt-4">
-                    <div class="card mx-auto" style="max-width:400px">
-                        <div class="card-header bg-transparent">
-                            <div class="navbar navbar-expand p-0">
-                                <a href="#!" class="navbar-brand">Lobby</a>
-                            </div>
+                <div class="card mx-auto" style="max-width:400px">
+                    <div class="card-header bg-transparent">
+                        <div class="navbar navbar-expand p-0">
+                            <a href="#!" class="navbar-brand">Lobby</a>
                         </div>
-                        <div class="card-body p-4" style="height: 500px; overflow: auto;">
-                            <ul>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style= "padding:12px"> <strong>You</strong>
-                                            </div>
+                    </div>
+                    <div class="card-body p-4" style="">
+                        <ul>
+                            <li>
+                                <div class="d-flex align-items-baseline mb-4">
+                                    <div class="position-relative avatar">
+                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
+                                            class="img-fluid rounded-circle" alt="User Avatar">
+                                    </div>
+                                    <div>
+                                        <div style= "padding:12px"> <strong>You</strong>
                                         </div>
                                     </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Vitlyn_Forever</strong>
-                                            </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex align-items-baseline mb-4">
+                                    <div class="position-relative avatar">
+                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
+                                            class="img-fluid rounded-circle" alt="User Avatar">
+                                    </div>
+                                    <div>
+                                        <div style="padding:12px"><strong>Vitlyn_Forever</strong><img src="/img/dice-roll-dice.gif" class="animated-gif" alt="Rolling dice that indicates the turn" style="width:20%">
                                         </div>
                                     </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Jill_Valentine2</strong>
-                                            </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex align-items-baseline mb-4">
+                                    <div class="position-relative avatar">
+                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
+                                            class="img-fluid rounded-circle" alt="User Avatar">
+                                    </div>
+                                    <div>
+                                        <div style="padding:12px"><strong>Jill_Valentine2</strong>
                                         </div>
                                     </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
-                                            </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="d-flex align-items-baseline mb-4">
+                                    <div class="position-relative avatar">
+                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
+                                            class="img-fluid rounded-circle" alt="User Avatar">
+                                    </div>
+                                    <div>
+                                        <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
                                         </div>
                                     </div>
-                                </li>
-                            </ul>
-            
+                                </div>
+                            </li>
+                        </ul>
+        
+                    </div>
+                </div>
+                <div class="container mt-4">
+                    <div class="card">
+                        <div class="card-header">Información de la Partida</div>
+                        <div class="card-body">
+                            <p><strong>Rondas Jugadas:</strong> 5</p>
+                            <p><strong>Piezas Restantes:</strong> 2</p>
+                            <p><strong>Puntos Acumulados:</strong> 120</p>
+                            <p><strong>Tiempo de Juego:</strong> 15 min</p>
                         </div>
                     </div>
                 </div>
