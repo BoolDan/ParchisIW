@@ -26,7 +26,7 @@ import java.util.List;
                         + "FROM User u "
                         + "WHERE u.username = :username")
 })
-@Table(name="IWUser")
+@Table(name="Usuario")
 public class User implements Transferable<User.Transfer> {
 
     public enum Role {
