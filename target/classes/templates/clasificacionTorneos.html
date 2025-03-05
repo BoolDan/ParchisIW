@@ -10,7 +10,7 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="clasificacion" >
+    <main class="clasificacion">
         <h1>Clasificación de Torneos</h1>
         
         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
@@ -21,8 +21,8 @@
         <div class="torneos-en-juego">
             <div th:each="torneo : ${torneosEnJuego}" class="torneo-card">
                 <h3 th:text="${torneo.nombre}"></h3>
-                <p>Participantes: <span th:text="${torneo.participantes}"></span></p>
-                <p>Puntos: <span th:text="${torneo.puntos}"></span></p>
+                <p>Participantes: <th:block th:text="${torneo.participantes}"></th:block></p>
+                <p>Puntos: <th:block th:text="${torneo.puntos}"></th:block></p>
             </div>
         </div>
 
@@ -30,8 +30,8 @@
         <div class="torneos-acabados">
             <div th:each="torneo : ${torneosAcabados}" class="torneo-card">
                 <h3 th:text="${torneo.nombre}"></h3>
-                <p>Ganador: <span th:text="${torneo.ganador}"></span></p>
-                <p>Puntos: <span th:text="${torneo.puntos}"></span></p>
+                <p>Ganador: <th:block th:text="${torneo.ganador}"></th:block></p>
+                <p>Puntos: <th:block th:text="${torneo.puntos}"></th:block></p>
             </div>
         </div>
 
@@ -44,3 +44,4 @@
 </body>
 
 </html>
+s
