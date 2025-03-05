@@ -29,44 +29,118 @@ img.preview {
     height: 100px;
     border-radius: 10px;
 }
-.clasificacion{
-    max-width: 800px;
-    background: rgb(255, 255, 255);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgb(255, 137, 2);
-    margin: 20px auto;
+
+/*para la clasificacion global y de torneos */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.clasificacion h1 {
+.clasificacion {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+h1, h2 {
     text-align: center;
-    color: #1b0457;
-    font-weight: bold;
+    color: #333;
     margin-bottom: 20px;
 }
 
-.clasificacion table {
+.table {
     width: 100%;
     border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
-.clasificacion th, 
-.clasificacion td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
 }
 
-.clasificacion th {
+.table th {
     background-color: #007bff;
     color: white;
 }
 
-.clasificacion .puntos {
-    text-align: right;
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.d-grid {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.d-grid button {
+    margin: 5px;
+}
+
+li a {
+    text-decoration: none;
+    color: #007bff;
     font-weight: bold;
 }
 
+li a:hover {
+    text-decoration: underline;
+} 
+
+/* Estilo para torneos en juego en formato de columnas (2x2) */
+.torneos-en-juego {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.torneo-card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Estilo para torneos acabados (uno debajo del otro) */
+.torneos-acabados {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Botón para ver todos los torneos acabados */
+.ver-todos {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.ver-todos .btn-primary {
+    padding: 12px 20px;
+    font-size: 16px;
+} 
+
+/*--------------------*/
 .game{
     vertical-align: top;
     text-align: center;
