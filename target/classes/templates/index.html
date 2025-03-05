@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Parchís Online - Inicio</title>
+    <link rel="stylesheet" href="/css/custom.css">
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <main class="flex-shrink-0">
+        <!-- Sección Hero con imagen de fondo -->
+        <div class="hero-section text-center">
+            <div class="container">
+                <h1 class="display-3 fw-bold">¡Bienvenido a Parchís Online!</h1>
+                <p class="lead">Juega al Parchís con amigos o contra la IA. ¡Diversión asegurada!</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-center mt-4">
+                    <a href="/jugar" class="btn btn-primary btn-lg px-5 py-3">¡Empieza a jugar!</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de características -->
+        <section class="feature-section">
+            <div class="container">
+                <div class="row text-center">
+                    <!-- Tarjeta 1: Juega Multijugador o desafía a la IA -->
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <img src="/img/vs.gif" alt="Jugar partida" class="feature-icon mb-3">
+                            <a href="/lobby" class="btn btn-custom btn-lobby">Juega Multijugador o desafía a la IA</a>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 2: Cómo Jugar -->
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <img src="/img/reglas.png" alt="Reglas del juego" class="feature-icon mb-3">
+                            <a href="/reglas" class="btn btn-custom btn-reglas">Cómo Jugar</a>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta 3: Clasificación de jugadores -->
+                    <div class="col-md-4 mb-4">
+                        <div class="feature-card">
+                            <img src="/img/ranking.png" alt="Clasificaciones" class="feature-icon mb-3">
+                            <a href="/clasificacion" class="btn btn-custom btn-rankings">Clasificación de jugadores</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+
+</html>
