@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.time.LocalTime;
 
 @Entity
 @Data
@@ -21,7 +22,29 @@ import java.util.List;
 @Table(name="Torneo")
 public class Torneo {
     
+    public enum Estado {
+        En_espera,
+        Cerrado,
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
-    @
+    @SequenceGenerator(name = "gen", sequenceName = "gen")
+    private long id;
+
+    @Column
+    private int numParticipantes;
+
+    @Column
+    private Estado estado;
+
+    @Column
+    private LocalTime horaInicio;
+
+    @Column
+    private LocalTime horaFin;
+
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Partida> partidas;
+
 }
