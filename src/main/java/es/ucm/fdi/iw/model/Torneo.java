@@ -22,7 +22,7 @@ import java.time.LocalTime;
 @Table(name="Torneo")
 public class Torneo {
     
-    public enum Estado {
+    public enum EstadoTorneo {
         En_espera,
         Cerrado,
     }
@@ -36,7 +36,7 @@ public class Torneo {
     private int numParticipantes;
 
     @Column
-    private Estado estado;
+    private EstadoTorneo estado;
 
     @Column
     private LocalTime horaInicio;
