@@ -11,13 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.time.LocalTime;
 
 
 @Entity
-@Data // @Getter, @Setter, @ToString, @Equals and Hash Code, @RequiredArgsConstructor
+@Data  // @Getter, @Setter, @ToString, @Equals and Hash Code, @RequiredArgsConstructor
 @NoArgsConstructor
-@NamedQueries({})
+@NamedQueries({
+
+})
 
 @Table(name="Partida")
 public class Partida {
@@ -58,7 +64,17 @@ public class Partida {
     private String resultadoFinal;
 
     @Column
-    private ?? informacionPartida; // Convertir a JSON para lectura y String para escritura
+    private String movimientos_turno;
+    
+
+    public void setMovimientos(List<String> movimientos) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            this.movimientos_turno = objectMapper.writeValueAsString(movimientos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @ManyToOne
     @JoinColumn(name = "ID_torneo", nullable = false)
