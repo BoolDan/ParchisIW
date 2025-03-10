@@ -58,7 +58,7 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/api/**")
 			)
             .authorizeHttpRequests(authorize -> authorize
-			.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/configuracion", "/error", "/reglas", "/clasificacionTorneos", "/clasificacionAcabados").permitAll()
+			.requestMatchers("/css/**", "/js/**", "/img/**", "/", "/configuracion", "/error", "/reglas", "/clasificacionTorneos", "/torneos/clasificacion", "/clasificacionAcabados").permitAll()
 			.requestMatchers("/api/**").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**", "/game", "/lobby").hasRole("USER")	   // <-- logged-in users

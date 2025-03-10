@@ -20,7 +20,7 @@ import java.time.LocalTime;
     @NamedQuery(name = "Torneo.getAcabados", query = "SELECT t FROM Torneo t WHERE t.estado = 'Cerrado'")
 })
 @Table(name = "Torneo")
-public class Torneo {
+public class Torneo implements Transferable<Torneo.Transfer> {
     
     public enum EstadoTorneo {
         En_espera,  // Torneos en curso
@@ -57,4 +57,29 @@ public class Torneo {
     // Relación 1 Torneo -> muchas Partidas
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Partida> partidas = new ArrayList<>();
+
+    @Getter
+    @AllArgsConstructor
+    public static class Transfer {
+		private long id;
+        private String nombreTorneo;
+		private int estado;
+        private int numParticipantes;
+        private String ganador;
+        private int puntos;
+        private LocalTime horaInicio;
+        private LocalTime horaFin;
+
+    }
+
+    @Override
+    public Transfer toTransfer() {
+		return new Transfer(id,	nombre, estado.ordinal(),
+                        numParticipantes, ganador, puntos, horaInicio, horaFin);
+	}
+
+    @Override
+	public String toString() {
+		return toTransfer().toString();
+	}
 }
