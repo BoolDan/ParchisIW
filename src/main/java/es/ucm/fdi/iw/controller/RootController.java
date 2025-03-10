@@ -54,6 +54,16 @@ public class RootController {
         return "clasificacion";
     }
 
+    @GetMapping("/clasificacionTorneos")
+    public String clasificacionTorneos(Model model) {
+        return "clasificacionTorneos";
+    }
+
+    @GetMapping("/clasificacionAcabados")
+    public String clasificacionAcabados(Model model) {
+        return "clasificacionAcabados";
+    }
+
     @GetMapping("/lobby")
     public String lobby(Model model) {
         return "lobby";
