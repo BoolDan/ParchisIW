@@ -18,16 +18,16 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @NamedQueries({
-        @NamedQuery(name="Usuario.byUsername",
-                query="SELECT u FROM User u "
-                        + "WHERE u.username = :username AND u.enabled = TRUE"),
-        @NamedQuery(name="Usuario.hasUsername",
+        @NamedQuery(name="Usuario_Nuevo.porusuario",
+                query="SELECT u FROM Usuario_Nuevo u "
+                        + "WHERE u.nombre_usuario = :nombre_usuario AND u.enabled = TRUE"),
+        @NamedQuery(name="Usuario_Nuevo.tieneusuario",
                 query="SELECT COUNT(u) "
-                        + "FROM User u "
-                        + "WHERE u.username = :username")
+                        + "FROM Usuario_Nuevo u "
+                        + "WHERE u.nombre_usuario = :nombre_usuario")
 })
-@Table(name="Usuario")
-public class Usuario implements Transferable<Usuario.Transfer> {
+@Table(name="Usuario_Nuevo")
+public class Usuario_Nuevo implements Transferable<Usuario_Nuevo.Transfer> {
 
     public enum Rol {
         USER,			// normal users 
