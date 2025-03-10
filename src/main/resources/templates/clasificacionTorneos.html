@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <link rel="stylesheet" href="/src/main/resources/static/css/custom.css">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
     <title>Clasificación Torneos</title>
 </head>
 
@@ -12,31 +12,36 @@
 
     <main class="clasificacion">
         <h1>Clasificación de Torneos</h1>
-        
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-            <a href="clasificacion.html" class="btn btn-primary me-md-2" title="Ver clasificación general">Clasificación General</a>
-        </div>
 
+        <!-- Torneos en juego -->
         <h2>Torneos en Juego</h2>
         <div class="torneos-en-juego">
+            <div th:if="${#lists.isEmpty(torneosEnJuego)}">
+                <p>No hay torneos en juego actualmente.</p>
+            </div>
             <div th:each="torneo : ${torneosEnJuego}" class="torneo-card">
-                <h3 th:text="${torneo.nombre}"></h3>
-                <p>Participantes: <th:block th:text="${torneo.participantes}"></th:block></p>
-                <p>Puntos: <th:block th:text="${torneo.puntos}"></th:block></p>
+                <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
+                <p>Participantes: <span th:text="${torneo.numParticipantes}">0</span></p>
+                <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
             </div>
         </div>
 
+        <!-- Torneos acabados -->
         <h2>Torneos Acabados</h2>
         <div class="torneos-acabados">
+            <div th:if="${#lists.isEmpty(torneosAcabados)}">
+                <p>No hay torneos acabados actualmente.</p>
+            </div>
             <div th:each="torneo : ${torneosAcabados}" class="torneo-card">
-                <h3 th:text="${torneo.nombre}"></h3>
-                <p>Ganador: <th:block th:text="${torneo.ganador}"></th:block></p>
-                <p>Puntos: <th:block th:text="${torneo.puntos}"></th:block></p>
+                <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
+                <p>Ganador: <span th:text="${torneo.ganador}">Sin determinar</span></p>
+                <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
             </div>
         </div>
 
+        <!-- Botón para ver todos los torneos acabados -->
         <div class="ver-todos">
-            <a href="clasificacionAcabados.html" class="btn btn-primary">Ver Todos los Torneos Acabados</a>
+            <a th:href="@{/clasificacionAcabados}" class="btn btn-primary">Ver Todos los Torneos Acabados</a>
         </div>
     </main>
     
@@ -44,4 +49,3 @@
 </body>
 
 </html>
-s

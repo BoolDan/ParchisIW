@@ -8,23 +8,23 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.time.LocalTime;
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @NamedQueries({
-    //Queries que vamos a usar para la tabla Torneo en la BBDD
+    @NamedQuery(name = "Torneo.getEnJuego", query = "SELECT t FROM Torneo t WHERE t.estado = 'En_espera'"),
+    @NamedQuery(name = "Torneo.getAcabados", query = "SELECT t FROM Torneo t WHERE t.estado = 'Cerrado'")
 })
-
-@Table(name="Torneo")
+@Table(name = "Torneo")
 public class Torneo {
     
     public enum EstadoTorneo {
-        En_espera,
-        Cerrado,
+        En_espera,  // Torneos en curso
+        Cerrado     // Torneos finalizados
     }
 
     @Id
@@ -32,10 +32,20 @@ public class Torneo {
     @SequenceGenerator(name = "gen", sequenceName = "gen")
     private long id;
 
-    @Column
+    @Column(nullable = false)
+    private String nombre;
+
+    @Column(nullable = false)
     private int numParticipantes;
 
     @Column
+    private String ganador; 
+
+    @Column
+    private int puntos; 
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private EstadoTorneo estado;
 
     @Column
@@ -44,7 +54,7 @@ public class Torneo {
     @Column
     private LocalTime horaFin;
 
+    // Relación 1 Torneo -> muchas Partidas
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Partida> partidas;
-
+    private List<Partida> partidas = new ArrayList<>();
 }

@@ -49,11 +49,11 @@ public class RootController {
         return "index";
     }
 
-    @GetMapping("/clasificacion")
+  /*  @GetMapping("/clasificacion")
     public String clasificacion(Model model) {
         return "clasificacion";
     }
-
+*/
     @GetMapping("/clasificacionTorneos")
     public String clasificacionTorneos(Model model) {
         return "clasificacionTorneos";
