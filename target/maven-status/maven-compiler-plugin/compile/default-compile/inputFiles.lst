@@ -1,6 +1,7 @@
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\AppConfig.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\controller\AdminController.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\controller\RootController.java
+C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\controller\TorneoController.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\controller\UserController.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\IwApplication.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\IwUserDetailsService.java
@@ -13,6 +14,7 @@ C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\model\Torneo.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\model\Transferable.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\model\User.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\model\Usuario_Nuevo.java
+C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\repository\TorneoRepository.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\SecurityConfig.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\StartupConfig.java
 C:\IW_Desarrollo\code\ParchisIW\src\main\java\es\ucm\fdi\iw\WebSocketConfig.java
