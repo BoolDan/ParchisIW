@@ -64,11 +64,11 @@ def main(credentials_file, db_file_root, data_file_root):
   try:
       subprocess.run(["mvn",
                       "package", 
-                      "-DskipTests=true"], shell=False, check=True)
-      jar = glob.glob("target/*.jar")[0]
+                      "-DskipTests=true"], shell=True, check=True)
       print(f"Deployment jar file is ready: {jar}")
   except:
       print("Error: Could not build jar file. Exiting.")
+  jar = glob.glob("target/*.jar")[0]
 
   print(f"Loading credentials from `{credentials_file}` ... ")
   try:
