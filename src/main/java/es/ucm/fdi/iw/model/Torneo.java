@@ -62,7 +62,7 @@ public class Torneo implements Transferable<Torneo.Transfer> {
     @AllArgsConstructor
     public static class Transfer {
 		private long id;
-        private String nombreTorneo;
+        private String nombre;
 		private int estado;
         private int numParticipantes;
         private String ganador;
