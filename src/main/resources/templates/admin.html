@@ -40,14 +40,13 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        <form th:action="@{'/admin/toggle/' + ${user.id}}"
-                                            th:method="post">
+                                        <form th:action="@{'/admin/toggle/' + ${user.id}}" th:method="post">
                                             <button
                                                 th:if="${user.enabled}"
-                                                type="submit" class="toggle btn btn-danger">Deshabilitar</button>
+                                                type="submit" class="toggle btn btn-danger">Banear</button>
                                             <button
                                                 th:unless="${user.enabled}"
-                                                type="submit" class="toggle btn btn-primary">Habilitar</button>
+                                                type="submit" class="toggle btn btn-primary">Desbanear</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -107,17 +106,7 @@
                 });
             });
         });
-
-        // Función para hacer la petición AJAX
-        async function go(url, method) {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            return response.json();
-        }
+        
     </script>
 
 </body>

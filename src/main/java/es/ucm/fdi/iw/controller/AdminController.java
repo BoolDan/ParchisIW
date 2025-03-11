@@ -53,35 +53,35 @@ public class AdminController {
         model.addAttribute("users", 
              entityManager.createQuery("select u from User u").getResultList());
         
-        return "admin"; // El nombre de la vista Thymeleaf
+        return "admin";
     }
 
     @PostMapping("/toggle/{id}")
-     @Transactional
-     @ResponseBody
-     public String toggleUser(@PathVariable long id, Model model) {
-         log.info("Admin cambia estado de " + id);
-         User target = entityManager.find(User.class, id);
-         target.setEnabled(!target.isEnabled());
-         return "{\"enabled\":" + target.isEnabled() + "}";
-     }
+    @Transactional
+    @ResponseBody
+    public String toggleUser(@PathVariable long id, Model model) {
+        log.info("Admin cambia estado de " + id);
+        User target = entityManager.find(User.class, id);
+        target.setEnabled(!target.isEnabled());
+        return "{\"enabled\":" + target.isEnabled() + "}";
+    }
  
-     @PostMapping("/populate")
-     @ResponseBody
-     @Transactional
-     public String populate(Model model) {
-         for (int i=0; i<10; i++) {
-             User u = new User();
-             u.setUsername("user" + i);
-             u.setPassword(passwordEncoder
-                 .encode(UserController
-                     .generateRandomBase64Token(9)));
-             u.setEnabled(true);
-             u.setRoles(User.Role.USER.toString());
-             u.setFirstName(Lorem.nombreAlAzar());
-             u.setLastName(Lorem.apellidoAlAzar());
-             entityManager.persist(u);
-         }
-         return "{\"admin\": \"populated\"}";
-     }
+    @PostMapping("/populate")
+    @ResponseBody
+    @Transactional
+    public String populate(Model model) {
+        for (int i=0; i<10; i++) {
+            User u = new User();
+            u.setUsername("user" + i);
+            u.setPassword(passwordEncoder
+                .encode(UserController
+                    .generateRandomBase64Token(9)));
+            u.setEnabled(true);
+            u.setRoles(User.Role.USER.toString());
+            u.setFirstName(Lorem.nombreAlAzar());
+            u.setLastName(Lorem.apellidoAlAzar());
+            entityManager.persist(u);
+        }
+        return "{\"admin\": \"populated\"}";
+    }
 }
