@@ -6,13 +6,10 @@ INSERT INTO Usuario (id, enabled, roles, username, password)
 VALUES (2, TRUE, 'USER', 'b',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
 
-<<<<<<< Updated upstream
-=======
 INSERT INTO Usuario (id, enabled, roles, username, password)
 VALUES (3, TRUE, 'USER', 'c',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
 
->>>>>>> Stashed changes
 -- Insertar un torneo en estado "En espera" sin fecha de finalización
 INSERT INTO Torneo (estado, numero_participantes, fecha_inicio, fecha_fin)
 VALUES ('En espera', 8, '2025-03-10 14:00:00', NULL);
