@@ -77,6 +77,16 @@
                                     <button type="submit" class="btn btn-outline-danger btn-sm">b</button>
                                 </form>
                             </li>
+<<<<<<< Updated upstream
+=======
+                            <li class="nav-item debug align-self-center" th:if="${application.debug}">
+                                <form class="d-flex" th:action="@{/login}" method="post">
+                                    <input type="hidden" name="username" value="c">
+                                    <input type="hidden" name="password" value="aa">
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">c</button>
+                                </form>
+                            </li>
+>>>>>>> Stashed changes
                         </th:block>
                     </ul>
                 </div>

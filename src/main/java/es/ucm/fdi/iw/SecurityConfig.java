@@ -49,8 +49,9 @@ public class SecurityConfig {
 				.ignoringRequestMatchers("/h2/**")
 			);
 			http.authorizeHttpRequests(authorize -> authorize
-				.requestMatchers("/h2/**")
+				.requestMatchers("/h2/**").permitAll()  // <-- no login for h2 console
 			);
+      http.headers(header->header.frameOptions(frameOptions->frameOptions.sameOrigin()));
 		}
 
         http
