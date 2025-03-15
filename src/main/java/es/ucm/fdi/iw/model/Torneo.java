@@ -82,4 +82,5 @@ public class Torneo implements Transferable<Torneo.Transfer> {
 	public String toString() {
 		return toTransfer().toString();
 	}
+
 }
