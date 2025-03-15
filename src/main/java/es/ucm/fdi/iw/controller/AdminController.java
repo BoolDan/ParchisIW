@@ -34,26 +34,36 @@ public class AdminController {
     private static final Logger log = LogManager.getLogger(AdminController.class);
 
     @Autowired
- 	private PasswordEncoder passwordEncoder;
- 
-     @Autowired
-     private EntityManager entityManager;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @ModelAttribute
-    public void populateModel(HttpSession session, Model model) {        
+    public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] {"u", "url", "ws"}) {
             model.addAttribute(name, session.getAttribute(name));
         }
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        log.info("Admin acaba de entrar");
+    public String index(@RequestParam(value = "search", required = false) String search, Model model) {
+        log.info("Buscando usuarios con término: " + search);
 
-        model.addAttribute("users", 
-             entityManager.createQuery("select u from User u").getResultList());
-        
-        return "admin";
+        List<User> users;
+
+        if (search != null && !search.isEmpty()) {
+            // Realiza la búsqueda de usuarios con el término "search"
+            users = entityManager.createQuery("SELECT u FROM User u WHERE LOWER(u.username) LIKE :search", User.class)
+                .setParameter("search", "%" + search.toLowerCase() + "%")
+                .getResultList();
+        } else {
+            // Si no hay término de búsqueda, obtiene todos los usuarios
+            users = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+        }
+
+        model.addAttribute("users", users);
+        return "admin";  // Devuelve la vista admin
     }
 
     @PostMapping("/toggle/{id}")
@@ -65,12 +75,12 @@ public class AdminController {
         target.setEnabled(!target.isEnabled());
         return "{\"enabled\":" + target.isEnabled() + "}";
     }
- 
+
     @PostMapping("/populate")
     @ResponseBody
     @Transactional
     public String populate(Model model) {
-        for (int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             User u = new User();
             u.setUsername("user" + i);
             u.setPassword(passwordEncoder
@@ -85,3 +95,4 @@ public class AdminController {
         return "{\"admin\": \"populated\"}";
     }
 }
+
