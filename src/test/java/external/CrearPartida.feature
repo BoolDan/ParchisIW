@@ -1,5 +1,7 @@
+@tag
+@aparallel False
 Feature: Creación de partida de Parchís
-
+  @tag1
   Scenario Outline: Crear una nueva partida de Parchís
     Given el usuario está en la página de creación de partida
     When selecciona el número de jugadores "<num_jugadores>"
