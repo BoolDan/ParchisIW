@@ -23,27 +23,12 @@
                 <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
                 <p>Participantes: <span th:text="${torneo.numParticipantes}">0</span></p>
                 <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
-                <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-primary">Ver Detalles</a>
+                <a th:href="@{/torneos/{id}(id=${torneo.id}, from='vigentes')}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
 
-        <!-- Torneos acabados -->
-        <h2>Torneos Acabados</h2>
-        <div class="torneos-acabados">
-            <div th:if="${#lists.isEmpty(torneosAcabados)}">
-                <p>No hay torneos acabados actualmente.</p>
-            </div>
-            <div th:each="torneo : ${torneosAcabados}" class="torneo-card">
-                <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
-                <p>Ganador: <span th:text="${torneo.ganador}">Sin determinar</span></p>
-                <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
-                <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-primary">Ver Detalles</a>
-            </div>
-        </div>
-
-        <!-- Botón para ver todos los torneos acabados -->
-        <div class="ver-todos">
-            <a th:href="@{/clasificacionAcabados}" class="btn btn-primary">Ver Todos los Torneos Acabados</a>
+        <div class="Volver">
+            <a href="/torneos/clasificacionAcabados" class="btn btn-primary">Ver los Torneos Acabados</a>
         </div>
     </main>
     

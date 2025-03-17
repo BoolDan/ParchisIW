@@ -3,9 +3,6 @@ package es.ucm.fdi.iw.controller;
 import es.ucm.fdi.iw.model.Jugador_torneo;
 import es.ucm.fdi.iw.model.Torneo;
 import es.ucm.fdi.iw.model.User;
-
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,9 +11,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import java.util.List;
+
 @Controller
 @RequestMapping("/torneos")
 public class TorneoController {
@@ -24,35 +27,38 @@ public class TorneoController {
     @Autowired
     private EntityManager entityManager;
 
-    @GetMapping("/clasificacion")
-    public String getClasificacionTorneos(Model model) {
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {
+        for (String name : new String[] {"u", "url", "ws"}) {
+            model.addAttribute(name, session.getAttribute(name));
+        }
+
         List<Torneo> torneosEnJuego = entityManager.createNamedQuery("Torneo.getEnJuego", Torneo.class).getResultList();
         List<Torneo> torneosAcabados = entityManager.createNamedQuery("Torneo.getAcabados", Torneo.class).getResultList();
 
         model.addAttribute("torneosEnJuego", torneosEnJuego);
         model.addAttribute("torneosAcabados", torneosAcabados);
+    }
 
+    @GetMapping("/clasificacionTorneos")
+    public String getClasificacionTorneos(Model model) {
         return "clasificacionTorneos";
     }
 
     @GetMapping("/clasificacionAcabados")
     public String getClasificacionTorneosAcabados(Model model) {
-        List<Torneo> torneosAcabados = entityManager.createNamedQuery("Torneo.getAcabados", Torneo.class)
-                .getResultList();
-
-        model.addAttribute("torneosAcabados", torneosAcabados);
-
         return "clasificacionAcabados";
     }
 
     @GetMapping("/{id}")
-    public String getTorneoDetails(@PathVariable("id") long id, Model model) {
+    public String getTorneoDetails(@PathVariable("id") long id, @RequestParam(value = "from", required = false) String from, Model model) {
         Torneo torneo = entityManager.find(Torneo.class, id);
         List<Jugador_torneo> jugadores = entityManager.createNamedQuery("Jugador_torneo.findByTorneo", Jugador_torneo.class)
                 .setParameter("torneoId", id)
                 .getResultList();
         model.addAttribute("torneo", torneo);
         model.addAttribute("jugadores", jugadores);
+        model.addAttribute("from", from);
         return "torneoDetalles";
     }
 
@@ -67,9 +73,9 @@ public class TorneoController {
         if (torneo != null && usuario != null) {
             // Verificar si el usuario ya está inscrito en el torneo
             boolean yaInscrito = entityManager.createNamedQuery("Jugador_torneo.countByTorneoAndUsuario", Long.class)
-            .setParameter("torneoId", id)
-            .setParameter("usuarioId", usuario.getId())
-            .getSingleResult() > 0;
+                    .setParameter("torneoId", id)
+                    .setParameter("usuarioId", usuario.getId())
+                    .getSingleResult() > 0;
 
             if (!yaInscrito) {
                 // Inscribir al usuario en el torneo
