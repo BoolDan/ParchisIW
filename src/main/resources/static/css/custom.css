@@ -31,92 +31,123 @@ img.preview {
 }
 
 /*para la clasificacion global y de torneos */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.clasificacion {
-    width: 80%;
-    margin: auto;
-    padding: 20px;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
+/* ----- NUEVO DISEÑO PARA CLASIFICACION DE TORNEOS ----- */
 
 h1, h2 {
     text-align: center;
+    color: #444;
+    margin: 20px 0;
+    font-weight: 700;
+}
+
+/* Contenedor principal */
+.clasificacion {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(1, 52, 155, 0.36);
+    border-radius: 15px;
+}
+
+/* Cartas de torneos */
+.torneo-card {
+    background: linear-gradient(135deg, #fdfdfd, #f1f1f1);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(33, 104, 2, 0.233);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.torneo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* Títulos de torneos */
+.torneo-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
     color: #333;
-    margin-bottom: 20px;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 2px solid white!important;
+/* Texto de torneos */
+.torneo-card p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 1rem;
 }
 
-.clasificacion th, 
-.clasificacion td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid black;
-}
-
-.table th {
-    background-color: #007bff;
+/* Botón de ver detalles */
+.torneo-card button {
+    background-color: #FF6F61;
     color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
 }
 
-.clasificacion .puntos {
-    text-align: center;
-    font-weight: bold;
+.torneo-card button:hover {
+    background-color: #FF3B2F;
 }
 
-li a:hover {
-    text-decoration: underline;
-} 
-
-/* Estilo para torneos en juego en formato de columnas (2x2) */
+/* Torneos en juego (grid adaptable) */
 .torneos-en-juego {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
-.torneo-card {
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-/* Estilo para torneos acabados (uno debajo del otro) */
+/* Torneos acabados (columnas verticales) */
 .torneos-acabados {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    margin-bottom: 20px;
 }
 
-/* Botón para ver todos los torneos acabados */
+/* Botón "Ver todos" centrado */
 .ver-todos {
+    margin: 30px 0 10px;
     text-align: center;
-    margin-top: 10px;
 }
 
-.ver-todos .btn-primary {
-    padding: 12px 20px;
-    font-size: 16px;
-} 
+.ver-todos button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-size: 1rem;
+}
+
+.ver-todos button:hover {
+    background-color: #0056b3;
+}
+
+/* Botón de volver */
+.Volver {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.Volver .btn-primary {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    border-radius: 25px;
+    background-color: #28a745;
+    border: none;
+}
+
+.Volver .btn-primary:hover {
+    background-color: #218838;
+}
 
 /*--------------------*/
 .game{
