@@ -29,13 +29,13 @@ ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
 
 -- Consultas para probar insertar jugadores en torneos
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (1, 2, 1, 100);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (1, 2, 1, 100);
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (2, 2, 2, 50);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (2, 2, 2, 50);
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (3, 3, 2, 0);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (3, 3, 2, 0);
 
 
