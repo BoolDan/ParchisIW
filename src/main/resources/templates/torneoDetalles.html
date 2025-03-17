@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <title>Detalles del Torneo</title>
+</head>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <div class="container mt-4">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+            <a href="clasificacion" class="btn btn-primary me-md-2" title="Volver a Torneos">Volver a Torneos</a>
+        </div>
+
+        <h1 class="text-center">Detalles del Torneo</h1>
+        <div class="torneo-detalles card p-4 mb-4">
+            <h2 th:text="${torneo.nombre}" class="card-title">Nombre del Torneo</h2>
+            <p><strong>Estado:</strong> <span th:text="${torneo.estado}">Estado</span></p>
+            <p><strong>Número de Participantes:</strong> <span th:text="${torneo.numParticipantes}">Número de Participantes</span></p>
+            <p><strong>Ganador:</strong> <span th:text="${torneo.ganador}">Ganador</span></p>
+            <p><strong>Puntos:</strong> <span th:text="${torneo.puntos}">Puntos</span></p>
+            <p><strong>Hora de Inicio:</strong> <span th:text="${torneo.horaInicio}">Hora de Inicio</span></p>
+            <p><strong>Hora de Fin:</strong> <span th:text="${torneo.horaFin}">Hora de Fin</span></p>
+        </div>
+
+        <h2 class="text-center">Jugadores</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Puntuación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="jugador : ${jugadores}">
+                    <td th:text="${jugador.usuario.username}">Nombre del Usuario</td>
+                    <td th:text="${jugador.puntuacion}">Puntuación</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Botón para inscribirse o jugar en el torneo -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+            <a th:href="@{/torneos/{id}/inscribirse(id=${torneo.id})}" class="btn btn-success me-md-2" title="Inscribirse o Jugar en el Torneo">Inscribirse o Jugar</a>
+        </div>
+    </div>
+    <footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+</html>

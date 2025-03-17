@@ -23,6 +23,7 @@
                 <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
                 <p>Participantes: <span th:text="${torneo.numParticipantes}">0</span></p>
                 <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
+                <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
 
@@ -36,6 +37,7 @@
                 <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
                 <p>Ganador: <span th:text="${torneo.ganador}">Sin determinar</span></p>
                 <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
+                <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
 
