@@ -49,10 +49,10 @@ public class Partida {
     private long id;
 
     @Column
-    private ColoresPartida colorTurno;
+    private String colorTurno;
 
     @Column(nullable = false)
-    private EstadoPartida estado = EstadoPartida.ESPERANDO_JUGADORES;
+    private String estado = "ESPERANDO_JUGADORES";
 
     @Column
     private int numJugadores;
@@ -77,6 +77,6 @@ public class Partida {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ID_torneo", nullable = false)
+    @JoinColumn(name = "id_torneo")
     private Torneo torneo;
 }
