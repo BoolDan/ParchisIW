@@ -35,6 +35,16 @@ public class TorneoController {
         return "clasificacionTorneos";
     }
 
+    @GetMapping("/clasificacionAcabados")
+    public String getClasificacionTorneosAcabados(Model model) {
+        List<Torneo> torneosAcabados = entityManager.createNamedQuery("Torneo.getAcabados", Torneo.class)
+                .getResultList();
+
+        model.addAttribute("torneosAcabados", torneosAcabados);
+
+        return "clasificacionAcabados";
+    }
+
     @GetMapping("/{id}")
     public String getTorneoDetails(@PathVariable("id") long id, Model model) {
         Torneo torneo = entityManager.find(Torneo.class, id);
@@ -60,7 +70,6 @@ public class TorneoController {
             .setParameter("torneoId", id)
             .setParameter("usuarioId", usuario.getId())
             .getSingleResult() > 0;
-
 
             if (!yaInscrito) {
                 // Inscribir al usuario en el torneo
