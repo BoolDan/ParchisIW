@@ -37,9 +37,14 @@ INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resu
 VALUES (4, 'AZUL', 'EN_CURSO', 3, 6, 'ALE', NULL, 3);
 
 -- Consultas para Mensajes
---INSERT INTO Mensaje (id, id_usuario, id_partida, text, data_sent, fecha_reporte, reported) 
---VALUES (1, 1, )
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (1, 1, 1, 'QUE HACES', '2025-03-17 14:30:00', '2025-03-17 14:50:00', TRUE);
 
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (2, 2, 2, 'BORRA BRO', '2025-03-16 10:30:00', NULL, FALSE);
+
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (3, 1, 3, 'BUENA PARTIDA', '2025-03-14 12:30:00', NULL, FALSE);
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
