@@ -49,22 +49,6 @@ public class RootController {
         return "index";
     }
 
-  /*  @GetMapping("/clasificacion")
-    public String clasificacion(Model model) {
-        return "clasificacion";
-    }
-*/
-    @GetMapping("/clasificacionTorneos")
-    public String clasificacionTorneos(Model model) {
-     //   return "clasificacionTorneos";   ahora es el TorneoController quien se encarga de esto
-        return "redirect:/torneos/clasificacion";
-    }
-
-    @GetMapping("/clasificacionAcabados")
-    public String clasificacionAcabados(Model model) {
-        return "clasificacionAcabados";
-    }
-
     @GetMapping("/lobby")
     public String lobby(Model model) {
         return "lobby";

@@ -12,10 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 @Controller
 @RequestMapping("/torneos")
@@ -24,24 +26,26 @@ public class TorneoController {
     @Autowired
     private EntityManager entityManager;
 
-    @GetMapping("/clasificacion")
-    public String getClasificacionTorneos(Model model) {
-        List<Torneo> torneosEnJuego = entityManager.createNamedQuery("Torneo.getEnJuego", Torneo.class).getResultList();
+    @ModelAttribute
+    public void populateModel(HttpSession session, Model model) {        
+        for (String name : new String[] {"u", "url", "ws"}) {
+            model.addAttribute(name, session.getAttribute(name));
+        }
+
         List<Torneo> torneosAcabados = entityManager.createNamedQuery("Torneo.getAcabados", Torneo.class).getResultList();
+        List<Torneo> torneosEnJuego = entityManager.createNamedQuery("Torneo.getEnJuego", Torneo.class).getResultList();
 
-        model.addAttribute("torneosEnJuego", torneosEnJuego);
         model.addAttribute("torneosAcabados", torneosAcabados);
+        model.addAttribute("torneosEnJuego", torneosEnJuego);
+    }
 
+    @GetMapping("/clasificacionTorneos")
+    public String getClasificacionTorneos(Model model) {
         return "clasificacionTorneos";
     }
 
     @GetMapping("/clasificacionAcabados")
     public String getClasificacionTorneosAcabados(Model model) {
-        List<Torneo> torneosAcabados = entityManager.createNamedQuery("Torneo.getAcabados", Torneo.class)
-                .getResultList();
-
-        model.addAttribute("torneosAcabados", torneosAcabados);
-
         return "clasificacionAcabados";
     }
 
