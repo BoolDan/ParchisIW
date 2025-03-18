@@ -57,7 +57,7 @@ public class AdminController {
             entityManager.createQuery("select p from Partida p").getResultList());
 
         model.addAttribute("mensajes", 
-            entityManager.createQuery("select m from Message m").getResultList());
+            entityManager.createQuery("select m from Message m where m.reported=true").getResultList());
 
         return "admin";
     }
