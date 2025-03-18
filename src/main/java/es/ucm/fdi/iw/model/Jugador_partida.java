@@ -22,6 +22,7 @@ import java.time.LocalTime;
 @Data
 @NoArgsConstructor
 @NamedQueries({
+    
 
 })
 

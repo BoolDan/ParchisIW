@@ -9,3 +9,5 @@ Feature: Funcionamiento de una partida de Parchís con 5 jugadores
   Scenario: Ver la clasificacion de los torneos 
     Given request {estado: 'Cerrado'}
     Then 
+
+  Scenario:

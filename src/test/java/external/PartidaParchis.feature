@@ -6,7 +6,7 @@ Feature: Funcionamiento de una partida de Parchís con 5 jugadores
       * url 'http://localhost:8080/game'
       * header Content-Type = 'application/json'
 
-  #Este escenario muestra como el usuario puedee enviar mensajes por el chat    
+  #Este escenario muestra como el usuario puedee enviar mensajes por el chat      
   @tag1
   Scenario: Enviar un mensaje
     Given request { "from": "usuario1", "to": "usuario2", "text": "Hola, ¿cómo estás?", "sent": "2025-03-17T10:00:00" }

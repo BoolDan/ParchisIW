@@ -44,8 +44,8 @@ public class User implements Transferable<User.Transfer> {
     @Column(nullable = false)
     private String password;
 
-    private String firstName;
-    private String lastName;
+    private String correo;
+    private String pais;
 
     private String colorFavorito;
 
@@ -68,6 +68,7 @@ public class User implements Transferable<User.Transfer> {
         String roleName = role.name();
         return Arrays.asList(roles.split(",")).contains(roleName);
     }
+
 
     @Getter
     @AllArgsConstructor
