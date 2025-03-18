@@ -53,6 +53,12 @@ public class AdminController {
         model.addAttribute("users", 
              entityManager.createQuery("select u from User u").getResultList());
         
+        model.addAttribute("partidas", 
+            entityManager.createQuery("select p from Partida p").getResultList());
+
+        model.addAttribute("mensajes", 
+            entityManager.createQuery("select m from Message m").getResultList());
+
         return "admin";
     }
 

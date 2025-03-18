@@ -23,13 +23,12 @@
                 <h3 th:text="${torneo.nombre}">Nombre del Torneo</h3>
                 <p>Participantes: <span th:text="${torneo.numParticipantes}">0</span></p>
                 <p>Puntos: <span th:text="${torneo.puntos}">0</span></p>
-                <a th:href="@{/torneos/{id}(id=${torneo.id})}" class="btn btn-primary">Ver Detalles</a>
+                <a th:href="@{/torneos/{id}(id=${torneo.id}, from='vigentes')}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
 
-        <!-- Botón para ver todos los torneos acabados -->
-        <div class="ver-todos">
-            <a th:href="@{/torneos/clasificacionAcabados}" class="btn btn-primary">Ver los Torneos Acabados</a>
+        <div class="Volver">
+            <a href="/torneos/clasificacionAcabados" class="btn btn-primary">Ver los Torneos Acabados</a>
         </div>
     </main>
     

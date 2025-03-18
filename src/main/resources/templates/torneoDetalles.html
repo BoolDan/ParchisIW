@@ -10,7 +10,7 @@
     <header th:replace="~{fragments/nav.html :: nav}"></header>
     <div class="container mt-4">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
-            <a href="clasificacion" class="btn btn-primary me-md-2" title="Volver a Torneos">Volver a Torneos</a>
+            <a th:href="${from == 'vigentes' ? '/torneos/clasificacionTorneos' : '/torneos/clasificacionAcabados'}" class="btn btn-primary me-md-2" title="Volver a Torneos">Volver a Torneos</a>
         </div>
 
         <h1 class="text-center">Detalles del Torneo</h1>
@@ -41,9 +41,13 @@
         </table>
 
         <!-- Botón para inscribirse o jugar en el torneo -->
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-            <a th:href="@{/torneos/{id}/inscribirse(id=${torneo.id})}" class="btn btn-success me-md-2" title="Inscribirse o Jugar en el Torneo">Inscribirse o Jugar</a>
+        <div th:if="${#strings.toLowerCase(torneo.estado) == 'en_espera'}" class="torneo-card">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                <a th:href="@{/torneos/{id}/inscribirse(id=${torneo.id})}" class="btn btn-success me-md-2" title="Inscribirse o Jugar en el Torneo">Inscribirse o Jugar</a>
+            </div>
         </div>
+
+        <p th:text="'Estado del torneo: ' + ${torneo.estado}" class="text-center mt-4"></p>
     </div>
     <footer th:replace="~{fragments/footer.html :: footer}"></footer>
 </body>
