@@ -84,8 +84,7 @@ public class AdminController {
                     .generateRandomBase64Token(9)));
             u.setEnabled(true);
             u.setRoles(User.Role.USER.toString());
-            u.setFirstName(Lorem.nombreAlAzar());
-            u.setLastName(Lorem.apellidoAlAzar());
+            
             entityManager.persist(u);
         }
         return "{\"admin\": \"populated\"}";
