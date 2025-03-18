@@ -21,12 +21,13 @@ import java.time.LocalTime;
 @Entity
 @Data  // @Getter, @Setter, @ToString, @Equals and Hash Code, @RequiredArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @NamedQueries({
 
 })
 
 @Table(name="Partida")
-public class Partida {
+public class Partida implements Transferable<Partida.Transfer> {
     
     public enum ColoresPartida {
         ROJO,
@@ -79,4 +80,28 @@ public class Partida {
     @ManyToOne
     @JoinColumn(name = "id_torneo")
     private Torneo torneo;
+
+    @Getter
+    @AllArgsConstructor
+    public static class Transfer {
+		private long id;
+        private String colorTurno;
+		private String estado;
+        private int numJugadores;
+        private int jugadoresMax;
+        private String resultadoFinal;
+        private String movimientos_turno;
+        private Torneo torneo;
+
+    }
+
+    @Override
+    public Transfer toTransfer() {
+		return new Transfer(id,	colorTurno, estado, numJugadores, jugadoresMax, resultadoFinal, movimientos_turno, torneo);
+	}
+
+    @Override
+	public String toString() {
+		return toTransfer().toString();
+	}
 }
