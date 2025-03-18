@@ -21,6 +21,7 @@
                 <div class="col-md-4">
                     <div class="section-card flex-column h-100">
                         <h3 class="section-title">Usuarios</h3>
+                        <input type="text" id="searchField" placeholder="Buscar por nombre..." />
                         <table>
                             <thead>
                                 <tr>
@@ -54,7 +55,7 @@
                         </table>
                     </div>
                 </div>
-
+                
                 <!-- Columna de Partidas -->
                 <div class="col-md-4">
                     <div class="section-card flex-column h-100">
@@ -96,17 +97,57 @@
                     if (d.enabled) {
                         e.target.classList.remove('btn-primary');
                         e.target.classList.add('btn-danger');
-                        e.target.textContent = 'Deshabilitar';
+                        e.target.textContent = 'Banear';
                     } else {
                         e.target.classList.remove('btn-danger');
                         e.target.classList.add('btn-primary');
-                        e.target.textContent = 'Habilitar';
+                        e.target.textContent = 'Desbanear';
                     }
                     console.log(d);
                 });
             });
         });
         
+    </script>
+    <script>
+        document.getElementById("searchField").addEventListener("input", function() {
+        var searchText = this.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/admin?search=" + encodeURIComponent(searchText), true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Si la respuesta es correcta, actualizamos la tabla
+                var users = JSON.parse(xhr.responseText); // Parseamos la respuesta JSON
+                var tableBody = document.querySelector("#usersTable tbody");
+                tableBody.innerHTML = ""; // Limpiamos la tabla
+
+                // Agregamos las filas con los usuarios filtrados
+                users.forEach(function(user) {
+                    var row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td><ul><li>${user.roles}</li></ul></td>
+                        <td>
+                            <form action="/admin/toggle/${user.id}" method="post">
+                                <button type="submit" class="toggle btn ${user.enabled ? 'btn-danger' : 'btn-primary'}">
+                                    ${user.enabled ? 'Banear' : 'Desbanear'}
+                                </button>
+                            </form>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } else {
+                console.error('Error al cargar los usuarios:', xhr.status, xhr.statusText);
+            }
+        };
+
+        xhr.send(); // Enviamos la solicitud
+    });
+
     </script>
 
 </body>

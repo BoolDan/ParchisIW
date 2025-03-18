@@ -34,13 +34,13 @@ public class AdminController {
     private static final Logger log = LogManager.getLogger(AdminController.class);
 
     @Autowired
- 	private PasswordEncoder passwordEncoder;
- 
-     @Autowired
-     private EntityManager entityManager;
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @ModelAttribute
-    public void populateModel(HttpSession session, Model model) {        
+    public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] {"u", "url", "ws"}) {
             model.addAttribute(name, session.getAttribute(name));
         }
@@ -71,12 +71,12 @@ public class AdminController {
         target.setEnabled(!target.isEnabled());
         return "{\"enabled\":" + target.isEnabled() + "}";
     }
- 
+
     @PostMapping("/populate")
     @ResponseBody
     @Transactional
     public String populate(Model model) {
-        for (int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             User u = new User();
             u.setUsername("user" + i);
             u.setPassword(passwordEncoder
@@ -90,3 +90,4 @@ public class AdminController {
         return "{\"admin\": \"populated\"}";
     }
 }
+
