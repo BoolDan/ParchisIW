@@ -30,7 +30,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="usersTable">
                                 <tr th:each="user : ${users}">
                                     <td th:text="${user.id}">1</td>
                                     <td th:text="${user.username}">Nombre</td>
@@ -55,14 +55,20 @@
                     </div>
                 </div>
                 
-                <!-- Columna de Partidas -->
+                <!-- Columna de Torneos -->
                 <div class="col-md-4">
                     <div class="section-card flex-column h-100 scrollable-column">
-                        <h3 class="section-title">Partidas</h3>
-                        <ul>
-                            <li th:each="partida : ${partidas}">
+                        <h3 class="section-title">Torneos</h3>
+                        <select id="estadoTorneo" class="form-select">
+                            <option value="">Todos los estados</option>
+                            <option value="En_espera">En espera</option>
+                            <option value="En_curso">En curso</option>
+                            <option value="Cerrado">Cerrado</option>
+                        </select>
+                        <ul id="torneosList">
+                            <li th:each="torneo : ${torneos}">
                                 <button class="btn btn-outline-secondary"
-                                    th:text="${partida.id + ' - ' + partida.estado}"></button>
+                                    th:text="${torneo.nombre + ' - ' + torneo.estado}"></button>
                             </li>
                         </ul>
                     </div>
@@ -109,45 +115,95 @@
         });
         
     </script>
+    
     <script>
         document.getElementById("searchField").addEventListener("input", function() {
-        var searchText = this.value;
+            var searchText = this.value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/admin/search?search=" + encodeURIComponent(searchText), true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+    
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Si la respuesta es correcta, actualizamos la tabla
+                    var users = JSON.parse(xhr.responseText); // Parseamos la respuesta JSON
+                    var tableBody = document.getElementById("usersTable");
+                    tableBody.innerHTML = ""; // Limpiamos la tabla
+    
+                    // Agregamos las filas con los usuarios filtrados
+                    users.forEach(function(user) {
+                        var row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td><ul><li>${user.roles}</li></ul></td>
+                            <td>
+                                <form action="/admin/toggle/${user.id}" method="post">
+                                    <button type="submit" class="toggle btn ${user.enabled ? 'btn-danger' : 'btn-primary'}">
+                                        ${user.enabled ? 'Banear' : 'Desbanear'}
+                                    </button>
+                                </form>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+    
+                    // Re-agregar los event listeners a los botones de banear/desbanear
+                    const toggles = document.querySelectorAll('.toggle');
+                    toggles.forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const form = e.target.parentElement;
+                            go(form.action, 'POST').then((d) => {
+                                if (d.enabled) {
+                                    e.target.classList.remove('btn-primary');
+                                    e.target.classList.add('btn-danger');
+                                    e.target.textContent = 'Banear';
+                                } else {
+                                    e.target.classList.remove('btn-danger');
+                                    e.target.classList.add('btn-primary');
+                                    e.target.textContent = 'Desbanear';
+                                }
+                                console.log(d);
+                            });
+                        });
+                    });
+                } else {
+                    console.error('Error al cargar los usuarios:', xhr.status, xhr.statusText);
+                }
+            };
+    
+            xhr.send(); // Enviamos la solicitud
+        });
+
+        document.getElementById("estadoTorneo").addEventListener("change", function() {
+        var estado = this.value;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "/admin?search=" + encodeURIComponent(searchText), true);
+        xhr.open("GET", "/admin/torneos?estado=" + encodeURIComponent(estado), true);
         xhr.setRequestHeader("Content-Type", "application/json");
 
         xhr.onload = function() {
             if (xhr.status === 200) {
-                // Si la respuesta es correcta, actualizamos la tabla
-                var users = JSON.parse(xhr.responseText); // Parseamos la respuesta JSON
-                var tableBody = document.querySelector("#usersTable tbody");
-                tableBody.innerHTML = ""; // Limpiamos la tabla
+                var torneos = JSON.parse(xhr.responseText);
+                var torneosList = document.getElementById("torneosList");
+                torneosList.innerHTML = "";
 
-                // Agregamos las filas con los usuarios filtrados
-                users.forEach(function(user) {
-                    var row = document.createElement("tr");
-                    row.innerHTML = `
-                        <td>${user.id}</td>
-                        <td>${user.username}</td>
-                        <td><ul><li>${user.roles}</li></ul></td>
-                        <td>
-                            <form action="/admin/toggle/${user.id}" method="post">
-                                <button type="submit" class="toggle btn ${user.enabled ? 'btn-danger' : 'btn-primary'}">
-                                    ${user.enabled ? 'Banear' : 'Desbanear'}
-                                </button>
-                            </form>
-                        </td>
+                torneos.forEach(function(torneo) {
+                    var li = document.createElement("li");
+                    li.innerHTML = `
+                        <button class="btn btn-outline-secondary">
+                            ${torneo.nombre} - ${torneo.estado}
+                        </button>
                     `;
-                    tableBody.appendChild(row);
+                    torneosList.appendChild(li);
                 });
             } else {
-                console.error('Error al cargar los usuarios:', xhr.status, xhr.statusText);
+                console.error('Error al cargar los torneos:', xhr.status, xhr.statusText);
             }
         };
 
-        xhr.send(); // Enviamos la solicitud
+        xhr.send();
     });
-
     </script>
 
 </body>
