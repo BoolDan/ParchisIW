@@ -9,6 +9,12 @@
     width: 32px;
 }
 
+.scrollable-column {
+    max-height: 500px; /* Ajusta la altura máxima según tu diseño */
+    overflow-y: auto; /* Habilita el desplazamiento vertical */
+}
+
+
 .errTable tr>td:first-child {
     min-width: 200px;
     max-width: 200px;
