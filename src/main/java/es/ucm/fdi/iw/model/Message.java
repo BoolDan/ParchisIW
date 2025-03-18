@@ -3,14 +3,7 @@ package es.ucm.fdi.iw.model;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +17,13 @@ import lombok.AllArgsConstructor;
  *
  */
 @Entity
+@Data
 @NamedQueries({
 	@NamedQuery(name="Message.countUnread",
 	query="SELECT COUNT(m) FROM Message m "
 			+ "WHERE m.recipient.id = :userId AND m.dateRead = null")
 })
-@Data
+@Table(name="Mensaje")
 public class Message implements Transferable<Message.Transfer> {
 	
 	private static Logger log = LogManager.getLogger(Message.class);	
@@ -38,15 +32,34 @@ public class Message implements Transferable<Message.Transfer> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
     @SequenceGenerator(name = "gen", sequenceName = "gen")
 	private long id;
+
 	@ManyToOne
 	private User sender;
+
 	@ManyToOne
 	private User recipient;
+
+	@ManyToOne
+	@JoinColumn(name="id_usuario") 
+	private User usuario;
+
+	@ManyToOne
+	@JoinColumn(name="id_partida")
+	private Partida partida;
+
+	@Column(nullable = false)
 	private String text;
 	
+	@Column(nullable = false)
 	private LocalDateTime dateSent;
 	private LocalDateTime dateRead;
 	
+	@Column 
+	private LocalDateTime fechaReporte;
+
+	@Column(nullable = false)
+	private boolean reported;
+
 	/**
 	 * Objeto para persistir a/de JSON
 	 * @author mfreire

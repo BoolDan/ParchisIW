@@ -63,7 +63,7 @@
                         <ul>
                             <li th:each="partida : ${partidas}">
                                 <button class="btn btn-outline-secondary"
-                                    th:text="${partida.nombre + ' - ' + partida.estado}">Partida 1 - En progreso</button>
+                                    th:text="${partida.id + ' - ' + partida.estado}"></button>
                             </li>
                         </ul>
                     </div>
@@ -74,9 +74,9 @@
                     <div class="section-card flex-column h-100">
                         <h3 class="section-title">Reportes</h3>
                         <ul>
-                            <li th:each="reporte : ${reportes}">
+                            <li th:each="mensaje : ${mensajes}">
                                 <button class="btn btn-outline-success"
-                                    th:text="${reporte.titulo + ' - ' + reporte.fecha}">Posible Cheater - 2025-02-14</button>
+                                    th:text="${mensaje.text + ' - ' + mensaje.dateSent}"></button>
                             </li>
                         </ul>
                     </div>

@@ -47,23 +47,19 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    public String index(@RequestParam(value = "search", required = false) String search, Model model) {
-        log.info("Buscando usuarios con término: " + search);
+    public String index(Model model) {
+        log.info("Admin acaba de entrar");
 
-        List<User> users;
+        model.addAttribute("users", 
+             entityManager.createQuery("select u from User u").getResultList());
+        
+        model.addAttribute("partidas", 
+            entityManager.createQuery("select p from Partida p").getResultList());
 
-        if (search != null && !search.isEmpty()) {
-            // Realiza la búsqueda de usuarios con el término "search"
-            users = entityManager.createQuery("SELECT u FROM User u WHERE LOWER(u.username) LIKE :search", User.class)
-                .setParameter("search", "%" + search.toLowerCase() + "%")
-                .getResultList();
-        } else {
-            // Si no hay término de búsqueda, obtiene todos los usuarios
-            users = entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-        }
+        model.addAttribute("mensajes", 
+            entityManager.createQuery("select m from Message m").getResultList());
 
-        model.addAttribute("users", users);
-        return "admin";  // Devuelve la vista admin
+        return "admin";
     }
 
     @PostMapping("/toggle/{id}")

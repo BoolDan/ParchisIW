@@ -15,13 +15,36 @@ INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora
 VALUES (3, 'Torneo Primavera', 0, NULL, 0, 'En_espera', '14:00:00', NULL);
 
 INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora_Inicio, hora_Fin) 
-VALUES (2, 'Torneo Verano', 0, 'Juan Pérez', 150, 'Cerrado', '10:30:00', '12:30:00');
+VALUES (2, 'Torneo Verano', 8, 'Juan Pérez', 150, 'Cerrado', '10:30:00', '12:30:00');
+
 INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora_Inicio, hora_Fin) 
 VALUES (4, 'Torneo ABD', 0, 'Ana Gomez', 200, 'Cerrado', '09:00:00', '22:30:00');
 
 INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora_Inicio, hora_Fin) 
 VALUES (1, 'Torneo Otoño', 0, NULL, 0, 'En_espera', '16:00:00', NULL);
 
+-- Consultas para partidas
+INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
+VALUES (1, 'ROJO', 'ESPERANDO_JUGADORES', 2, 4, NULL, 'PRIMER MOVIMIENTO CHOTO', 1);
+
+INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
+VALUES (2, 'VERDE', 'EN_CURSO', 3, 4, NULL, 'NO SE', 2);
+
+INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
+VALUES (3, 'AMARILLO', 'FINALIZADA', 4, 4, 'PRIMER LUGAR: NO SE', NULL, 4);
+
+INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
+VALUES (4, 'AZUL', 'EN_CURSO', 3, 6, 'ALE', NULL, 3);
+
+-- Consultas para Mensajes
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (1, 1, 1, 'QUE HACES', '2025-03-17 14:30:00', '2025-03-17 14:50:00', TRUE);
+
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (2, 2, 2, 'BORRA BRO', '2025-03-16 10:30:00', NULL, FALSE);
+
+INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
+VALUES (3, 1, 3, 'BUENA PARTIDA', '2025-03-14 12:30:00', NULL, FALSE);
 
 -- start id numbering from a value that is larger than any assigned above
 ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
@@ -29,13 +52,13 @@ ALTER SEQUENCE "PUBLIC"."GEN" RESTART WITH 1024;
 
 -- Consultas para probar insertar jugadores en torneos
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (1, 2, 1, 100);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (1, 2, 1, 100);
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (2, 2, 2, 50);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (2, 2, 2, 50);
 
-INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
-VALUES (3, 3, 2, 0);
+-- INSERT INTO Jugador_torneo (id, id_usuario, id_torneo, puntuacion)
+-- VALUES (3, 3, 2, 0);
 
 
