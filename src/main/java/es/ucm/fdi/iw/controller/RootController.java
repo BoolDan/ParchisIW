@@ -49,11 +49,6 @@ public class RootController {
         return "index";
     }
 
-    @GetMapping("/lobby")
-    public String lobby(Model model) {
-        return "lobby";
-    }
-
     @GetMapping("/reglas")
     public String reglas(Model model) {
         return "reglas";
