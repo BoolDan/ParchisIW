@@ -64,7 +64,7 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
 				.requestMatchers("/user/**", "/game", "/lobby", "/partida/**").hasRole("USER")	   // <-- logged-in users
 				.requestMatchers("/admin/**","/torneos/crearTorneo" ,"/torneos/crear").hasRole("ADMIN")	   // <-- administration
-				.requestMatchers("/user/**", "/game", "/lobby").hasRole("USER")	   // <-- logged-in users
+				.requestMatchers("/user/**", "/game", "/lobby", "/partida/**").hasRole("USER")	   // <-- logged-in users
 				.anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin
