@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap-5.3.3.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+    <title>Crear Torneo</title>
+</head>
+<body class="d-flex flex-column h-100">
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <div class="container mt-4">
+        <h1 class="text-center">Crear Torneo</h1>
+        <div class="card p-4 shadow-sm">
+            <form th:action="@{/torneos/crear}" th:object="${torneo}" method="post" class="form-signin">
+                <div class="form-group mb-3">
+                    <label for="nombre" class="form-label">Nombre del Torneo</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="horaInicio" class="form-label">Hora de Inicio</label>
+                    <input type="time" id="horaInicio" name="horaInicio" class="form-control" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="horaFin" class="form-label">Hora de Fin</label>
+                    <input type="time" id="horaFin" name="horaFin" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Crear Torneo</button>
+            </form>
+        </div>
+    </div>
+    <footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+</html>
