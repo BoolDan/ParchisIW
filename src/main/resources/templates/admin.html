@@ -58,11 +58,11 @@
                 <!-- Columna de Partidas -->
                 <div class="col-md-4">
                     <div class="section-card flex-column h-100 scrollable-column">
-                        <h3 class="section-title">Torneos</h3>
+                        <h3 class="section-title">Patidas</h3>
                         <ul>
-                            <li th:each="partida : ${torneos}">
+                            <li th:each="partida : ${partida}">
                                 <button class="btn btn-outline-secondary"
-                                    th:text="${torneos.id + ' - ' + torneos.estado}"></button>
+                                    th:text="${partida.id + ' - ' + partida.estado}"></button>
                             </li>
                         </ul>
                     </div>

@@ -122,9 +122,35 @@ public class AdminController {
 
     @GetMapping("/reporte/{id}")
     public String verReporte(@PathVariable long id, Model model) {
-        Message mensaje = findById(id);
+        Message mensaje = entityManager.createNamedQuery("Message.findById", Message.class)
+        .setParameter("id", id)
+        .getSingleResult();
         model.addAttribute("mensaje", mensaje);
         return "reporte";
     }
+
+    @PostMapping("/reporte/{id}/confirmar")
+    public String confirmarReporte(@PathVariable long id, @RequestParam String castigo) {
+        Message mensaje = entityManager.createNamedQuery("Message.findById", Message.class)
+        .setParameter("id", id)
+        .getSingleResult();
+        User emisor = mensaje.getEmisor();
+
+        // Aplicar el castigo seleccionado
+        switch (castigo) {
+            case "ban":
+                emisor.setEnabled(false); // Deshabilitar usuario
+                break;
+            case "warning":
+                // Registrar advertencia (puedes implementar un sistema de advertencias)
+                break;
+            default:
+                throw new IllegalArgumentException("Castigo no válido: " + castigo);
+        }
+        
+
+        return "redirect:/admin"; // Redirigir a la vista de administrador
+    }
+
 }
 
