@@ -5,6 +5,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
+//import es.ucm.fdi.iw.model.Partida;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -292,6 +293,7 @@ public class UserController {
 		throws JsonProcessingException {
 		
 		String text = o.get("message").asText();
+		//Partida partida = entityManager.find(Partida.class, o.get("id_partida").asLong());
 		User u = entityManager.find(User.class, id);
 		User sender = entityManager.find(
 				User.class, ((User)session.getAttribute("u")).getId());
@@ -299,8 +301,8 @@ public class UserController {
 		
 		// construye mensaje, lo guarda en BD
 		Message m = new Message();
-		m.setRecipient(u);
-		m.setSender(sender);
+		//m.setReceptor(u);
+		m.setEmisor(sender);
 		m.setDateSent(LocalDateTime.now());
 		m.setText(text);
 		entityManager.persist(m);

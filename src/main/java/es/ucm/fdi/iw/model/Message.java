@@ -19,12 +19,20 @@ import lombok.AllArgsConstructor;
 @Entity
 @Data
 @NamedQueries({
-	@NamedQuery(name="Message.countUnread",
-	query="SELECT COUNT(m) FROM Message m "
-			+ "WHERE m.recipient.id = :userId AND m.dateRead = null")
+	@NamedQuery(name="Message.findById",
+	query="SELECT m FROM Message m "
+			+ "WHERE m.id = :id")
 })
 @Table(name="Mensaje")
 public class Message implements Transferable<Message.Transfer> {
+	
+	/*public Message(User emisor, Partida partida, String text){
+		this.emisor = emisor;
+		this.partida = partida;
+		this.text = text;
+		this.dateSent = LocalDateTime.now();
+		this.reported = false;
+	}*/
 	
 	private static Logger log = LogManager.getLogger(Message.class);	
 	
@@ -34,10 +42,7 @@ public class Message implements Transferable<Message.Transfer> {
 	private long id;
 
 	@ManyToOne
-	private User sender;
-
-	@ManyToOne
-	private User recipient;
+	private User emisor;
 
 	@ManyToOne
 	@JoinColumn(name="id_usuario") 
@@ -47,7 +52,7 @@ public class Message implements Transferable<Message.Transfer> {
 	@JoinColumn(name="id_partida")
 	private Partida partida;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 512)
 	private String text;
 	
 	@Column(nullable = false)
@@ -68,14 +73,13 @@ public class Message implements Transferable<Message.Transfer> {
     @AllArgsConstructor
 	public static class Transfer {
 		private String from;
-		private String to;
 		private String sent;
 		private String received;
 		private String text;
 		long id;
 		public Transfer(Message m) {
-			this.from = m.getSender().getUsername();
-			this.to = m.getRecipient().getUsername();
+			this.from = m.getEmisor().getUsername();
+			//this.to = m.getReceptor().getUsername();
 			this.sent = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateSent());
 			this.received = m.getDateRead() == null ?
 					null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateRead());
@@ -86,10 +90,15 @@ public class Message implements Transferable<Message.Transfer> {
 
 	@Override
 	public Transfer toTransfer() {
-		return new Transfer(sender.getUsername(), recipient.getUsername(), 
+		return new Transfer(emisor.getUsername(), 
 			DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
 			dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
 			text, id
         );
     }
+
+	public void report() {
+		this.reported = true;
+		this.fechaReporte = LocalDateTime.now();
+	}
 }

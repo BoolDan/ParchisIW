@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Reporte de Mensaje</title>
+</head>
+<body>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+
+    <main class="container mt-4">
+        <h1 class="text-center">Reporte de Mensaje</h1>
+
+        <!-- Detalles del mensaje -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Detalles del Mensaje</h5>
+                <p><strong>Emisor:</strong> <span th:text="${mensaje.emisor.username}"></span></p>
+                <p><strong>Fecha de Envío:</strong> <span th:text="${#dates.format(mensaje.dateSent, 'dd/MM/yyyy HH:mm')}"></span></p>
+                <p><strong>Fecha de Lectura:</strong> <span th:text="${#dates.format(mensaje.dateRead, 'dd/MM/yyyy HH:mm')}" th:if="${mensaje.dateRead != null}">No leído</span></p>
+                <p><strong>Fecha de Reporte:</strong> <span th:text="${#dates.format(mensaje.fechaReporte, 'dd/MM/yyyy HH:mm')}"></span></p>
+                <p><strong>Texto:</strong></p>
+                <blockquote class="blockquote">
+                    <p th:text="${mensaje.text}"></p>
+                </blockquote>
+            </div>
+        </div>
+
+        <!-- Confirmar reporte y seleccionar castigo -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Acciones</h5>
+                <form th:action="@{'/admin/reporte/' + ${mensaje.id} + '/confirmar'}" method="post">
+                    <div class="form-group">
+                        <label for="castigo">Selecciona un castigo:</label>
+                        <select id="castigo" name="castigo" class="form-control" required>
+                            <option value="ban">Banear usuario</option>
+                            <option value="mute">Silenciar usuario</option>
+                            <option value="warning">Advertencia</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger mt-3">Confirmar Reporte</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+</body>
+</html>

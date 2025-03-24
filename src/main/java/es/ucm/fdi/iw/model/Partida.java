@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.antlr.v4.runtime.misc.NotNull;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -53,7 +55,8 @@ public class Partida implements Transferable<Partida.Transfer> {
     private String colorTurno;
 
     @Column(nullable = false)
-    private String estado = "ESPERANDO_JUGADORES";
+    @Enumerated(EnumType.STRING) //store the string value of the enum
+    private EstadoPartida estado = EstadoPartida.ESPERANDO_JUGADORES;
 
     @Column
     private int numJugadores;
@@ -66,7 +69,9 @@ public class Partida implements Transferable<Partida.Transfer> {
 
     @Column
     private String movimientos_turno;
-    
+
+    @Column
+    private String chat_token;
 
     public void setMovimientos(List<String> movimientos) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -104,4 +109,7 @@ public class Partida implements Transferable<Partida.Transfer> {
 	public String toString() {
 		return toTransfer().toString();
 	}
+    @OneToMany 
+    @JoinColumn(name = "chat")
+    private List<Message> chat;
 }

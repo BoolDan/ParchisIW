@@ -74,8 +74,10 @@
                         <h3 class="section-title">Reportes</h3>
                         <ul>
                             <li th:each="mensaje : ${mensajes}">
-                                <button class="btn btn-outline-success"
-                                    th:text="${mensaje.text + ' - ' + mensaje.dateSent}"></button>
+                                <a class="btn btn-outline-success"
+                                   th:href="@{'/admin/reporte/' + ${mensaje.id}}"
+                                   th:text="${mensaje.text + ' - ' + #dates.format(mensaje.dateSent, 'dd/MM/yyyy HH:mm')}">
+                                </a>
                             </li>
                         </ul>
                     </div>

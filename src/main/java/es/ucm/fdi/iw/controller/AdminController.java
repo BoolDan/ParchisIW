@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.model.Lorem;
 import es.ucm.fdi.iw.model.User;
+import es.ucm.fdi.iw.model.Message;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,6 +45,17 @@ public class AdminController {
         for (String name : new String[] {"u", "url", "ws"}) {
             model.addAttribute(name, session.getAttribute(name));
         }
+    }
+    public Message findById(long id) {
+        return entityManager.createNamedQuery("Message.findById", Message.class)
+                            .setParameter("id", id)
+                            .getSingleResult();
+    }
+
+    public String verReporte(@PathVariable long id, Model model) {
+        Message mensaje = findById(id);
+        model.addAttribute("mensaje", mensaje);
+        return "reporte";
     }
 
     @GetMapping("/")
