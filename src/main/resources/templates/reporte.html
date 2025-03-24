@@ -16,7 +16,10 @@
                 <h5 class="card-title">Detalles del Mensaje</h5>
                 <p><strong>Emisor:</strong> <span th:text="${mensaje.emisor.username}"></span></p>
                 <p><strong>Fecha de Envío:</strong> <span th:text="${#dates.format(mensaje.dateSent, 'dd/MM/yyyy HH:mm')}"></span></p>
-                <p><strong>Fecha de Lectura:</strong> <span th:text="${#dates.format(mensaje.dateRead, 'dd/MM/yyyy HH:mm')}" th:if="${mensaje.dateRead != null}">No leído</span></p>
+                <p><strong>Fecha de Lectura:</strong> 
+                    <span th:if="${mensaje.dateRead != null}" th:text="${#dates.format(mensaje.dateRead, 'dd/MM/yyyy HH:mm')}"></span>
+                    <span th:unless="${mensaje.dateRead != null}">No leído</span>
+                </p>
                 <p><strong>Fecha de Reporte:</strong> <span th:text="${#dates.format(mensaje.fechaReporte, 'dd/MM/yyyy HH:mm')}"></span></p>
                 <p><strong>Texto:</strong></p>
                 <blockquote class="blockquote">

@@ -70,8 +70,8 @@ public class Partida implements Transferable<Partida.Transfer> {
     @Column
     private String movimientos_turno;
 
-    @Column
-    private String chat_token;
+    /*@Column
+    private String chat_token;*/
 
     public void setMovimientos(List<String> movimientos) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -97,19 +97,18 @@ public class Partida implements Transferable<Partida.Transfer> {
         private String resultadoFinal;
         private String movimientos_turno;
         private Torneo torneo;
-
     }
 
     @Override
     public Transfer toTransfer() {
-		return new Transfer(id,	colorTurno, estado, numJugadores, jugadoresMax, resultadoFinal, movimientos_turno, torneo);
+		return new Transfer(id, colorTurno, estado.toString(), numJugadores, jugadoresMax, resultadoFinal, movimientos_turno, torneo);
 	}
 
     @Override
 	public String toString() {
 		return toTransfer().toString();
 	}
-    @OneToMany 
+    /*@OneToMany 
     @JoinColumn(name = "chat")
-    private List<Message> chat;
+    private List<Message> chat;*/
 }

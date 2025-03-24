@@ -53,12 +53,6 @@ public class AdminController {
                             .getSingleResult();
     }
 
-    public String verReporte(@PathVariable long id, Model model) {
-        Message mensaje = findById(id);
-        model.addAttribute("mensaje", mensaje);
-        return "reporte";
-    }
-
     @GetMapping("/")
     public String index(Model model) {
         log.info("Admin acaba de entrar");
@@ -123,6 +117,14 @@ public class AdminController {
             entityManager.persist(u);
         }
         return "{\"admin\": \"populated\"}";
+    }
+
+
+    @GetMapping("/reporte/{id}")
+    public String verReporte(@PathVariable long id, Model model) {
+        Message mensaje = findById(id);
+        model.addAttribute("mensaje", mensaje);
+        return "reporte";
     }
 }
 
