@@ -347,3 +347,44 @@ input:focus {
     padding: 20px;
     margin-top: 40px;
 }
+
+/* Estilos personalizados para el formulario de creación de torneos */
+.container {
+    max-width: 600px;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-signin {
+    width: 100%;
+    max-width: 100%;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-signin .form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-signin .form-control {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.form-signin .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.form-signin .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

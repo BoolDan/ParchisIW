@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IW: Lobby</title>
     <th:block th:replace="~{fragments/head :: header}" />
-
+    <title>IW: Lobby</title>
 </head>
+
 <body class="d-flex justify-content-center flex-column vh-100">
 
     <header th:replace="~{fragments/nav.html :: nav}"></header>
@@ -25,7 +25,10 @@
                     <h5 class="card-title" th:text="'Partida #' + ${partida.id}"></h5>
                     <!--<p class="card-text" th:text="'Modo: ' + {partida.}">Modo: Clásico</p>-->
                     <p class="card-text" th:text="'Jugadores: ' + ${partida.numJugadores} + '/' + ${partida.jugadoresMax}"></p>
-                    <button class="btn btn-primary w-100">Unirse</button>
+                    <form th:action="@{'/partida/' + ${partida.id}}" th:method="post">
+                        <button th:if="${partida.numJugadores < partida.jugadoresMax}" type="submit" class="btn btn-primary w-100">Unirse</button>
+                        <button th:unless="${partida.numJugadores < partida.jugadoresMax}" class="btn btn-secondary w-100" disabled>Lobby lleno</button>
+                    </form>
                 </div>
             </div>
         </div>

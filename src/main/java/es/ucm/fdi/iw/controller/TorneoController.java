@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -50,6 +51,21 @@ public class TorneoController {
         return "clasificacionAcabados";
     }
 
+    @GetMapping("/crear")
+    public String mostrarFormularioCrearTorneo(Model model) {
+        model.addAttribute("torneo", new Torneo());
+        return "crearTorneo";
+    }
+
+    @PostMapping("/crear")
+    @Transactional
+    public String crearTorneo(@ModelAttribute Torneo torneo) {
+        torneo.setEstado(Torneo.EstadoTorneo.En_espera);
+        entityManager.persist(torneo);
+        return "redirect:/torneos/clasificacionTorneos";
+    }
+
+    
     @GetMapping("/{id}")
     public String getTorneoDetails(@PathVariable("id") long id, @RequestParam(value = "from", required = false) String from, Model model) {
         Torneo torneo = entityManager.find(Torneo.class, id);
@@ -59,6 +75,7 @@ public class TorneoController {
         model.addAttribute("torneo", torneo);
         model.addAttribute("jugadores", jugadores);
         model.addAttribute("from", from);
+
         return "torneoDetalles";
     }
 

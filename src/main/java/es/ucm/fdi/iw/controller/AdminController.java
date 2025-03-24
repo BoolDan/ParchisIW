@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.model.Lorem;
+import es.ucm.fdi.iw.model.Torneo;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Message;
 import jakarta.persistence.EntityManager;
@@ -65,13 +66,35 @@ public class AdminController {
         model.addAttribute("users", 
              entityManager.createQuery("select u from User u").getResultList());
         
-        model.addAttribute("partidas", 
-            entityManager.createQuery("select p from Partida p").getResultList());
+        model.addAttribute("torneos", 
+            entityManager.createQuery("select t from Torneo t").getResultList());
 
         model.addAttribute("mensajes", 
             entityManager.createQuery("select m from Message m where m.reported=true").getResultList());
 
         return "admin";
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public List<User> searchUsers(@RequestParam String search) {
+        log.info("Buscando usuarios con: " + search);
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.username LIKE :search", User.class)
+                            .setParameter("search", search + "%")
+                            .getResultList();
+    }
+
+    @GetMapping("/torneos")
+    @ResponseBody
+    public List<Torneo> getTorneosByEstado(@RequestParam String estado) {
+        log.info("Buscando torneos con estado: " + estado);
+        if (estado.isEmpty()) {
+            return entityManager.createQuery("SELECT t FROM Torneo t", Torneo.class).getResultList();
+        } else {
+            return entityManager.createQuery("SELECT t FROM Torneo t WHERE t.estado = :estado", Torneo.class)
+                                .setParameter("estado", estado)
+                                .getResultList();
+        }
     }
 
     @PostMapping("/toggle/{id}")
