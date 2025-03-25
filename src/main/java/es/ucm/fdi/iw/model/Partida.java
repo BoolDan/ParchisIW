@@ -70,6 +70,14 @@ public class Partida implements Transferable<Partida.Transfer> {
     @Column
     private String movimientos_turno;
 
+    @Column 
+    private String tipoPartida;
+
+    @Column 
+    private String modoJuego;
+
+
+
     /*@Column
     private String chat_token;*/
 

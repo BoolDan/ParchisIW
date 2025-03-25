@@ -53,4 +53,27 @@ public class PartidaController {
         //model.addAttribute("partida", p);
         return "game";
     }
+
+    @PostMapping("/partida/crear")
+    @Transactional
+    public String crearPartida(
+            @RequestParam("numJugadores") int jugadoresMax,
+            @RequestParam("modoJuego") String modoJuego,
+            @RequestParam("tipoPartida") String tipoPartida,
+            Model model) {
+
+        // Crear una nueva instancia de Partida
+        Partida nuevaPartida = new Partida();
+        nuevaPartida.setJugadoresMax(jugadoresMax);
+        nuevaPartida.setModoJuego(modoJuego);
+        nuevaPartida.setTipoPartida(tipoPartida);
+        nuevaPartida.setNumJugadores(0); // Inicialmente no hay jugadores
+        nuevaPartida.setEstado(Partida.EstadoPartida.ESPERANDO_JUGADORES); // Estado inicial de la partida
+
+        // Persistir la partida en la base de datos
+        entityManager.persist(nuevaPartida);
+
+        // Redirigir al lobby o a la vista de la partida creada
+        return "redirect:/lobby";
+    }
 }

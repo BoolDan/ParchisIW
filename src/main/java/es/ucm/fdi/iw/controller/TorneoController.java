@@ -4,6 +4,7 @@ import es.ucm.fdi.iw.model.Jugador_torneo;
 import es.ucm.fdi.iw.model.Torneo;
 import es.ucm.fdi.iw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+
+import java.time.LocalTime;
 import java.util.List;
 
 @Controller
@@ -110,4 +113,23 @@ public class TorneoController {
 
         return "redirect:/torneos/" + id;
     }
+
+    /**
+     * Tarea programada para cerrar automáticamente los torneos cuya hora de fin ha pasado.
+     */
+    @Scheduled(fixedRate = 60000) // Ejecutar cada minuto
+    @Transactional
+    public void cerrarTorneosAutomaticamente() {
+        LocalTime now = LocalTime.now();
+        List<Torneo> torneos = entityManager.createQuery(
+                "SELECT t FROM Torneo t WHERE t.horaFin <= :now AND t.estado = 'En_espera'", Torneo.class)
+                .setParameter("now", now)
+                .getResultList();
+
+        for (Torneo torneo : torneos) {
+            torneo.setEstado(Torneo.EstadoTorneo.Cerrado);
+            entityManager.merge(torneo);
+        }
+    }
+    
 }
