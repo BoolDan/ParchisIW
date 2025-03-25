@@ -21,6 +21,8 @@ import es.ucm.fdi.iw.model.Message;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.transaction.Transactional;
 
@@ -70,13 +72,13 @@ public class AdminController {
     }
 
     @GetMapping("/search")
-    @ResponseBody
-    public List<User> searchUsers(@RequestParam String search) {
-        log.info("Buscando usuarios con: " + search);
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.username LIKE :search", User.class)
-                            .setParameter("search", search + "%")
-                            .getResultList();
-    }
+@ResponseBody
+public List<User> searchUsers(@RequestParam String search) {
+    log.info("Buscando usuarios con: " + search);
+    return entityManager.createQuery("SELECT u FROM User u WHERE u.username LIKE :search", User.class)
+                        .setParameter("search", "%" + search + "%")
+                        .getResultList();
+}
 
     @GetMapping("/torneos")
     @ResponseBody
@@ -85,9 +87,15 @@ public class AdminController {
         if (estado.isEmpty()) {
             return entityManager.createQuery("SELECT t FROM Torneo t", Torneo.class).getResultList();
         } else {
-            return entityManager.createQuery("SELECT t FROM Torneo t WHERE t.estado = :estado", Torneo.class)
-                                .setParameter("estado", estado)
-                                .getResultList();
+            try {
+                Torneo.EstadoTorneo estadoTorneo = Torneo.EstadoTorneo.valueOf(estado);
+                return entityManager.createQuery("SELECT t FROM Torneo t WHERE t.estado = :estado", Torneo.class)
+                                    .setParameter("estado", estadoTorneo)
+                                    .getResultList();
+            } catch (IllegalArgumentException e) {
+                log.error("Estado no válido: " + estado, e);
+                return new ArrayList<>();
+            }
         }
     }
 
