@@ -24,6 +24,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import jakarta.transaction.Transactional;
 
 /**
@@ -82,21 +84,23 @@ public List<User> searchUsers(@RequestParam String search) {
 
     @GetMapping("/torneos")
     @ResponseBody
-    public List<Torneo> getTorneosByEstado(@RequestParam String estado) {
+    public List<Torneo.Transfer> getTorneosByEstado(@RequestParam String estado) {
         log.info("Buscando torneos con estado: " + estado);
+        List<Torneo> torneos;
         if (estado.isEmpty()) {
-            return entityManager.createQuery("SELECT t FROM Torneo t", Torneo.class).getResultList();
+            torneos = entityManager.createQuery("SELECT t FROM Torneo t", Torneo.class).getResultList();
         } else {
             try {
                 Torneo.EstadoTorneo estadoTorneo = Torneo.EstadoTorneo.valueOf(estado);
-                return entityManager.createQuery("SELECT t FROM Torneo t WHERE t.estado = :estado", Torneo.class)
-                                    .setParameter("estado", estadoTorneo)
-                                    .getResultList();
+                torneos = entityManager.createQuery("SELECT t FROM Torneo t WHERE t.estado = :estado", Torneo.class)
+                                        .setParameter("estado", estadoTorneo)
+                                        .getResultList();
             } catch (IllegalArgumentException e) {
                 log.error("Estado no válido: " + estado, e);
                 return new ArrayList<>();
             }
         }
+        return torneos.stream().map(Torneo::toTransfer).collect(Collectors.toList());
     }
 
     @PostMapping("/toggle/{id}")

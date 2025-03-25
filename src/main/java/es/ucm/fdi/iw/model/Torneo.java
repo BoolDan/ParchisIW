@@ -17,13 +17,15 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NamedQueries({
     @NamedQuery(name = "Torneo.getEnJuego", query = "SELECT t FROM Torneo t WHERE t.estado = 'En_espera'"),
-    @NamedQuery(name = "Torneo.getAcabados", query = "SELECT t FROM Torneo t WHERE t.estado = 'Cerrado'")
+    @NamedQuery(name = "Torneo.getAcabados", query = "SELECT t FROM Torneo t WHERE t.estado = 'Cerrado'"),
+    @NamedQuery(name = "Torneo.getEnCurso", query = "SELECT t FROM Torneo t WHERE t.estado = 'En_curso'")
 })
 @Table(name = "Torneo")
 public class Torneo implements Transferable<Torneo.Transfer> {
     
     public enum EstadoTorneo {
-        En_espera,  // Torneos en curso
+        En_espera,  // Torneos en espera
+        En_curso,   // Torneos en curso
         Cerrado     // Torneos finalizados
     }
 
@@ -61,26 +63,24 @@ public class Torneo implements Transferable<Torneo.Transfer> {
     @Getter
     @AllArgsConstructor
     public static class Transfer {
-		private long id;
+        private long id;
         private String nombre;
-		private int estado;
+        private String estado;
         private int numParticipantes;
         private String ganador;
         private int puntos;
         private LocalTime horaInicio;
         private LocalTime horaFin;
-
     }
 
     @Override
     public Transfer toTransfer() {
-		return new Transfer(id,	nombre, estado.ordinal(),
-                        numParticipantes, ganador, puntos, horaInicio, horaFin);
-	}
+        return new Transfer(id, nombre, estado.name(),
+                            numParticipantes, ganador, puntos, horaInicio, horaFin);
+    }
 
     @Override
-	public String toString() {
-		return toTransfer().toString();
-	}
-
+    public String toString() {
+        return toTransfer().toString();
+    }
 }
