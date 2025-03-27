@@ -1,10 +1,13 @@
 package es.ucm.fdi.iw.controller;
 
+import es.ucm.fdi.iw.model.Jugador_partida;
 import es.ucm.fdi.iw.model.Partida;
-
+import es.ucm.fdi.iw.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +52,12 @@ public class PartidaController {
     @PostMapping("/partida/{id}")
     public String verPartida(@PathVariable long id, Model model) {
         log.info("Solicitud POST recibida para la partida con ID: " + id);
+        List<User> usuarios = entityManager.createQuery(
+    "SELECT u FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", User.class)
+    .setParameter("id", id)
+    .getResultList();
+log.info("Usuarios encontrados para la partida {}: {}", id, usuarios.size());
+model.addAttribute("usuarios", usuarios);
         // Partida p = entityManager.find(Partida.class, id);
         //model.addAttribute("partida", p);
         return "game";

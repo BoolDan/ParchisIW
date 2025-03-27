@@ -66,6 +66,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		        .getSingleResult();		
 		session.setAttribute("u", u);
 
+		session.setAttribute("username", username);
+
 		// add 'url' and 'ws' session variables
 		// example URLS:                            Root URL
 		//     http://localhost:8080/               //localhost:8080/

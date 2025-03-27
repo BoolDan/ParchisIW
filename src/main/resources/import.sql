@@ -2,6 +2,7 @@
 INSERT INTO Usuario (id, enabled, roles, username, password)
 VALUES (1, TRUE, 'ADMIN,USER', 'a',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+
 INSERT INTO Usuario (id, enabled, roles, username, password)
 VALUES (2, TRUE, 'USER', 'b',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
@@ -35,6 +36,48 @@ VALUES (3, 'AMARILLO', 'FINALIZADA', 4, 4, 'PRIMER LUGAR: NO SE', NULL, 4);
 
 INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
 VALUES (4, 'AZUL', 'EN_CURSO', 3, 6, 'ALE', NULL, 3);
+
+-- Consultas para Jugador_partida
+
+-- Jugadores en la partida con id 1 (2 jugadores)
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (1, 1, 1);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (2, 1, 2);
+
+-- Jugadores en la partida con id 2 (3 jugadores)
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (3, 2, 1);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (4, 2, 2);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (5, 2, 3);
+
+-- Jugadores en la partida con id 3 (4 jugadores)
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (6, 3, 1);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (7, 3, 2);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (8, 3, 3);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (9, 3, 4);
+
+-- Jugadores en la partida con id 4 (3 jugadores)
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (10, 4, 1);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (11, 4, 2);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (12, 4, 3);
 
 -- Consultas para Mensajes
 INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 

@@ -43,13 +43,11 @@ public class Jugador_partida {
     @SequenceGenerator(name = "gen", sequenceName = "gen")
     private long id;
 
-
-
     @ManyToOne
     @JoinColumn(name = "ID_Partida", nullable = false)
     private Partida partida;
 
-    @OneToOne
+    @ManyToOne // @OneToOne pero de momento lo dejamos así para pruebas
     @JoinColumn(name = "ID_Usuario", nullable = false)
     private User usuario;
 }

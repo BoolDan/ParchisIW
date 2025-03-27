@@ -149,59 +149,79 @@
                                 <a href="#!" class="navbar-brand">Lobby</a>
                             </div>
                         </div>
-                        <div class="card-body p-4" style="">
-                            <ul>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style= "padding:12px"> <strong>You</strong>
+                        <div th:each="usuario, iterStat : ${usuarios}"> <!-- Iteración sobre la lista de usuario y recogemos el valor del iterador-->
+                            <div class="card-body p-4" style="">
+                                <ul>
+                                    <li>
+                                        <div class="d-flex align-items-baseline mb-4">
+                                            <div class="position-relative avatar">
+                                                <img th:src="@{${'https://nextbootstrap.netlify.app/assets/images/profiles/' + (iterStat.index % 6 + 1) + '.jpg'}}"
+                                                    class="img-fluid rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div style= "padding:12px"><strong th:text="${usuario.username == session.username} ? 'Tú' : ${usuario.username}"></strong>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Vitlyn_Forever</strong><img src="/img/dice-roll-dice.gif" class="animated-gif" alt="Rolling dice that indicates the turn" style="width:20%">
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--
+                            <div class="card-body p-4" style="">
+                                <ul>
+                                    <li>
+                                        <div class="d-flex align-items-baseline mb-4">
+                                            <div class="position-relative avatar">
+                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
+                                                    class="img-fluid rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div style= "padding:12px"> <strong>You</strong>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Jill_Valentine2</strong>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex align-items-baseline mb-4">
+                                            <div class="position-relative avatar">
+                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
+                                                    class="img-fluid rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div style="padding:12px"><strong>Vitlyn_Forever</strong><img src="/img/dice-roll-dice.gif" class="animated-gif" alt="Rolling dice that indicates the turn" style="width:20%">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="d-flex align-items-baseline mb-4">
-                                        <div class="position-relative avatar">
-                                            <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
-                                                class="img-fluid rounded-circle" alt="User Avatar">
-                                        </div>
-                                        <div>
-                                            <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
+                                    </li>
+                                    <li>
+                                        <div class="d-flex align-items-baseline mb-4">
+                                            <div class="position-relative avatar">
+                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
+                                                    class="img-fluid rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div style="padding:12px"><strong>Jill_Valentine2</strong>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </li>
-                            </ul>
-            
+                                    </li>
+                                    <li>
+                                        <div class="d-flex align-items-baseline mb-4">
+                                            <div class="position-relative avatar">
+                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
+                                                    class="img-fluid rounded-circle" alt="User Avatar">
+                                            </div>
+                                            <div>
+                                                <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            -->
+                            </div>
                         </div>
+
                     </div>
                     <div class="container mt-4">
                         <div class="card">
