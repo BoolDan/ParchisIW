@@ -11,6 +11,22 @@ INSERT INTO Usuario (id, enabled, roles, username, password)
 VALUES (3, TRUE, 'USER', 'c',
     '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
 
+    INSERT INTO Usuario (id, enabled, roles, username, password)
+VALUES (4, TRUE, 'USER', 'd',
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    
+INSERT INTO Usuario (id, enabled, roles, username, password)
+VALUES (5, TRUE, 'USER', 'e',
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+
+INSERT INTO Usuario (id, enabled, roles, username, password)
+VALUES (6, TRUE, 'USER', 'f',
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+
+INSERT INTO Usuario (id, enabled, roles, username, password)
+VALUES (7, TRUE, 'USER', 'g',
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W'); 
+
 -- Consultas para probar insertar torneos
 INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora_Inicio, hora_Fin) 
 VALUES (3, 'Torneo Primavera', 0, NULL, 0, 'En_espera', '14:00:00', NULL);
@@ -35,7 +51,7 @@ INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resu
 VALUES (3, 'AMARILLO', 'FINALIZADA', 4, 4, 'PRIMER LUGAR: NO SE', NULL, 4);
 
 INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
-VALUES (4, 'AZUL', 'EN_CURSO', 3, 6, 'ALE', NULL, 3);
+VALUES (4, 'AZUL', 'EN_CURSO', 5, 6, 'ALE', NULL, 3);
 
 -- Consultas para Jugador_partida
 
@@ -69,7 +85,7 @@ VALUES (8, 3, 3);
 INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
 VALUES (9, 3, 4);
 
--- Jugadores en la partida con id 4 (3 jugadores)
+-- Jugadores en la partida con id 4 (5 jugadores)
 INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
 VALUES (10, 4, 1);
 
@@ -78,6 +94,12 @@ VALUES (11, 4, 2);
 
 INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
 VALUES (12, 4, 3);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (13, 4, 4);
+
+INSERT INTO Jugador_partida (id, id_partida, id_usuario) 
+VALUES (14, 4, 5);
 
 -- Consultas para Mensajes
 INSERT INTO Mensaje (id, id_usuario, id_partida, text, date_sent, fecha_reporte, reported) 
