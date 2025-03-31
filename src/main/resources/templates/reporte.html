@@ -14,7 +14,7 @@
         <div class="card mt-4">
             <div class="card-body">
                 <h5 class="card-title">Detalles del Mensaje</h5>
-                <p><strong>Emisor:</strong> <span th:text="${mensaje.emisor}"></span></p>
+                <p><strong>Emisor:</strong> <span th:text="${mensaje.emisor.username}"></span></p>
                 <p><strong>Fecha de Envío:</strong> <span th:text="${#temporals.format(mensaje.dateSent, 'dd/MM/yyyy HH:mm')}"></span></p>
                 <p><strong>Fecha de Lectura:</strong> 
                     <span th:if="${mensaje.dateRead != null}" th:text="${#temporals.format(mensaje.dateRead, 'dd/MM/yyyy HH:mm')}"></span>
@@ -34,11 +34,9 @@
                 <h5 class="card-title">Acciones</h5>
                 <form th:action="@{'/admin/reporte/' + ${mensaje.id} + '/confirmar'}" method="post">
                     <div class="form-group">
-                        <label for="castigo">Selecciona un castigo:</label>
+                        <label for="castigo">Confirme el reporte</label>
                         <select id="castigo" name="castigo" class="form-control" required>
                             <option value="ban">Banear usuario</option>
-                            <option value="mute">Silenciar usuario</option>
-                            <option value="warning">Advertencia</option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger mt-3">Confirmar Reporte</button>

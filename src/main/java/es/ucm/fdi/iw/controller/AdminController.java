@@ -74,13 +74,13 @@ public class AdminController {
     }
 
     @GetMapping("/search")
-@ResponseBody
-public List<User> searchUsers(@RequestParam String search) {
-    log.info("Buscando usuarios con: " + search);
-    return entityManager.createQuery("SELECT u FROM User u WHERE u.username LIKE :search", User.class)
-                        .setParameter("search", "%" + search + "%")
-                        .getResultList();
-}
+    @ResponseBody
+    public List<User> searchUsers(@RequestParam String search) {
+        log.info("Buscando usuarios con: " + search);
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.username LIKE :search", User.class)
+                            .setParameter("search", "%" + search + "%")
+                            .getResultList();
+    }
 
     @GetMapping("/torneos")
     @ResponseBody
@@ -142,6 +142,7 @@ public List<User> searchUsers(@RequestParam String search) {
     }
 
     @PostMapping("/reporte/{id}/confirmar")
+    @Transactional // Asegura que los cambios que se realizen dentro de la función se mentengan en la BD
     public String confirmarReporte(@PathVariable long id, @RequestParam String castigo) {
         Message mensaje = entityManager.createNamedQuery("Message.findById", Message.class)
         .setParameter("id", id)
@@ -153,15 +154,13 @@ public List<User> searchUsers(@RequestParam String search) {
             case "ban":
                 emisor.setEnabled(false); // Deshabilitar usuario
                 break;
-            case "warning":
-                // Registrar advertencia (puedes implementar un sistema de advertencias)
-                break;
             default:
                 throw new IllegalArgumentException("Castigo no válido: " + castigo);
         }
         
+        mensaje.setReported(false);
 
-        return "redirect:/admin"; // Redirigir a la vista de administrador
+        return "redirect:/admin/"; // Redirigir a la vista de administrador
     }
 
 }

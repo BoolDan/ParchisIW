@@ -42,11 +42,8 @@ public class Message implements Transferable<Message.Transfer> {
 	private long id;
 
 	@ManyToOne
-	private User emisor;
-
-	@ManyToOne
 	@JoinColumn(name="id_usuario") 
-	private User usuario;
+	private User emisor;
 
 	@ManyToOne
 	@JoinColumn(name="id_partida")
