@@ -4,12 +4,15 @@
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
     <title>Parchís Pachá: Juego</title>
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
 </head>
-<body class="d-flex flex-column h-100">
+<body class="d-flex flex-column min-vh-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
-    <main class="flex-shrink-0 overflow-auto mt-5">
-        <div class="container text-center vh-100 d-flex align-items-center justify-content-center">
+    <main id="game-container" class="flex-shrink-0 overflow-auto mt-5" th:data-id="${partida.id}"        
+            th:data-num-jugadores="${partida.numJugadores}">
+            
+            <div class="container text-center min-vh-100 d-flex align-items-center justify-content-center">
             <div class="row align-items-center gap-4">
                 <div class="col mb-3">
                     <div class="container mt-4">
@@ -135,9 +138,11 @@
                     </div>
                 </div>
 
-                <div class="col-md-6 d-flex flex-column align-items-center">
-                    <div class="w-100" style="padding:25px">
-                        <img src="/img/tablero-de-parchis.jpg" alt="Tablero de Parchís" class="img-fluid mx-auto d-block">
+                <div class="col-md-6 ">
+                    <!-- Contenedor del tablero -->
+                    <div id="tablero" class="tablero-container position-relative" style="width: 600px; height: 600px;">
+                        
+                        
                     </div>
                     <button type="button" class="btn btn-danger">Abandonar partida</button>
                 </div>
@@ -231,6 +236,12 @@
                                 <p><strong>Piezas Restantes:</strong> 2</p>
                                 <p><strong>Puntos Acumulados:</strong> 120</p>
                                 <p><strong>Tiempo de Juego:</strong> 15 min</p>
+                                <!--
+                                <p><strong>Rondas Jugadas:</strong> <span id="rondasJugadas" th:text="${informacionPartida['rondasJugadas']}">0</span></p>
+                                <p><strong>Piezas Restantes:</strong> <span id="piezasRestantes" th:text="${informacionPartida['piezasRestantes']}">0</span></p>
+                                <p><strong>Puntos Acumulados:</strong> <span id="puntosAcumulados" th:text="${informacionPartida['puntosAcumulados']}">0</span></p>
+                                <p><strong>Tiempo de Juego:</strong> <span id="tiempoDeJuego" th:text="${informacionPartida['tiempoDeJuego']}">0 min</span></p>
+                                 -->
                             </div>
                         </div>
                     </div>
@@ -240,4 +251,8 @@
     </main>
     
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+    <script th:src="@{/js/tablero.js}"></script>
+    <!-- <script th:src="@{/js/partida.js}"></script> -->
+
+
 </body>

@@ -388,3 +388,145 @@ input:focus {
     background-color: #0056b3;
     border-color: #0056b3;
 }
+
+/* Estilos para el tablero   */
+
+table {
+    margin: auto;
+    background-color: white;
+    text-align: center;
+    border-collapse: collapse;
+    border: 2px solid #333;
+}
+
+td {
+    width: 30px;
+    height: 30px;
+    padding: 2px;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+.amarillo {
+    background-color: #FFD700;
+    text-align: center;
+}
+
+.verde {
+    background-color: #2E8B57;
+    text-align: center;
+    color: white;
+}
+
+.azul {
+    background-color: #1E90FF;
+    text-align: center;
+    color: white;
+}
+
+.rojo {
+    background-color: #DC143C;
+    text-align: center;
+    color: white;
+}
+
+#vacio {
+    background-color: transparent;
+    border: none;
+}
+
+.centro img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.numero-casilla {
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.token {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    z-index: 2;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.token:hover {
+    transform: scale(1.2);
+    z-index: 3;
+}
+
+.token.red { background-color: #DC143C; border: 1px solid #A52A2A; }
+.token.blue { background-color: #1E90FF; border: 1px solid #00008B; }
+.token.yellow { background-color: #FFD700; border: 1px solid #DAA520; color: #333; }
+.token.green { background-color: #2E8B57; border: 1px solid #006400; }
+
+/* Contenedor principal del juego */
+#game-container {
+    display: flex;
+    flex-direction: row; /* Coloca los elementos en columnas */
+    gap: 20px; /* Espacio entre columnas */
+    height: 100%; /* Ocupa toda la altura disponible */
+    padding: 20px;
+}
+
+/* Contenedor del tablero */
+#tablero {
+    flex: 1; /* Permite que el tablero ocupe el espacio necesario */
+    max-width: 600px; /* Limita el ancho máximo del tablero */
+    max-height: 600px; /* Limita la altura máxima del tablero */
+    overflow: hidden; /* Evita que el contenido se desborde */
+    border: 2px solid #ccc; /* Añade un borde para separar visualmente */
+    background-color: white; /* Fondo blanco */
+    position: relative; /* Para posicionar las fichas dentro */
+}
+
+/* Contenedor del chat */
+#game-chat {
+    flex: 2; /* Permite que el chat ocupe más espacio */
+    display: flex;
+    flex-direction: column;
+    max-height: 100%; /* Asegura que no se desborde */
+    overflow: hidden;
+}
+
+/* Ajusta el área del chat */
+#game-chat .card {
+    flex: 1; /* Permite que el chat crezca dentro del contenedor */
+    overflow: auto; /* Habilita el scroll si el contenido es demasiado grande */
+}
+
+/* Botón de abandonar partida */
+button.btn-danger {
+    margin-top: 20px;
+    align-self: center;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    #game-container {
+        flex-direction: column; /* Cambia a diseño vertical en pantallas pequeñas */
+    }
+
+    #tablero {
+        margin: 0 auto; /* Centra el tablero */
+    }
+}

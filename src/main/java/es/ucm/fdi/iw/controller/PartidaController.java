@@ -7,7 +7,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,15 +54,25 @@ public class PartidaController {
     @PostMapping("/partida/{id}")
     public String verPartida(@PathVariable long id, Model model) {
         log.info("Solicitud POST recibida para la partida con ID: " + id);
+
+        // Buscar la partida en la base de datos
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+
+        // Buscar los usuarios asociados a la partida
         List<User> usuarios = entityManager.createQuery(
-    "SELECT u FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", User.class)
-    .setParameter("id", id)
-    .getResultList();
-log.info("Usuarios encontrados para la partida {}: {}", id, usuarios.size());
-model.addAttribute("usuarios", usuarios);
-        // Partida p = entityManager.find(Partida.class, id);
-        //model.addAttribute("partida", p);
-        return "game";
+                "SELECT u FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", User.class)
+                .setParameter("id", id)
+                .getResultList();
+        log.info("Usuarios encontrados para la partida {}: {}", id, usuarios.size());
+
+        // Pasar la partida y los usuarios al modelo
+        model.addAttribute("partida", partida);
+        model.addAttribute("usuarios", usuarios);
+
+        return "game"; // Redirigir a la vista de la partida
     }
 
     @PostMapping("/partida/crear")
@@ -84,5 +96,31 @@ model.addAttribute("usuarios", usuarios);
 
         // Redirigir al lobby o a la vista de la partida creada
         return "redirect:/lobby";
+    }
+
+    @PostMapping("/partida/{id}/actualizar")
+    @ResponseBody
+    @Transactional
+    public Map<String, Object> actualizarPartida(@PathVariable long id, @RequestBody Map<String, Object> datos) {
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+
+        // Obtener la información actual de la partida
+        Map<String, Object> info = partida.getInformacionPartida();
+        if (info == null) {
+            info = new HashMap<>();
+        }
+
+        // Actualizar los datos recibidos
+        info.putAll(datos);
+        partida.setInformacionPartida(info);
+
+        // Guardar los cambios
+        entityManager.merge(partida);
+
+        // Devolver la información actualizada
+        return info;
     }
 }
