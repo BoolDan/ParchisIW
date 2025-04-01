@@ -67,8 +67,9 @@
                         </select>
                         <ul id="torneosList">
                             <li th:each="torneo : ${torneos}">
-                                <button class="btn btn-outline-secondary"
-                                    th:text="${torneo.nombre + ' - ' + torneo.estado}"></button>
+                                <a th:href="@{'/torneos/' + ${torneo.id}}" class="btn btn-outline-secondary">
+                                    <span th:text="${torneo.nombre + ' - ' + torneo.estado}"></span>
+                                </a>
                             </li>
                         </ul>
                     </div>
