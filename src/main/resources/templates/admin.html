@@ -182,37 +182,37 @@
     </script>
     <script>
         document.getElementById("estadoTorneo").addEventListener("change", function() {
-            var estado = this.value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "/admin/torneos?estado=" + encodeURIComponent(estado), true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-    
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    try {
-                        var torneos = JSON.parse(xhr.responseText);
-                        var torneosList = document.getElementById("torneosList");
-                        torneosList.innerHTML = "";
-    
-                        torneos.forEach(function(torneo) {
-                            var li = document.createElement("li");
-                            li.innerHTML = `
-                                <button class="btn btn-outline-secondary">
-                                    ${torneo.nombre} - ${torneo.estado}
-                                </button>
-                            `;
-                            torneosList.appendChild(li);
-                        });
-                    } catch (e) {
-                        console.error('Error al parsear la respuesta JSON:', e);
-                    }
-                } else {
-                    console.error('Error al cargar los torneos:', xhr.status, xhr.statusText);
+        var estado = this.value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "/admin/torneos?estado=" + encodeURIComponent(estado), true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                try {
+                    var torneos = JSON.parse(xhr.responseText);
+                    var torneosList = document.getElementById("torneosList");
+                    torneosList.innerHTML = "";
+
+                    torneos.forEach(function(torneo) {
+                        var li = document.createElement("li");
+                        li.innerHTML = `
+                            <a href="/torneos/${torneo.id}" class="btn btn-outline-secondary">
+                                ${torneo.nombre} - ${torneo.estado}
+                            </a>
+                        `;
+                        torneosList.appendChild(li);
+                    });
+                } catch (e) {
+                    console.error('Error al parsear la respuesta JSON:', e);
                 }
-            };
-    
-            xhr.send();
-        });
+            } else {
+                console.error('Error al cargar los torneos:', xhr.status, xhr.statusText);
+            }
+        };
+
+        xhr.send();
+    });
     </script>
 
 </body>
