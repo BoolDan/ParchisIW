@@ -530,3 +530,18 @@ button.btn-danger {
         margin: 0 auto; /* Centra el tablero */
     }
 }
+
+.card-text.estado-ESPERANDO_JUGADORES {
+    color: green;
+    font-weight: bold;
+}
+
+.card-text.estado-EN_CURSO {
+    color: orange;
+    font-weight: bold;
+}
+
+.card-text.estado-FINALIZADA {
+    color: red;
+    font-weight: bold;
+}
