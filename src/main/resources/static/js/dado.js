@@ -1,51 +1,75 @@
 class Dado {
     constructor() {
-        // Crear el elemento del dado
         this.dadoElement = document.createElement("div");
         this.dadoElement.className = "dado";
-        this.dadoElement.textContent = "1"; // Valor inicial del dado
-
-        // Valor inicial del dado
-        this.valor = 1;
-
-        // Agregar evento de clic para lanzar el dado
+        this.valor = 1; // Valor inicial del dado
+        this.crearCaras();
         this.dadoElement.addEventListener("click", () => this.lanzar());
+    }
+
+    crearCaras() {
+        // Crear las caras del dado
+        for (let i = 1; i <= 6; i++) {
+            const cara = document.createElement("div");
+            cara.className = `cara cara-${i}`;
+            cara.dataset.valor = i;
+    
+            // Crear los puntos para cada cara
+            for (let j = 0; j < i; j++) {
+                const punto = document.createElement("div");
+                punto.className = "punto";
+                cara.appendChild(punto);
+            }
+    
+            // Agregar la clase activa solo a la cara inicial (cara-1)
+            if (i === 1) {
+                cara.classList.add("cara-activa");
+            }
+    
+            this.dadoElement.appendChild(cara);
+        }
     }
 
     lanzar() {
         // Generar un número aleatorio entre 1 y 6
         this.valor = Math.floor(Math.random() * 6) + 1;
 
-        // Añadir la clase "lanzando" para activar la animación
-        this.dadoElement.classList.add("lanzando");
-
         // Actualizar la animación del dado
         this.actualizarAnimacion();
 
-        // Mostrar el valor en la consola
-        console.log(`Dado lanzado: ${this.valor}`);
+        // Mostrar los puntos correspondientes
+        this.mostrarPuntos(this.valor);
 
-        // Remover la clase "lanzando" después de que termine la animación
-        setTimeout(() => {
-            this.dadoElement.classList.remove("lanzando");
-        }, 1000); // Duración de la animación
+        console.log(`Dado lanzado: ${this.valor}`);
     }
 
     actualizarAnimacion() {
         // Restablecer la animación
         this.dadoElement.style.transition = "transform 0.5s ease-in-out";
-        this.dadoElement.style.transform = "rotate(0deg)"; // Resetear rotación
+        this.dadoElement.style.transform = "rotate(0deg)";
 
         // Aplicar una rotación aleatoria para simular el lanzamiento
-        const xRotation = 720 + this.valor * 90; 
-        const yRotation = 720 + this.valor * 90; 
+        const xRotation = 720 + this.valor * 90; // Rotación en el eje X
+        const yRotation = 720 + this.valor * 90; // Rotación en el eje Y
         this.dadoElement.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-
-        // Actualizar el texto después de la animación
-        setTimeout(() => {
-            this.dadoElement.textContent = this.valor;
-        }, 500); // Esperar a que termine la animación
     }
+
+    mostrarPuntos(valor) {
+    // Ocultar todas las caras
+    const caras = this.dadoElement.querySelectorAll(".cara");
+    caras.forEach(cara => {
+        cara.classList.remove("cara-activa");
+    });
+
+    // Mostrar la cara correspondiente al valor
+    const caraVisible = this.dadoElement.querySelector(`.cara-${valor}`);
+    if (caraVisible) {
+        caraVisible.classList.add("cara-activa");
+        console.log(`Cara ${valor} activada.`);
+    } else {
+        console.error(`No se encontró la cara-${valor} en el DOM.`);
+    }
+}
 
     getElemento() {
         return this.dadoElement;

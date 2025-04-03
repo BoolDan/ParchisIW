@@ -535,17 +535,140 @@ button.btn-danger {
 .dado {
     width: 100px;
     height: 100px;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    border-radius: 10px;
     border: 2px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     user-select: none;
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
     transform-style: preserve-3d;
-    transition: transform 0.5s ease-in-out, box-shadow 0.3s ease;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 0.5s ease-in-out;
+}
+
+.cara {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    justify-items: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    display: none; /* Ocultar todas las caras por defecto */
+}
+
+.cara .punto {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    border-radius: 50%;
+}
+
+/* Mostrar la cara activa */
+.cara-activa {
+    display: grid !important;
+}
+/* Cara 1: Punto en el centro */
+.cara-1 .punto:nth-child(1) {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+/* Cara 2: Puntos en las esquinas opuestas */
+.cara-2 .punto:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cara-2 .punto:nth-child(2) {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+/* Cara 3: Puntos en diagonal */
+.cara-3 .punto:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cara-3 .punto:nth-child(2) {
+    grid-column: 2;
+    grid-row: 2;
+}
+.cara-3 .punto:nth-child(3) {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+/* Cara 4: Puntos en las cuatro esquinas */
+.cara-4 .punto:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cara-4 .punto:nth-child(2) {
+    grid-column: 3;
+    grid-row: 1;
+}
+.cara-4 .punto:nth-child(3) {
+    grid-column: 1;
+    grid-row: 3;
+}
+.cara-4 .punto:nth-child(4) {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+/* Cara 5: Puntos en las cuatro esquinas y el centro */
+.cara-5 .punto:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cara-5 .punto:nth-child(2) {
+    grid-column: 3;
+    grid-row: 1;
+}
+.cara-5 .punto:nth-child(3) {
+    grid-column: 2;
+    grid-row: 2;
+}
+.cara-5 .punto:nth-child(4) {
+    grid-column: 1;
+    grid-row: 3;
+}
+.cara-5 .punto:nth-child(5) {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+/* Cara 6: Puntos en las dos columnas laterales */
+.cara-6 .punto:nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+}
+.cara-6 .punto:nth-child(2) {
+    grid-column: 1;
+    grid-row: 2;
+}
+.cara-6 .punto:nth-child(3) {
+    grid-column: 1;
+    grid-row: 3;
+}
+.cara-6 .punto:nth-child(4) {
+    grid-column: 3;
+    grid-row: 1;
+}
+.cara-6 .punto:nth-child(5) {
+    grid-column: 3;
+    grid-row: 2;
+}
+.cara-6 .punto:nth-child(6) {
+    grid-column: 3;
+    grid-row: 3;
 }
 
 /* Sombra cuando el dado es presionado */
@@ -553,83 +676,46 @@ button.btn-danger {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* CARAS DEL DADO */
-.dado .face {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 36px;
-    font-weight: bold;
-    color: #333;
-    border-radius: 5px;
-    border: 2px solid #333;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+
+/* Animaciones y posiciones de las caras */
+.dado .front {
+    transform: rotateY(0deg) translateZ(50px);
+}
+.dado .back {
+    transform: rotateY(180deg) translateZ(50px);
+}
+.dado .left {
+    transform: rotateY(-90deg) translateZ(50px);
+}
+.dado .right {
+    transform: rotateY(90deg) translateZ(50px);
+}
+.dado .top {
+    transform: rotateX(90deg) translateZ(50px);
+}
+.dado .bottom {
+    transform: rotateX(-90deg) translateZ(50px);
 }
 
-.dado .front { transform: rotateY(0deg) translateZ(50px); }
-.dado .back { transform: rotateY(180deg) translateZ(50px); }
-.dado .left { transform: rotateY(-90deg) translateZ(50px); }
-.dado .right { transform: rotateY(90deg) translateZ(50px); }
-.dado .top { transform: rotateX(90deg) translateZ(50px); }
-.dado .bottom { transform: rotateX(-90deg) translateZ(50px); }
-
-/* Puntos del dado */
-.dado .puntos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    height: 80%;
+/* Animación para cuando el dado se lanza */
+.dado.lanzando {
+    animation: lanzar 1s ease-out infinite; /* Animación de lanzamiento */
 }
 
-.dado .punto {
-    width: 20px;
-    height: 20px;
-    background-color: #333;
-    border-radius: 50%;
-    margin: 5px;
-}
-
-/* Estilos para mostrar puntos en diferentes combinaciones */
-.dado.1 .puntos {
-    display: flex;
-    justify-content: center;
-}
-
-.dado.2 .puntos {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-}
-
-.dado.3 .puntos {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    align-items: center;
-}
-
-.dado.4 .puntos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-
-.dado.5 .puntos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dado.6 .puntos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
+@keyframes lanzar {
+    0% {
+        transform: rotateX(0deg) rotateY(0deg);
+    }
+    25% {
+        transform: rotateX(360deg) rotateY(90deg);
+    }
+    50% {
+        transform: rotateX(180deg) rotateY(180deg);
+    }
+    75% {
+        transform: rotateX(90deg) rotateY(270deg);
+    }
+    100% {
+        transform: rotateX(0deg) rotateY(360deg);
+    }
 }
