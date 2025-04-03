@@ -236,7 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         fila.forEach((celda, celdaIndex) => {
             if (celda === null) return;
-            
+            console.log(`Procesando celda en fila ${filaIndex}, columna ${celdaIndex}:`, celda);
+
             const td = document.createElement('td');
             
             if (celda.colspan) td.colSpan = celda.colspan;
@@ -282,12 +283,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
                 case 'centro':
                     td.className = 'centro';
-                    const img = document.createElement('img');
-                    img.src = 'https://ilusionesopticas.org.es/wp-content/uploads/2015/10/movimiento-de-centro-hacia-afuera-400x400.jpg';
-                    img.alt = 'Centro del tablero';
-                    td.appendChild(img);
+                    console.log("Celda de tipo 'centro' encontrada.");
+
+                    try {
+                        const dado = new Dado();
+                        const dadoElemento = dado.getElemento();
+                        if (!dadoElemento) {
+                            console.error("El método getElemento() no devolvió un elemento válido.");
+                        } else {
+                            console.log("Dado creado correctamente.");
+                            td.appendChild(dadoElemento);
+                        }
+                    } catch (error) {
+                        console.error("Error al crear o agregar el dado:", error);
+                    }
                     break;
-            }
+        }
             
             tr.appendChild(td);
         });

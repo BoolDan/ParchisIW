@@ -530,3 +530,106 @@ button.btn-danger {
         margin: 0 auto; /* Centra el tablero */
     }
 }
+
+/* DADO */
+.dado {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 2px solid #333;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-in-out, box-shadow 0.3s ease;
+}
+
+/* Sombra cuando el dado es presionado */
+.dado:active {
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* CARAS DEL DADO */
+.dado .face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    border-radius: 5px;
+    border: 2px solid #333;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dado .front { transform: rotateY(0deg) translateZ(50px); }
+.dado .back { transform: rotateY(180deg) translateZ(50px); }
+.dado .left { transform: rotateY(-90deg) translateZ(50px); }
+.dado .right { transform: rotateY(90deg) translateZ(50px); }
+.dado .top { transform: rotateX(90deg) translateZ(50px); }
+.dado .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+/* Puntos del dado */
+.dado .puntos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+}
+
+.dado .punto {
+    width: 20px;
+    height: 20px;
+    background-color: #333;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+/* Estilos para mostrar puntos en diferentes combinaciones */
+.dado.1 .puntos {
+    display: flex;
+    justify-content: center;
+}
+
+.dado.2 .puntos {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.dado.3 .puntos {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dado.4 .puntos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.dado.5 .puntos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dado.6 .puntos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
