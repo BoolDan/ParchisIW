@@ -55,22 +55,25 @@ class Dado {
     }
 
     mostrarPuntos(valor) {
-    // Ocultar todas las caras
-    const caras = this.dadoElement.querySelectorAll(".cara");
-    caras.forEach(cara => {
-        cara.classList.remove("cara-activa");
-    });
-
-    // Mostrar la cara correspondiente al valor
-    const caraVisible = this.dadoElement.querySelector(`.cara-${valor}`);
-    if (caraVisible) {
-        caraVisible.classList.add("cara-activa");
-        console.log(`Cara ${valor} activada.`);
-    } else {
-        console.error(`No se encontró la cara-${valor} en el DOM.`);
+        console.log(`Intentando mostrar la cara-${valor}`); // Depuración inicial
+    
+        // Ocultar todas las caras
+        const caras = this.dadoElement.querySelectorAll(".cara");
+        caras.forEach(cara => {
+            cara.classList.remove("cara-activa");
+            console.log(`Cara ${cara.dataset.valor} desactivada.`); // Depuración para cada cara desactivada
+        });
+    
+        // Mostrar la cara correspondiente al valor
+        const caraVisible = this.dadoElement.querySelector(`.cara-${valor}`);
+        if (caraVisible) {
+            caraVisible.classList.add("cara-activa");
+            console.log(`Cara ${valor} activada.`); // Depuración para la cara activada
+        } else {
+            console.error(`No se encontró la cara-${valor} en el DOM.`); // Error si no se encuentra la cara
+        }
     }
-}
-
+    
     getElemento() {
         return this.dadoElement;
     }

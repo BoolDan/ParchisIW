@@ -46,58 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Actualizar estado de la partida
     function actualizarEstado() {
+        console.log('Actualizando estado de la partida...');
         const datos = {
             rondasJugadas: rondasJugadas,
             piezasRestantes: piezasRestantes
         };
-
+        console.log('Datos enviados:', datos);
+    
         actualizarInformacionPartida(datos);
     }
 
     // Llamada para iniciar la partida
     iniciarPartida();
 
-    // Función para lanzar el dado visualmente
-    function lanzarDadoVisual(callback) {
-        const dadoElemento = document.getElementById('dice');
-        dadoElemento.style.transition = 'transform 1s ease-in-out';
-
-        // Generamos un número aleatorio para el dado
-        const numeroDado = Math.floor(Math.random() * 6) + 1;
-        console.log(`Número del dado: ${numeroDado}`);
-
-        // Añadimos una animación para el lanzamiento del dado
-        dadoElemento.style.animation = 'dadoLanzamiento 1s forwards';
-
-        // Esperamos que termine la animación antes de llamar al callback
-        setTimeout(() => {
-            // Detenemos la animación y aplicamos la rotación final para el número del dado
-            dadoElemento.style.animation = 'none';
-            dadoElemento.style.transform = `rotateX(${numeroDado * 90}deg) rotateY(${numeroDado * 90}deg)`;
-            callback(numeroDado);  // Llamamos al callback con el número del dado
-        }, 1000);  // Esperamos 1 segundo por la animación
-    }
-
-    // Función para ejecutar un turno de un jugador
-    function jugarTurno() {
-        // Lanzamos el dado visualmente
-        lanzarDadoVisual((numeroDado) => {
-            console.log(`El jugador ${jugadores[juego.turnoActual].nombre} lanzó un ${numeroDado}`);
-
-            // Mover la ficha (PROVISIONAL HAY QUE HACERLO MEJOR)
-            juego.jugadores[juego.turnoActual].moverFicha(0, numeroDado);
-
-            // Actualizamos el estado del juego
-            rondasJugadas++;
-            piezasRestantes--;
-
-            // Cambiar de turno
-            juego.siguienteTurno();
-
-            // Actualizar la información de la partida en el servidor
-            actualizarEstado();
-        });
-    }
-
-    setTimeout(jugarTurno, 5000);  // Jugar el primer turno después de 5 seg
 });
