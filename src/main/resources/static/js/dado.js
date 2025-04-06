@@ -1,10 +1,7 @@
 class Dado {
     constructor() {
-        this.dadoElement = document.createElement("div");
-        this.dadoElement.className = "dado";
         this.valor = 1; // Valor inicial del dado
         this.crearCaras();
-        this.dadoElement.addEventListener("click", () => this.lanzar());
     }
 
     crearCaras() {

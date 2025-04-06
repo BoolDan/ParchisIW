@@ -53,11 +53,13 @@ class Tablero {
 }
 
 /*mostrar el tablero*/
-document.addEventListener('DOMContentLoaded', function() {
-    const tablero = document.getElementById('tablero');
-    
-    // Estructura del tablero
-    const estructura = [
+/* Generar el tablero visualmente */
+document.addEventListener('DOMContentLoaded', function () {
+    const tablero = new Tablero(); // Instancia de la clase Tablero
+    const tableroContainer = document.getElementById('tablero');
+
+     // Estructura del tablero
+     const estructura = [
         // Fila 1
         [
             { type: 'casa', color: 'amarillo', colspan: 7, rowspan: 7, tokens: [
@@ -288,32 +290,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Generar filas
     estructura.forEach((fila, filaIndex) => {
         const tr = document.createElement('tr');
-        
+
         fila.forEach((celda, celdaIndex) => {
             if (celda === null) return;
-            console.log(`Procesando celda en fila ${filaIndex}, columna ${celdaIndex}:`, celda);
 
             const td = document.createElement('td');
-            
+
             if (celda.colspan) td.colSpan = celda.colspan;
             if (celda.rowspan) td.rowSpan = celda.rowspan;
-            
-            switch(celda.type) {
+
+            switch (celda.type) {
                 case 'casa':
-                    td.className = celda.color;
+                    td.className = `casa ${celda.color}`;
                     // Añadir fichas a la casa
                     if (celda.tokens) {
                         celda.tokens.forEach(token => {
                             const tokenElement = document.createElement('div');
                             tokenElement.className = `token ${token.color}`;
                             tokenElement.textContent = token.number;
-                            tokenElement.style.left = `${token.x}px`;
-                            tokenElement.style.top = `${token.y}px`;
-                    
-                            // data-id único
+
+                            // Agregar un id único para cada ficha
                             tokenElement.dataset.id = `${token.color}-${token.number}`;
-                    
-                            //seleccionar la ficha
+
+                            // Evento para seleccionar la ficha
                             tokenElement.addEventListener('click', function () {
                                 fichaSeleccionada = {
                                     id: tokenElement.dataset.id,
@@ -322,19 +321,20 @@ document.addEventListener('DOMContentLoaded', function() {
                                 };
                                 console.log(`Ficha seleccionada: ID=${fichaSeleccionada.id}, Color=${fichaSeleccionada.color}, Número=${fichaSeleccionada.number}`);
                             });
-                    
+
                             td.appendChild(tokenElement);
                         });
                     }
                     break;
                 case 'casilla':
+                    td.className = 'casilla';
                     const numSpan = document.createElement('span');
                     numSpan.className = 'numero-casilla';
                     numSpan.textContent = celda.number;
                     td.appendChild(numSpan);
                     break;
                 case 'pasillo':
-                    td.className = celda.color || '';
+                    td.className = `pasillo ${celda.color}`;
                     if (celda.number) {
                         const numSpan = document.createElement('span');
                         numSpan.className = 'numero-casilla';
@@ -345,32 +345,36 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     break;
                 case 'vacio':
-                    td.id = 'vacio';
+                    td.className = 'vacio';
                     break;
                 case 'centro':
                     td.className = 'centro';
-                    console.log("Celda de tipo 'centro' encontrada.");
 
-                    try {
-                        const dado = new Dado();
-                        const dadoElemento = dado.getElemento();
-                        if (!dadoElemento) {
-                            console.error("El método getElemento() no devolvió un elemento válido.");
+                    // Crear un contenedor para el dado
+                    const dadoContainer = document.createElement('div');
+                    dadoContainer.id = 'dado';
+                    dadoContainer.className = 'dado';
+                
+
+                    // Conectar con la lógica del dado en game.js
+                    dadoContainer.addEventListener('click', () => {
+                        if (typeof game.lanzarDado === 'function') {
+                            const valor = game.lanzarDado(); // Usar la instancia de ParchisGame
+                            alert(`Has sacado un ${valor}`);
                         } else {
-                            console.log("Dado creado correctamente.");
-                            td.appendChild(dadoElemento);
+                            console.error('La función lanzarDado no está definida en game.');
                         }
-                    } catch (error) {
-                        console.error("Error al crear o agregar el dado:", error);
-                    }
+                    });
+
+                    td.appendChild(dadoContainer);
                     break;
-        }
-            
+            }
+
             tr.appendChild(td);
         });
-        
+
         table.appendChild(tr);
     });
 
-    tablero.appendChild(table);
+    tableroContainer.appendChild(table);
 });
