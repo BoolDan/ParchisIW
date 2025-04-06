@@ -565,10 +565,10 @@ button.btn-danger {
 }
 
 .cara .punto {
-    width: 20px;
-    height: 20px;
-    background-color: #333;
-    border-radius: 50%;
+    width: 20px; 
+    height: 20px; 
+    background-color: #333; 
+    border-radius: 50%; 
 }
 
 /* Mostrar la cara activa */

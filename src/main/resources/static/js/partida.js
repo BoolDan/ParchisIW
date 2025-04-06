@@ -1,17 +1,14 @@
+/*CLASE PARA INTERACTUAR CON EL SERVIDOR Y ACTUALIZAR LA INFO */ 
 document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
     const partidaId = document.getElementById('game-container').dataset.id;
-    const jugadores = [];
-    let rondasJugadas = 0;
-    let piezasRestantes = 4;
 
-    // Instancia del juego
     const juego = new ParchisGame();
 
-    // Función para actualizar la información de la partida
-    function actualizarInformacionPartida(datos) {
+    function actualizarEstadoEnServidor() {
+        const datos = juego.serializarEstado();
+
         fetch(`/partida/${partidaId}/actualizar`, {
             method: 'POST',
             headers: {
@@ -21,42 +18,47 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(datos)
         })
         .then(response => response.json())
-        .then(data => {
-            console.log('Partida actualizada:', data);
-        })
+        .then(data => console.log('Estado actualizado en el servidor:', data))
         .catch(error => console.error('Error al actualizar la partida:', error));
     }
 
-    // Agregar jugadores
-    function agregarJugador(nombre, color) {
-        const jugador = new Jugador(nombre, color);
-        jugadores.push(jugador);
-        juego.agregarJugador(nombre, color);
+    function cargarEstadoDesdeServidor() {
+        fetch(`/partida/${partidaId}/estado`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Estado cargado desde el servidor:', data);
+                juego.deserializarEstado(data);
+                actualizarEstado();
+                actualizarTurno();
+            })
+            .catch(error => console.error('Error al cargar el estado:', error));
     }
 
-    // Función para iniciar la partida
-    function iniciarPartida() {
-        //PRUEBA , CONECTAR CON BD
-        agregarJugador("Jugador 1", "red");
-        agregarJugador("Jugador 2", "blue");
-
-        juego.iniciarPartida();
-        actualizarEstado();
-    }
-
-    // Actualizar estado de la partida
     function actualizarEstado() {
-        console.log('Actualizando estado de la partida...');
-        const datos = {
-            rondasJugadas: rondasJugadas,
-            piezasRestantes: piezasRestantes
-        };
-        console.log('Datos enviados:', datos);
-    
-        actualizarInformacionPartida(datos);
+        document.getElementById('rondasJugadas').textContent = juego.rondasJugadas;
+        document.getElementById('piezasRestantes').textContent = juego.piezasRestantes;
+        actualizarEstadoEnServidor();
     }
 
-    // Llamada para iniciar la partida
-    iniciarPartida();
+    function actualizarTurno() {
+        const jugadorActual = juego.jugadores[juego.turnoActual];
+        document.getElementById('turnoActual').textContent = jugadorActual.nombre;
+        document.getElementById('colorJugador').textContent = jugadorActual.color;
+    }
 
+    function ejecutarTurno() {
+        const dado = juego.lanzarDado();
+        const ficha = juego.moverFicha(0, dado);
+
+        document.getElementById('fichaMovida').textContent = `Ficha ${ficha.id}`;
+        document.getElementById('posicionFicha').textContent = ficha.posicion;
+
+        actualizarEstado();
+        juego.siguienteTurno();
+        actualizarTurno();
+    }
+
+    cargarEstadoDesdeServidor();
+
+    document.getElementById('lanzar-dado').addEventListener('click', ejecutarTurno);
 });

@@ -8,7 +8,6 @@ class Dado {
     }
 
     crearCaras() {
-        // Crear las caras del dado
         for (let i = 1; i <= 6; i++) {
             const cara = document.createElement("div");
             cara.className = `cara cara-${i}`;
@@ -19,11 +18,6 @@ class Dado {
                 const punto = document.createElement("div");
                 punto.className = "punto";
                 cara.appendChild(punto);
-            }
-    
-            // Agregar la clase activa solo a la cara inicial (cara-1)
-            if (i === 1) {
-                cara.classList.add("cara-activa");
             }
     
             this.dadoElement.appendChild(cara);
@@ -69,6 +63,7 @@ class Dado {
         if (caraVisible) {
             caraVisible.classList.add("cara-activa");
             console.log(`Cara ${valor} activada.`); // Depuración para la cara activada
+            console.log("Contenido de la cara:", caraVisible.innerHTML); // Verificar los puntos
         } else {
             console.error(`No se encontró la cara-${valor} en el DOM.`); // Error si no se encuentra la cara
         }
