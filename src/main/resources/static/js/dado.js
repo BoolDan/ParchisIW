@@ -25,13 +25,8 @@ class Dado {
     }
 
     lanzar() {
-        // Generar un número aleatorio entre 1 y 6
         this.valor = Math.floor(Math.random() * 6) + 1;
-
-        // Actualizar la animación del dado
         this.actualizarAnimacion();
-
-        // Mostrar los puntos correspondientes
         this.mostrarPuntos(this.valor);
 
         console.log(`Dado lanzado: ${this.valor}`);

@@ -41,7 +41,6 @@ class ParchisGame {
     serializarEstado() {
         return {
             rondasJugadas: this.rondasJugadas,
-            piezasRestantes: this.piezasRestantes,
             turnoActual: this.turnoActual,
             jugadores: this.jugadores.map(jugador => ({
                 nombre: jugador.nombre,
@@ -50,15 +49,14 @@ class ParchisGame {
                     id: ficha.id,
                     posicion: ficha.posicion,
                     encasa: ficha.encasa,
-                    enjuego: ficha.enjuego
+                    enjuego: ficha.enjuego,
+                    enMeta: ficha.enMeta
                 }))
             }))
         };
     }
-
     deserializarEstado(datos) {
         this.rondasJugadas = datos.rondasJugadas;
-        this.piezasRestantes = datos.piezasRestantes;
         this.turnoActual = datos.turnoActual;
     
         this.jugadores = datos.jugadores.map(jugadorData => {
@@ -68,46 +66,10 @@ class ParchisGame {
                 ficha.posicion = fichaData.posicion;
                 ficha.encasa = fichaData.encasa;
                 ficha.enjuego = fichaData.enjuego;
+                ficha.enMeta = fichaData.enMeta;
                 return ficha;
             });
             return jugador;
         });
     }
-}
-
-class Jugador {
-    constructor(nombre, color) {
-        this.nombre = nombre;
-        this.color = color;
-        this.fichas = [];
-    }
-
-    moverFicha(idFicha, dado) {
-        const ficha = this.fichas[idFicha];
-        ficha.moverFichas(dado);
-    }
-}
-
-class Fichas {
-    constructor(color, id) {
-        this.color = color;
-        this.id = id;
-        this.posicion = 0;
-        this.encasa = true;
-        this.enjuego = false;
-    }
-
-    moverFichas(dado) {
-        if (this.encasa) {
-            this.sacarFichas();
-        }
-        this.posicion += dado;
-        this.enjuego = true;
-    }
-
-    sacarFichas() {
-        this.encasa = false;
-        this.posicion = 1; // posición inicial en el tablero
-    }
-
 }
