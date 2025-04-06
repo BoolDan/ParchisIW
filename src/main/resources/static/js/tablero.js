@@ -1,4 +1,5 @@
 /*clase tablero HAY QUE CAMBIAR COMO SE MUESTRA EL TABLERO ABAJO PARA QUE FUNCIONE BIEN GUARDANDO LAS COSAS*/
+
 class Tablero {
     constructor() {
         this.casillas = Array(68).fill(null); // 68 casillas en el tablero
@@ -301,18 +302,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (celda.type) {
                 case 'casa':
-                    td.className = `casa ${celda.color}`;
-                    // Añadir fichas a la casa
+                td.className = `casa ${celda.color}`;
                     if (celda.tokens) {
                         celda.tokens.forEach(token => {
                             const tokenElement = document.createElement('div');
                             tokenElement.className = `token ${token.color}`;
                             tokenElement.textContent = token.number;
 
-                            // Agregar un id único para cada ficha
+                            // id único para cada ficha
                             tokenElement.dataset.id = `${token.color}-${token.number}`;
 
-                            // Evento para seleccionar la ficha
+                            // seleccionar la ficha
                             tokenElement.addEventListener('click', function () {
                                 fichaSeleccionada = {
                                     id: tokenElement.dataset.id,
@@ -321,6 +321,11 @@ document.addEventListener('DOMContentLoaded', function () {
                                 };
                                 console.log(`Ficha seleccionada: ID=${fichaSeleccionada.id}, Color=${fichaSeleccionada.color}, Número=${fichaSeleccionada.number}`);
                             });
+
+                            // Posicionar las fichas correctamente dentro de la casa
+                            tokenElement.style.position = 'absolute';
+                            tokenElement.style.left = `${token.x}px`;
+                            tokenElement.style.top = `${token.y}px`;
 
                             td.appendChild(tokenElement);
                         });

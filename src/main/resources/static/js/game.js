@@ -1,5 +1,6 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
 const game = new ParchisGame();
+window.game = game; // Hacer que la instancia sea global
 class ParchisGame {
 
     constructor() {
