@@ -1,3 +1,58 @@
+/*clase tablero HAY QUE CAMBIAR COMO SE MUESTRA EL TABLERO ABAJO PARA QUE FUNCIONE BIEN GUARDANDO LAS COSAS*/
+class Tablero {
+    constructor() {
+        this.casillas = Array(68).fill(null); // 68 casillas en el tablero
+        this.pasillos = {
+            rojo: Array(7).fill(null),
+            azul: Array(7).fill(null),
+            verde: Array(7).fill(null),
+            amarillo: Array(7).fill(null)
+        }; 
+    }
+
+    obtenerInicio(color) {
+        const inicios = {
+            rojo: 0,
+            azul: 17,
+            verde: 34,
+            amarillo: 51
+        };
+        return inicios[color];
+    }
+
+    obtenerMeta(color) {
+        const metas = {
+            rojo: 67,
+            azul: 16,
+            verde: 33,
+            amarillo: 50
+        };
+        return metas[color];
+    }
+
+    colocarFichaEnInicio(ficha) {
+        const inicio = this.obtenerInicio(ficha.color);
+        this.casillas[inicio] = ficha;
+    }
+
+    moverFicha(ficha, dado) {
+        const nuevaPosicion = ficha.posicion + dado;
+
+        // Si la ficha llega a la meta
+        if (nuevaPosicion >= this.obtenerMeta(ficha.color)) {
+            ficha.llegarAMeta();
+            this.casillas[ficha.posicion] = null; // Vaciar la casilla actual
+            this.pasillos[ficha.color][nuevaPosicion - this.obtenerMeta(ficha.color)] = ficha; // Colocar en el pasillo
+        } else {
+            // Mover dentro del tablero
+            this.casillas[ficha.posicion] = null; // Vaciar la casilla actual
+            ficha.posicion = nuevaPosicion;
+            this.casillas[nuevaPosicion] = ficha; // Colocar la ficha en la nueva casilla
+        }
+    }
+}
+
+/*mostrar el tablero*/
 document.addEventListener('DOMContentLoaded', function() {
     const tablero = document.getElementById('tablero');
     
@@ -254,9 +309,20 @@ document.addEventListener('DOMContentLoaded', function() {
                             tokenElement.textContent = token.number;
                             tokenElement.style.left = `${token.x}px`;
                             tokenElement.style.top = `${token.y}px`;
-                            tokenElement.addEventListener('click', function() {
-                                console.log(`Ficha ${token.number} del jugador ${token.color}`);
+                    
+                            // data-id único
+                            tokenElement.dataset.id = `${token.color}-${token.number}`;
+                    
+                            //seleccionar la ficha
+                            tokenElement.addEventListener('click', function () {
+                                fichaSeleccionada = {
+                                    id: tokenElement.dataset.id,
+                                    color: token.color,
+                                    number: token.number
+                                };
+                                console.log(`Ficha seleccionada: ID=${fichaSeleccionada.id}, Color=${fichaSeleccionada.color}, Número=${fichaSeleccionada.number}`);
                             });
+                    
                             td.appendChild(tokenElement);
                         });
                     }

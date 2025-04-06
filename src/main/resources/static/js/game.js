@@ -1,5 +1,7 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
+const game = new ParchisGame();
 class ParchisGame {
+
     constructor() {
         this.jugadores = [];
         this.turnoActual = 0;
