@@ -30,9 +30,9 @@ export class ParchisGame {
         });
     }
 
-    lanzarDado() {
-        const valor = this.dado.lanzar(); 
-        console.log(`GAME JS El jugador  lanzó un ${valor}`);
+    async lanzarDado() {
+        const valor = await this.dado.lanzar(); // Espera a que el dado termine de girar
+        console.log(`GAME JS El jugador lanzó un ${valor}`);
         return valor;
     }
 

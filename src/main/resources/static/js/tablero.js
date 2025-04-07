@@ -355,10 +355,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     break;
                 case 'centro':
                     td.className = 'centro';
-                    // Crear el contenedor del dado
+                    // Obtener el contenedor del dado desde la instancia de ParchisGame
                     this.dadoElement = game.getDadoElemento(); // Usar la instancia de ParchisGame
-                    this.dadoElement.addEventListener('click', () => { 
-                        const valor = game.lanzarDado(); // Usar la instancia de ParchisGame        
+                
+                    // Registrar el evento de clic en el dado
+                    this.dadoElement.addEventListener('click', async () => {
+                        if (!game.dado.animando) {
+                            const valor = await game.lanzarDado(); // Llama a la función lanzarDado de ParchisGame
+                            console.log(`Valor obtenido del dado: ${valor}`);
+                        }
                     });
                 
                     td.appendChild(this.dadoElement); 
