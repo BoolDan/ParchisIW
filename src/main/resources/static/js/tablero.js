@@ -1,5 +1,6 @@
 /*clase tablero HAY QUE CAMBIAR COMO SE MUESTRA EL TABLERO ABAJO PARA QUE FUNCIONE BIEN GUARDANDO LAS COSAS*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar el contenedor que se crea en el constructor
+import { Jugador } from './jugador.js'; // Importa la clase Jugador para manejar los jugadores
 
 class Tablero {
     constructor() {
@@ -32,25 +33,14 @@ class Tablero {
         return metas[color];
     }
 
-    colocarFichaEnInicio(ficha) {
+    /*colocarFichaEnInicio(ficha) {
         const inicio = this.obtenerInicio(ficha.color);
         this.casillas[inicio] = ficha;
-    }
+    }*/
 
     moverFicha(ficha, dado) {
-        const nuevaPosicion = ficha.posicion + dado;
-
-        // Si la ficha llega a la meta
-        if (nuevaPosicion >= this.obtenerMeta(ficha.color)) {
-            ficha.llegarAMeta();
-            this.casillas[ficha.posicion] = null; // Vaciar la casilla actual
-            this.pasillos[ficha.color][nuevaPosicion - this.obtenerMeta(ficha.color)] = ficha; // Colocar en el pasillo
-        } else {
-            // Mover dentro del tablero
-            this.casillas[ficha.posicion] = null; // Vaciar la casilla actual
-            ficha.posicion = nuevaPosicion;
-            this.casillas[nuevaPosicion] = ficha; // Colocar la ficha en la nueva casilla
-        }
+        jugador = this.jugadores[this.turnoActual]; // Obtener el jugador actual
+        jugador.moverFicha(ficha.id, dado); // Mover la ficha del jugador actual
     }
 }
 
