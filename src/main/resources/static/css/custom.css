@@ -536,7 +536,6 @@ button.btn-danger {
     width: 100px;
     height: 100px;
     position: relative;
-    display: flex;
     justify-content: center;
     align-items: center;
     background-color: #fff;
@@ -546,8 +545,6 @@ button.btn-danger {
     cursor: pointer;
     user-select: none;
     transform-style: preserve-3d;
-    transform: rotateX(0deg) rotateY(0deg);
-    transition: transform 0.5s ease-in-out;
 }
 
 .cara {
@@ -561,7 +558,6 @@ button.btn-danger {
     align-items: center;
     background-color: #fff;
     border-radius: 10px;
-    display: none; /* Ocultar todas las caras por defecto */
 }
 
 .cara .punto {
