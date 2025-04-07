@@ -354,22 +354,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     td.className = 'vacio';
                     break;
                 case 'centro':
-                    case 'centro':
-                        td.className = 'centro';
-                        // Crear el contenedor del dado
-                        this.dadoElement = document.createElement('div');
-                        this.dadoElement.id = 'dado';
-                        this.dadoElement.className = 'dado';
-                        document.body.appendChild(this.dadoElement); 
-                        console.log(`Dado creado el contenedor desde tablero.js`);
-                    
-                        // Conectar con la lógica del dado en game.js
-                        this.dadoElement.addEventListener('click', () => { 
-                         const valor = game.lanzarDado(); // Usar la instancia de ParchisGame        
-                        });
-                    
-                        td.appendChild(this.dadoElement); 
-                        break;
+                    td.className = 'centro';
+                    // Crear el contenedor del dado
+                    this.dadoElement = game.getDadoElemento(); // Usar la instancia de ParchisGame
+                    this.dadoElement.addEventListener('click', () => { 
+                        const valor = game.lanzarDado(); // Usar la instancia de ParchisGame        
+                    });
+                
+                    td.appendChild(this.dadoElement); 
+                    break;
                     
             }
 

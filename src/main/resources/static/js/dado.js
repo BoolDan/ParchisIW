@@ -1,4 +1,4 @@
-class Dado {
+export class Dado {
     constructor() {
         this.valor = 1; // Valor inicial del dado
         this.dadoElement = document.createElement('div');
@@ -8,20 +8,41 @@ class Dado {
         console.log(`Dado creado el contenedor desde dado.js`);
 
         this.crearCaras(); // Crear las caras del dado
+        this.actualizarAnimacion(); // Mostrar la cara inicial rotando el cubo
     }
 
     crearCaras() {
+        const posiciones = {
+            1: [[1, 1]],
+            2: [[0, 0], [2, 2]],
+            3: [[0, 0], [1, 1], [2, 2]],
+            4: [[0, 0], [0, 2], [2, 0], [2, 2]],
+            5: [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]],
+            6: [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]],
+        };
+    
+        const transformaciones = [
+            "rotateY(0deg) translateZ(40px)",     // cara-1
+            "rotateY(180deg) translateZ(40px)",   // cara-2
+            "rotateY(90deg) translateZ(40px)",    // cara-3
+            "rotateY(-90deg) translateZ(40px)",   // cara-4
+            "rotateX(90deg) translateZ(40px)",    // cara-5
+            "rotateX(-90deg) translateZ(40px)",   // cara-6
+        ];
+    
         for (let i = 1; i <= 6; i++) {
             const cara = document.createElement("div");
             cara.className = `cara cara-${i}`;
-            cara.dataset.valor = i;
+            cara.style.transform = transformaciones[i - 1];
     
-            // Crear los puntos para cada cara
-            for (let j = 0; j < i; j++) {
+            const puntos = posiciones[i];
+            puntos.forEach(([fila, col]) => {
                 const punto = document.createElement("div");
                 punto.className = "punto";
+                punto.style.top = `${20 + fila * 20}px`;   // fila 0,1,2 => top: 20, 40, 60
+                punto.style.left = `${20 + col * 20}px`;  // col 0,1,2 => left: 20, 40, 60
                 cara.appendChild(punto);
-            }
+            });
     
             this.dadoElement.appendChild(cara);
         }
@@ -30,48 +51,26 @@ class Dado {
     lanzar() {
         this.valor = Math.floor(Math.random() * 6) + 1;
         this.actualizarAnimacion();
-        this.mostrarPuntos(this.valor);
 
         console.log(`Dado lanzado: ${this.valor} DADO JS`);
         return this.valor; 
     }
     
     actualizarAnimacion() {
-        // Restablecer la animación
-        this.dadoElement.style.transition = "transform 0.5s ease-in-out";
-        this.dadoElement.style.transform = "rotate(0deg)";
-
-        // Aplicar una rotación aleatoria para simular el lanzamiento
-        const xRotation = 720 + this.valor * 90; // Rotación en el eje X
-        const yRotation = 720 + this.valor * 90; // Rotación en el eje Y
-        this.dadoElement.style.transform = `rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
-    }
-
-    mostrarPuntos(valor) {
-        console.log(`Intentando mostrar la cara-${valor}`); // Depuración inicial
+        const rotaciones = {
+            1: "rotateX(0deg) rotateY(0deg)",
+            2: "rotateX(0deg) rotateY(180deg)",
+            3: "rotateX(0deg) rotateY(-90deg)",
+            4: "rotateX(0deg) rotateY(90deg)",
+            5: "rotateX(-90deg) rotateY(0deg)",
+            6: "rotateX(90deg) rotateY(0deg)",
+        };
     
-        // Ocultar todas las caras
-        const caras = this.dadoElement.querySelectorAll(".cara");
-        caras.forEach(cara => {
-            cara.classList.remove("cara-activa");
-            console.log(`Cara ${cara.dataset.valor} desactivada.`); // Depuración para cada cara desactivada
-        });
-    
-        // Mostrar la cara correspondiente al valor
-        const caraVisible = this.dadoElement.querySelector(`.cara-${valor}`);
-        if (caraVisible) {
-            caraVisible.classList.add("cara-activa");
-            console.log(`Cara ${valor} activada.`); // Depuración para la cara activada
-            console.log("Contenido de la cara:", caraVisible.innerHTML); // Verificar los puntos
-        } else {
-            console.error(`No se encontró la cara-${valor} en el DOM.`); // Error si no se encuentra la cara
-        }
-
+        const transformacion = rotaciones[this.valor] || "rotateX(0deg) rotateY(0deg)";
+        this.dadoElement.style.transform = transformacion;
     }
 
     getElemento() {
         return this.dadoElement;
     }
 }
-
-export { Dado };

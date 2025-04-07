@@ -1,7 +1,7 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar lanzardado
 
-class ParchisGame {
+export class ParchisGame {
     
     constructor() {
         this.jugadores = [];
@@ -76,6 +76,9 @@ class ParchisGame {
         });
     }
 
+    getDadoElemento() {
+        return this.dado.getElemento(); // Devuelve el elemento del dado
+    }
     
 }
 window.game = new ParchisGame(); // Aquí estamos creando la instancia
