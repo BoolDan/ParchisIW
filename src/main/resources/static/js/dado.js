@@ -1,7 +1,13 @@
 class Dado {
     constructor() {
         this.valor = 1; // Valor inicial del dado
-        this.crearCaras();
+        this.dadoElement = document.createElement('div');
+        this.dadoElement.id = 'dado';
+        this.dadoElement.className = 'dado';
+        document.body.appendChild(this.dadoElement); 
+        console.log(`Dado creado el contenedor desde dado.js`);
+
+        this.crearCaras(); // Crear las caras del dado
     }
 
     crearCaras() {
@@ -26,7 +32,8 @@ class Dado {
         this.actualizarAnimacion();
         this.mostrarPuntos(this.valor);
 
-        console.log(`Dado lanzado: ${this.valor}`);
+        console.log(` DADO JS Dado lanzado: ${this.valor}`);
+        return this.valor; 
     }
 
     actualizarAnimacion() {
@@ -65,3 +72,4 @@ class Dado {
         return this.dadoElement;
     }
 }
+export { Dado };

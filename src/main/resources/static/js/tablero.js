@@ -1,4 +1,5 @@
 /*clase tablero HAY QUE CAMBIAR COMO SE MUESTRA EL TABLERO ABAJO PARA QUE FUNCIONE BIEN GUARDANDO LAS COSAS*/
+import { Dado } from './dado.js'; // Importa la clase Dado para usar el contenedor que se crea en el constructor
 
 class Tablero {
     constructor() {
@@ -353,26 +354,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     td.className = 'vacio';
                     break;
                 case 'centro':
-                    td.className = 'centro';
-
-                    // Crear un contenedor para el dado
-                    const dadoContainer = document.createElement('div');
-                    dadoContainer.id = 'dado';
-                    dadoContainer.className = 'dado';
-                
-
-                    // Conectar con la lógica del dado en game.js
-                    dadoContainer.addEventListener('click', () => {
-                        if (typeof game.lanzarDado === 'function') {
-                            const valor = game.lanzarDado(); // Usar la instancia de ParchisGame
-                            alert(`Has sacado un ${valor}`);
-                        } else {
-                            console.error('La función lanzarDado no está definida en game.');
-                        }
-                    });
-
-                    td.appendChild(dadoContainer);
-                    break;
+                    case 'centro':
+                        td.className = 'centro';
+                        // Crear el contenedor del dado
+                        this.dadoElement = document.createElement('div');
+                        this.dadoElement.id = 'dado';
+                        this.dadoElement.className = 'dado';
+                        document.body.appendChild(this.dadoElement); 
+                        console.log(`Dado creado el contenedor desde tablero.js`);
+                    
+                        // Conectar con la lógica del dado en game.js
+                        this.dadoElement.addEventListener('click', () => { 
+                         const valor = game.lanzarDado(); // Usar la instancia de ParchisGame        
+                        });
+                    
+                        td.appendChild(this.dadoElement); 
+                        break;
+                    
             }
 
             tr.appendChild(td);

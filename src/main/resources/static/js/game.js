@@ -1,8 +1,8 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
-const game = new ParchisGame();
-window.game = game; // Hacer que la instancia sea global
-class ParchisGame {
+import { Dado } from './dado.js'; // Importa la clase Dado para usar lanzardado
 
+class ParchisGame {
+    
     constructor() {
         this.jugadores = [];
         this.turnoActual = 0;
@@ -32,7 +32,7 @@ class ParchisGame {
 
     lanzarDado() {
         const valor = this.dado.lanzar(); 
-        console.log(`El jugador ${this.jugadores[this.turnoActual].nombre} lanzó un ${valor}`);
+        console.log(`GAME JS El jugador  lanzó un ${valor}`);
         return valor;
     }
 
@@ -75,4 +75,14 @@ class ParchisGame {
             return jugador;
         });
     }
+
+    
 }
+window.game = new ParchisGame(); // Aquí estamos creando la instancia
+
+console.log("✅ game.js cargado correctamente DESDE GAME.JS");
+
+window.onload = () => {
+    console.log("Esperando a que todo cargue...");
+    console.log("¿Game está definido?", window.game);
+};

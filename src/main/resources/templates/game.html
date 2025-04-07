@@ -251,9 +251,10 @@
     </main>
     
     <th:block th:replace="~{fragments/footer.html :: footer}" />
-    <script th:src="@{/js/dado.js}"></script>
-    <script th:src="@{/js/tablero.js}"></script>
-    <script th:src="@{/js/partida.js}"></script>
+    <script type="module" th:src="@{/js/dado.js}"onload="console.log('✅ dado.js cargado correctamente desde GAME.HTML');"></script>
+    <script type= "module" th:src="@{/js/game.js}"onload="console.log('✅ game.js cargado correctamente DESDE GAME.HTML');"></script>
+
+    <script type="module" th:src="@{/js/tablero.js}"onload="console.log('✅ tablero.js cargado correctamente DESDE GAME.HTML');"></script>
 
 
 </body>
