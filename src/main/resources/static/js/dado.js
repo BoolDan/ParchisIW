@@ -32,10 +32,10 @@ class Dado {
         this.actualizarAnimacion();
         this.mostrarPuntos(this.valor);
 
-        console.log(` DADO JS Dado lanzado: ${this.valor}`);
+        console.log(`Dado lanzado: ${this.valor} DADO JS`);
         return this.valor; 
     }
-
+    
     actualizarAnimacion() {
         // Restablecer la animación
         this.dadoElement.style.transition = "transform 0.5s ease-in-out";
@@ -66,10 +66,12 @@ class Dado {
         } else {
             console.error(`No se encontró la cara-${valor} en el DOM.`); // Error si no se encuentra la cara
         }
+
     }
-    
+
     getElemento() {
         return this.dadoElement;
     }
 }
+
 export { Dado };
