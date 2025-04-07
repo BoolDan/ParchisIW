@@ -1,28 +1,14 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar lanzardado
-import { Jugador } from './jugador.js'; // Importa la clase Jugador para manejar los jugadores
-import { Fichas } from './ficha.js'; // Importa la clase Fichas para manejar las fichas
-import { Tablero } from './tablero.js'; // Importa la clase Tablero para manejar el tablero
-class ParchisGame {
+
+export class ParchisGame {
     
     constructor() {
         this.jugadores = [];
         this.turnoActual = 0;
         this.rondasJugadas = 0;
-        this.tablero = new Tablero();
+        this.piezasRestantes = 4;
         this.dado = new Dado(); 
-    }
-
-    init(numerojugadores){
-        colores = ["rojo", "verde", "amarillo", "azul", "naranja", "morado"]
-        for (num in numerojugadores){
-            new Jugador("Jugador"+num, colores[num])
-        }
-
-    }
-
-    salir(){
-        AddEvent
     }
 
     agregarJugador(nombre, color) {
@@ -45,9 +31,8 @@ class ParchisGame {
     }
 
     async lanzarDado() {
-        //const valor = await this.dado.lanzar(); 
-        const valor = Math.floor(Math.random() * 6) + 1; // Simulación de lanzamiento de dado
-        console.log(`GAME JS El jugador  lanzó un ${valor}`);
+        const valor = await this.dado.lanzar(); // Espera a que el dado termine de girar
+        console.log(`GAME JS El jugador lanzó un ${valor}`);
         return valor;
     }
 
