@@ -1,8 +1,10 @@
 /*clase tablero HAY QUE CAMBIAR COMO SE MUESTRA EL TABLERO ABAJO PARA QUE FUNCIONE BIEN GUARDANDO LAS COSAS*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar el contenedor que se crea en el constructor
+import { ParchisGame } from './game.js'; // Importa la clase ParchisGame para usar el contenedor que se crea en el constructor
 
 class Tablero {
-    constructor() {
+    constructor(game) {
+        this.game = game; // Instancia de ParchisGame
         this.casillas = Array(68).fill(null); // 68 casillas en el tablero
         this.pasillos = {
             rojo: Array(7).fill(null),
@@ -53,9 +55,27 @@ class Tablero {
         }
     }
 
+    mostrarTurno() {
+        const jugadorActual = this.game.jugadores[this.game.turnoActual];  
+        const mensajeTurno = document.getElementById('mensaje-turno');
+        if (!mensajeTurno) {
+            console.error("El elemento mensaje-turno no existe en el DOM.");    
+            return;
+        }
+        mensajeTurno.textContent = `Turno de ${jugadorActual.nombre} (${jugadorActual.color})`;
+    }
+
     generarTablero() {
-        const tablero = new Tablero(); // Instancia de la clase Tablero
         const tableroContainer = document.getElementById('tablero');
+        if (!tableroContainer) {
+            console.error("El contenedor del tablero no existe en el DOM.");
+            return;
+        }
+        
+        // Crear la tabla
+        const table = document.createElement('table');
+        table.setAttribute('border', '1px');
+    
     
          // Estructura del tablero
          const estructura = [
@@ -281,16 +301,12 @@ class Tablero {
                 null
             ]
         ];
-    
-        // Crear la tabla
-        const table = document.createElement('table');
-        table.setAttribute('border', '1px');
-    
+
         // Generar filas
-        estructura.forEach((fila, filaIndex) => {
+        estructura.forEach((fila) => {
             const tr = document.createElement('tr');
     
-            fila.forEach((celda, celdaIndex) => {
+            fila.forEach((celda) => {
                 if (celda === null) return;
     
                 const td = document.createElement('td');
@@ -360,6 +376,10 @@ class Tablero {
                             if (!game.dado.animando) {
                                 const valor = await game.lanzarDado(); // Llama a la función lanzarDado de ParchisGame
                                 console.log(`Valor obtenido del dado: ${valor}`);
+
+                                // Avanzar al siguiente turno
+                                this.game.siguienteTurno();
+                                this.mostrarTurno(); // Actualizar el mensaje del turno
                             }
                         });
                     
@@ -381,6 +401,15 @@ class Tablero {
 /*mostrar el tablero*/
 /* Generar el tablero visualmente */
 document.addEventListener('DOMContentLoaded', function () {
-    const tablero = new Tablero(); // Instancia de la clase Tablero
+    const game = new ParchisGame(); // Instancia de la clase ParchisGame    
+    const tablero = new Tablero(game); // Instancia de la clase Tablero
+
+    // Agregar jugadores
+    game.agregarJugador("Jugador 1", "rojo");
+    game.agregarJugador("Jugador 2", "verde");
+    game.agregarJugador("Jugador 3", "azul");
+    game.agregarJugador("Jugador 4", "amarillo");
+
     tablero.generarTablero(); // Generar el tablero visualmente
+    tablero.mostrarTurno(); // Mostrar el turno del jugador actual
 });

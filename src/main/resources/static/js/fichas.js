@@ -1,4 +1,4 @@
-class Fichas {
+export class Fichas {
     constructor(color, id) {
         this.color = color;
         this.id = id;

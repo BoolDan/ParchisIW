@@ -1,4 +1,4 @@
-class Jugador {
+export class Jugador {
     constructor(nombre, color, tipo = "Normal") {
         this.nombre = nombre;
         this.color = color;

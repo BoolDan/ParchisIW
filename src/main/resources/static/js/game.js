@@ -1,5 +1,6 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar lanzardado
+import { Jugador } from './jugador.js'; // Importa la clase Jugador para crear jugadores
 
 export class ParchisGame {
     
@@ -14,6 +15,7 @@ export class ParchisGame {
     agregarJugador(nombre, color) {
         const jugador = new Jugador(nombre, color);
         this.jugadores.push(jugador);
+        console.log(`Jugador agregado: ${nombre} (${color})`);
     }
 
     siguienteTurno() {
