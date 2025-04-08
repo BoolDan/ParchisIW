@@ -1,6 +1,7 @@
 /*MANEJA LA LOGICA DEL JUEGO, TURNOS MOVIMIENTOS ESTADO ETC, TAMBIEN ES EL QUE CONTACTA CON LA CLASE DADO*/
 import { Dado } from './dado.js'; // Importa la clase Dado para usar lanzardado
 import { Jugador } from './jugador.js'; // Importa la clase Jugador para crear jugadores
+import { Fichas } from './fichas.js'; // Importa la clase Fichas para crear fichas
 
 export class ParchisGame {
     
@@ -24,12 +25,17 @@ export class ParchisGame {
     }
 
     iniciarPartida() {
+        console.log("Inicializando fichas para los jugadores...");
         this.jugadores.forEach(jugador => {
             for (let i = 0; i < 4; i++) {
                 const ficha = new Fichas(jugador.color, i);
+                ficha.encasa = true; // Todas las fichas comienzan en casa
+                ficha.enjuego = false;
+                ficha.posicion = -1; // Posición inicial fuera del tablero
                 jugador.fichas.push(ficha);
             }
         });
+        console.log("Fichas inicializadas para todos los jugadores:", this.jugadores);
     }
 
     async lanzarDado() {
@@ -41,6 +47,51 @@ export class ParchisGame {
     moverFicha(idFicha, dado) {
         const jugador = this.jugadores[this.turnoActual];
         jugador.moverFicha(idFicha, dado);
+    }
+
+    jugarTurno(valorDado, tablero) {
+        const jugador = this.jugadores[this.turnoActual];
+        console.log(`Turno de ${jugador.nombre} (${jugador.color}) con el dado ${valorDado}`);
+        console.log("Estado de las fichas del jugador:", jugador.fichas);
+
+        let fichaMovida = false;
+
+        if (valorDado === 5) {
+            for (const ficha of jugador.fichas) {
+                console.log(`Verificando ficha: ${ficha.id}, encasa: ${ficha.encasa}`);
+                if (ficha.encasa) {
+                    if (tablero.colocarFichaEnInicio(ficha)) {
+                        ficha.sacarFicha();
+                        fichaMovida = true;
+                        console.log(`El jugador ${jugador.nombre} sacó una ficha.`);
+                        break;
+                    } else {
+                        console.log(`No se pudo colocar la ficha ${ficha.id} en el inicio.`);
+                    }
+                }
+            }
+        }
+
+        // Si no se sacó ficha, intentar mover una ficha en el tablero
+        if (!fichaMovida) {
+            for (const ficha of jugador.fichas) {
+                if (ficha.enjuego) {
+                    if (tablero.moverFicha(ficha, valorDado)) {
+                        fichaMovida = true;
+                        console.log(`El jugador ${jugador.nombre} movió una ficha.`);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Si no se pudo mover ninguna ficha, pasar el turno
+        if (!fichaMovida) {
+            console.log(`El jugador ${jugador.nombre} no pudo mover ninguna ficha.`);
+        }
+
+        // Avanzar al siguiente turno
+        this.siguienteTurno();
     }
 
     serializarEstado() {

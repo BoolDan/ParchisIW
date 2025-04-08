@@ -452,6 +452,22 @@ td {
     z-index: 1;
 }
 
+.casilla.rojo {
+    background-color: #DC143C; /* Color de fondo para la casilla roja */
+}
+
+.casilla.azul {
+    background-color: #1E90FF; /* Color de fondo para la casilla azul */
+}
+
+.casilla.verde {
+    background-color: #2E8B57; /* Color de fondo para la casilla verde */
+}
+
+.casilla.amarillo {
+    background-color: #FFD700; /* Color de fondo para la casilla amarilla */
+}
+
 .token {
     width: 30px;
     height: 30px;
