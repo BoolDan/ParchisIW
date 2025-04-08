@@ -53,13 +53,14 @@ export class ParchisGame {
         const jugador = this.jugadores[this.turnoActual];
         console.log(`Turno de ${jugador.nombre} (${jugador.color}) con el dado ${valorDado}`);
         console.log("Estado de las fichas del jugador:", jugador.fichas);
-
+    
         let fichaMovida = false;
-
+    
+        // Intentar sacar una ficha de la casa si el dado es 5
         if (valorDado === 5) {
             for (const ficha of jugador.fichas) {
-                console.log(`Verificando ficha: ${ficha.id}, encasa: ${ficha.encasa}`);
-                if (ficha.encasa) {
+                console.log(`Verificando ficha: ${ficha.id}, encasa: ${ficha.encasa}, completada: ${ficha.completada}`);
+                if (ficha.encasa && !ficha.completada) { // Excluir fichas completadas
                     if (tablero.colocarFichaEnInicio(ficha)) {
                         ficha.sacarFicha();
                         fichaMovida = true;
@@ -71,11 +72,12 @@ export class ParchisGame {
                 }
             }
         }
-
+    
         // Si no se sacó ficha, intentar mover una ficha en el tablero
         if (!fichaMovida) {
             for (const ficha of jugador.fichas) {
-                if (ficha.enjuego) {
+                console.log(`Verificando ficha: ${ficha.id}, enjuego: ${ficha.enjuego}, completada: ${ficha.completada}`);
+                if (ficha.enjuego && !ficha.completada) { // Excluir fichas completadas
                     if (tablero.moverFicha(ficha, valorDado)) {
                         fichaMovida = true;
                         console.log(`El jugador ${jugador.nombre} movió una ficha.`);
@@ -84,12 +86,12 @@ export class ParchisGame {
                 }
             }
         }
-
+    
         // Si no se pudo mover ninguna ficha, pasar el turno
         if (!fichaMovida) {
             console.log(`El jugador ${jugador.nombre} no pudo mover ninguna ficha.`);
         }
-
+    
         // Avanzar al siguiente turno
         this.siguienteTurno();
     }

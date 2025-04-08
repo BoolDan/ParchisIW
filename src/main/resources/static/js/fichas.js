@@ -4,6 +4,7 @@ export class Fichas {
         this.id = id;
         this.encasa = true; // La ficha comienza en casa
         this.enPasillo = false; // La ficha no está en la meta al inicio
+        this.completada = false; // La ficha no está completada al inicio
         this.enjuego = false;
         this.posicion = -1; // Posición inicial fuera del tablero
     }

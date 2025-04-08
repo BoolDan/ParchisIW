@@ -36,13 +36,39 @@ class Tablero {
 
     actualizarTablero() {
         console.log("Actualizando el tablero en el DOM...");
-    
+        
         const tableroContainer = document.getElementById('tablero');
         if (!tableroContainer) {
             console.error("El contenedor del tablero no existe en el DOM.");
             return;
         }
     
+        // Mover fichas completadas al contenedor correspondiente
+        const completadasContainer = document.getElementById('fichas-completadas');
+        if (completadasContainer) {
+            Object.keys(this.pasillos).forEach(color => {
+                this.pasillos[color].forEach((ficha, index) => {
+                    if (ficha && ficha.completada) {
+                        let fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
+
+                        if (!fichaElement) {
+                            // Si no existe, creamos la ficha DOM
+                            fichaElement = document.createElement('div');
+                            fichaElement.className = `ficha ${ficha.color}`;
+                            fichaElement.textContent = ficha.id;
+                            fichaElement.setAttribute('data-id', `${ficha.color}-${ficha.id}`);
+                            console.warn(`Ficha ${ficha.color}-${ficha.id} no estaba en el DOM, se ha creado.`);
+                        }
+
+                        completadasContainer.appendChild(fichaElement);
+                        console.log(`Ficha ${ficha.color}-${ficha.id} movida al contenedor de fichas completadas.`);
+                    }
+                });
+            });
+        } else {
+            console.error("No se encontró el contenedor de fichas completadas en el DOM.");
+        }
+
         // Limpiar todas las fichas del tablero
         const fichasDOM = tableroContainer.querySelectorAll('.ficha');
         fichasDOM.forEach(ficha => ficha.remove());
@@ -50,49 +76,56 @@ class Tablero {
         // Actualizar las casillas
         this.casillas.forEach((fichas, posicion) => {
             if (fichas && fichas.length > 0) {
-                console.log(`Actualizando casilla ${posicion} con fichas:`, fichas);
-                const casillaDOM = document.querySelector(`[data-posicion="${posicion}"]`);
-                if (casillaDOM) {
-                    fichas.forEach(ficha => {
-                        // Busca el token existente en el DOM
-                        const fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
-                        if (fichaElement) {
-                            // Mueve el token a la casilla correspondiente
-                            casillaDOM.appendChild(fichaElement);
-                            fichaElement.style.position = 'relative'; // Ajusta la posición si es necesario
-                            fichaElement.style.left = '0';
-                            fichaElement.style.top = '0';
-                        } else {
-                            console.warn(`No se encontró el token para la ficha ${ficha.color}-${ficha.id}`);
-                        }
-                    });
-                } else {
-                    console.warn(`No se encontró la casilla en el DOM para la posición ${posicion}`);
+                // Excluir fichas completadas
+                const fichasNoCompletadas = fichas.filter(ficha => !ficha.completada);
+    
+                if (fichasNoCompletadas.length > 0) {
+                    console.log(`Actualizando casilla ${posicion} con fichas:`, fichasNoCompletadas);
+                    const casillaDOM = document.querySelector(`[data-posicion="${posicion}"]`);
+                    if (casillaDOM) {
+                        fichasNoCompletadas.forEach(ficha => {
+                            let fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
+                            if (fichaElement) {
+                                casillaDOM.appendChild(fichaElement);
+                                fichaElement.style.position = 'relative';
+                                fichaElement.style.left = '0';
+                                fichaElement.style.top = '0';
+                            } else {
+                                console.warn(`No se encontró el token para la ficha ${ficha.color}-${ficha.id}`);
+                            }
+                        });
+                    } else {
+                        console.warn(`No se encontró la casilla en el DOM para la posición ${posicion}`);
+                    }
                 }
             }
         });
-
+    
         // Actualizar los pasillos
         Object.keys(this.pasillos).forEach(color => {
             this.pasillos[color].forEach((ficha, index) => {
-                if (ficha) { // Verifica si la ficha no es null
-                    if (index >= 0 && index < 7) {
-                        const pasilloDOM = document.querySelector(`[data-pasillo="${color}-${index}"]`);
-                        if (pasilloDOM) {
-                            const fichaElement = document.createElement('div');
-                            fichaElement.className = `ficha ${ficha.color}`;
-                            fichaElement.textContent = ficha.id; // Mostrar el ID de la ficha
-                            fichaElement.setAttribute('data-id', `${ficha.color}-${ficha.id}`);
+                if (ficha && !ficha.completada) { // Excluir fichas completadas
+                    const pasilloDOM = document.querySelector(`[data-pasillo="${color}-${index}"]`);
+                    if (pasilloDOM) {
+                        let fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
+                        if (fichaElement) {
                             pasilloDOM.appendChild(fichaElement);
                         } else {
-                            console.warn(`No se encontró el pasillo en el DOM para ${color}-${index}`);
+                            // Crear la ficha si no existe en el DOM
+                            fichaElement = document.createElement('div');
+                            fichaElement.className = `ficha ${ficha.color}`;
+                            fichaElement.textContent = ficha.id;
+                            fichaElement.setAttribute('data-id', `${ficha.color}-${ficha.id}`);
+                            pasilloDOM.appendChild(fichaElement);
                         }
                     } else {
-                        console.error(`Índice de pasillo fuera de rango: ${index} para el color ${color}`);
+                        console.warn(`No se encontró el pasillo en el DOM para ${color}-${index}`);
                     }
                 }
             });
         });
+    
+
     }
 
     colocarFichaEnInicio(ficha) {
@@ -154,41 +187,73 @@ class Tablero {
         console.log(`Intentando mover ${ficha.color}-${ficha.id}, posición: ${ficha.posicion}, dado: ${dado}`);
     
         const meta = this.obtenerMeta(ficha.color);
-        
+    
         // Si la ficha ya está en el pasillo
         if (ficha.enPasillo) {
             const nuevaPosicion = ficha.posicion + dado;
-    
-            if (nuevaPosicion < 7) {
+
+            // Calcular los pasos necesarios para llegar a la casilla final (casilla "8")
+            const pasosParaFinal = 8 - ficha.posicion;
+
+            if (dado === pasosParaFinal) {
+                // Mover directamente a la casilla final
+                this.pasillos[ficha.color][ficha.posicion] = null;
+                ficha.posicion = -1; // Casilla final
+                ficha.enPasillo = false;
+                ficha.enjuego = false; // La ficha ya no está en juego
+                ficha.completada = true; // Marcar como completada
+
+                console.log(`La ficha ${ficha.color}-${ficha.id} ha llegado a la casilla final y está completada.`);
+                this.actualizarTablero();
+                return true;
+            } else if (nuevaPosicion <= 7) {
                 // Avanzar en el pasillo
                 this.pasillos[ficha.color][ficha.posicion] = null;
                 ficha.posicion = nuevaPosicion;
                 this.pasillos[ficha.color][nuevaPosicion] = ficha;
+                console.log(`Ficha ${ficha.color}-${ficha.id} movida al pasillo en posición ${nuevaPosicion}`);
                 this.actualizarTablero();
                 return true;
             } else {
-                console.log("La ficha no puede moverse más en el pasillo.");
-                return false;
+                console.log(`El dado no es suficiente para mover la ficha ${ficha.color}-${ficha.id} a la casilla final.`);
+                return false; // No se mueve más en este turno
             }
         }
     
         // Ficha aún está en el tablero principal
-        // Calculamos la distancia a la meta circularmente
         const distanciaAMeta = (meta - ficha.posicion + 68) % 68;
     
-        if (dado > distanciaAMeta) {
-            // Mover al pasillo
-            const pasosEnPasillo = dado - distanciaAMeta - 1; // -1 porque la meta no se pisa, se entra al pasillo
-            if (pasosEnPasillo < 7) {
+        if (dado >= distanciaAMeta) {
+            const pasosEnMeta = distanciaAMeta;
+            const pasosEnPasillo = dado - pasosEnMeta;
+    
+            if (pasosEnMeta > 0) {
                 if (this.casillas[ficha.posicion]) {
                     this.casillas[ficha.posicion] = this.casillas[ficha.posicion].filter(f => f !== ficha);
                 }
     
-                ficha.enPasillo = true;
-                ficha.posicion = pasosEnPasillo;
-                this.pasillos[ficha.color][pasosEnPasillo] = ficha;
+                ficha.posicion = meta;
+                this.casillas[meta] = this.casillas[meta] || [];
+                this.casillas[meta].push(ficha);
     
-                console.log(`La ficha ${ficha.color}-${ficha.id} entra al pasillo en posición ${pasosEnPasillo}`);
+                console.log(`Ficha ${ficha.color}-${ficha.id} movida a la meta en casilla ${meta}`);
+                this.actualizarTablero();
+    
+                if (pasosEnPasillo === 0) {
+                    return true;
+                }
+            }
+    
+            if (pasosEnPasillo > 0 && pasosEnPasillo <= 7) {
+                if (this.casillas[meta]) {
+                    this.casillas[meta] = this.casillas[meta].filter(f => f !== ficha);
+                }
+    
+                ficha.enPasillo = true;
+                ficha.posicion = pasosEnPasillo - 1; // Índice dentro del pasillo (0 a 6)
+                this.pasillos[ficha.color][ficha.posicion] = ficha;
+    
+                console.log(`La ficha ${ficha.color}-${ficha.id} entra al pasillo en posición ${ficha.posicion}`);
                 this.actualizarTablero();
                 return true;
             } else {
@@ -260,7 +325,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 2, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 1, colspan: 2 },
                 { type: 'casilla', number: 66, colspan: 2 },
                 null
             ],
@@ -268,7 +333,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 3, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 2, colspan: 2 },
                 { type: 'casilla', number: 65, colspan: 2 },
                 null
             ],
@@ -276,7 +341,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 4, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 3, colspan: 2 },
                 { type: 'casilla', number: 64, colspan: 2 },
                 null
             ],
@@ -284,7 +349,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 5, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 4, colspan: 2 },
                 { type: 'casilla', number: 63, colspan: 2 },
                 null
             ],
@@ -292,7 +357,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 6, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 5, colspan: 2 },
                 { type: 'casilla', number: 62, colspan: 2 },
                 null
             ],
@@ -300,7 +365,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 7, colspan: 2 },
-                { type: 'pasillo', color: 'amarillo', colspan: 2 },
+                { type: 'pasillo', color: 'amarillo', number: 6, colspan: 2 },
                 { type: 'casilla', number: 61, colspan: 2 },
                 null
             ],
@@ -315,8 +380,8 @@ class Tablero {
                 { type: 'casilla', number: 10, rowspan: 2 },
                 { type: 'vacio' },
                 { type: 'casilla', number: 8 },
-                { type: 'pasillo', color: 'amarillo'},
-                { type: 'pasillo', color: 'amarillo'},
+                { type: 'pasillo', color: 'amarillo', number: 7},
+                { type: 'vacio'},
                 { type: 'casilla', number: 60 },
                 { type: 'vacio' },
                 { type: 'casilla', number: 58, rowspan: 2 },
@@ -338,28 +403,28 @@ class Tablero {
             // Fila 10
             [
                 { type: 'casilla', number: 17, rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul', rowspan: 2 },
-                { type: 'pasillo', color: 'azul' },
-                { type: 'pasillo', color: 'verde' },
+                { type: 'pasillo', color: 'azul', number: 1, rowspan: 2 },
+                { type: 'pasillo', color: 'azul', number: 2, rowspan: 2 },
+                { type: 'pasillo', color: 'azul', number: 3, rowspan: 2 },
+                { type: 'pasillo', color: 'azul', number: 4, rowspan: 2 },
+                { type: 'pasillo', color: 'azul', number: 5, rowspan: 2 },
+                { type: 'pasillo', color: 'azul', number: 6, rowspan: 2 },
+                { type: 'vacio' },
+                { type: 'vacio' },
                 null, null, null,
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
-                { type: 'pasillo', color: 'verde', rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 6, rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 5, rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 4, rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 3, rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 2, rowspan: 2 },
+                { type: 'pasillo', color: 'verde', number: 1, rowspan: 2 },
                 { type: 'casilla', number: 51, rowspan: 2 }
             ],
             // Fila 11
             [
                 null, null, null, null, null, null, null,
-                { type: 'pasillo', color: 'azul'},
-                { type: 'pasillo', color: 'verde'},
+                { type: 'pasillo', color: 'azul', number: 7 },
+                { type: 'pasillo', color: 'verde', number: 7 },
                 null, null, null, null, null, null, null, null
             ],
             // Fila 12
@@ -386,8 +451,8 @@ class Tablero {
                 null, null, null, null, null, null, null,
                 { type: 'vacio' },
                 { type: 'casilla', number: 26 },
-                { type: 'pasillo', color: 'rojo'},
-                { type: 'pasillo', color: 'rojo' },
+                { type: 'vacio'},
+                { type: 'pasillo', color: 'rojo', number: 7 },
                 { type: 'casilla', number: 42 },
                 { type: 'vacio' },
                 null, null, null, null, null, null, null
@@ -402,7 +467,7 @@ class Tablero {
                     { color: 'blue', number: 4, x: 150, y: 150 }
                 ]},
                 { type: 'casilla', number: 27, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 6, colspan: 2 },
                 { type: 'casilla', number: 41, colspan: 2 },
                 { type: 'casa', color: 'rojo', colspan: 7, rowspan: 7, tokens: [
                     { color: 'red', number: 1, x: 15, y: 15 },
@@ -415,7 +480,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 28, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 5, colspan: 2 },
                 { type: 'casilla', number: 40, colspan: 2 },
                 null
             ],
@@ -423,7 +488,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 29, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 4, colspan: 2 },
                 { type: 'casilla', number: 39, colspan: 2 },
                 null
             ],
@@ -431,7 +496,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 30, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 3, colspan: 2 },
                 { type: 'casilla', number: 38, colspan: 2 },
                 null
             ],
@@ -439,7 +504,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 31, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 2, colspan: 2 },
                 { type: 'casilla', number: 37, colspan: 2 },
                 null
             ],
@@ -447,7 +512,7 @@ class Tablero {
             [
                 null,
                 { type: 'casilla', number: 32, colspan: 2 },
-                { type: 'pasillo', color: 'rojo', colspan: 2 },
+                { type: 'pasillo', color: 'rojo', number: 1, colspan: 2 },
                 { type: 'casilla', number: 36, colspan: 2 },
                 null
             ],
