@@ -11,229 +11,50 @@
     <main id="game-container" class="flex-shrink-0 overflow-auto mt-5" th:data-id="${partida.id}"        
             th:data-num-jugadores="${partida.numJugadores}">
             
-            <div class="container text-center min-vh-100 d-flex align-items-center justify-content-center">
-            <div class="row align-items-center gap-4">
-                <div class="col mb-3">
-                    <div class="container mt-4">
-                        <div class="card mx-auto" style="max-width:400px">
-                            <div class="card-header bg-transparent">
-                                <div class="navbar navbar-expand p-0">
-                                    <ul class="navbar-nav me-auto align-items-center">
-                                        <li class="nav-item">
-                                            <a href="#!" class="nav-link">
-                                                <div class="position-relative"
-                                                    style="width:50px; height: 50px; border-radius: 50%; border: 2px solid #e84118; padding: 2px">
-                                                    <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
-                                                        class="img-fluid rounded-circle" alt="">
-                                                    <span
-                                                        class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
-                                                        <span class="visually-hidden">New alerts</span>
-                                                    </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="#!" class="navbar-brand">Game chat</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="card-body p-4" style="height: 500px; overflow: auto;">
-                
-                                <div class="d-flex align-items-baseline mb-4">
-                                    <div class="pe-2">
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">GLHF
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small">01:11PM</div>
-                                        </div>
-                                    </div>
-                                </div>
-                
-                                <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
-                                    <div class="pe-2">
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">Same GLHF</div>
-                                        </div>
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">Rollign a five at the first try thats some luck you got mate!
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small">01:13PM</div>
-                                        </div>
-                                    </div>
-                                    <div class="position-relative avatar">
-                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
-                                            class="img-fluid rounded-circle" alt="">
-                                        <span
-                                            class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
-                                            <span class="visually-hidden">New alerts</span>
-                                        </span>
-                                    </div>
-                                </div>
-                
-                                <div class="d-flex align-items-baseline mb-4">
-                                    <div class="pe-2">
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">I call it natural talent XD</div>
-                                        </div>
-                                        <div>
-                                            <div class="small" style="center:left">01:13PM</div>
-                                        </div>
-                                    </div>
-                                </div>
-                
-                                <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
-                                    <div class="pe-2">
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">Bro this is a chance game &#128128</div>
-                                        </div>
-                                        <div>
-                                            <div class="small" style="center:left">01:14PM</div>
-                                        </div>
-                                    </div>
-                                    <div class="position-relative avatar">
-                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
-                                            class="img-fluid rounded-circle" alt="">
-                                        <span
-                                            class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
-                                            <span class="visually-hidden">New alerts</span>
-                                        </span>
-                                    </div>
-                                </div>
+            <input type="hidden" id="gameId" th:value="${partida.id}">
+            <input type="hidden" id="username" th:value="${#authentication.name}">
 
-                                <div class="d-flex align-items-baseline text-end justify-content-end mb-4">
-                                    <div class="pe-2">
-                                        <div>
-                                            <div class="card card-text d-inline-block p-2 px-3 m-1">Well there is no chance you are winning that´s for sure &#128514</div>
-                                        </div>
-                                        <div>
-                                            <div class="small" style="center:left">01:14PM</div>
-                                        </div>
-                                    </div>
-                                    <div class="position-relative avatar">
-                                        <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
-                                            class="img-fluid rounded-circle" alt="">
-                                        <span
-                                            class="position-absolute bottom-0 start-100 translate-middle p-1 bg-success border border-light rounded-circle">
-                                            <span class="visually-hidden">New alerts</span>
-                                        </span>
-                                    </div>
-                                </div>
-                
+            <div class="container text-center min-vh-100 d-flex flex-column justify-content-center">
+                <!-- Tablero -->
+                <div class="row align-items-start">
+                    <div class="col-md-12 d-flex flex-column align-items-center">
+                        <div id="mensaje-turno" class="mb-3" style="font-weight: bold; font-size: 18px;">
+                            <p><strong>Turno de Jugador 1 (rojo)</strong></p>
+                        </div>
+                        <div id="fichas-completadas" class="fichas-completadas mb-3">
+                            <h3>Fichas Completadas</h3>
+                        </div>
+                        <!-- Contenedor del tablero -->
+                        <div id="tablero" class="tablero-container position-relative" style="width: 100%; max-width: 600px; height: 600px;">
+                        </div>
+                        <button type="button" class="btn btn-danger mt-3">Abandonar partida</button>
+                    </div>
+                </div>
+            
+                <!-- Fila del chat -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div id="chat-container" class="card">
+                            <div class="card-header bg-primary text-white">
+                                <strong>Chat</strong>
                             </div>
-                            <div class="card-footer bg-white position-absolute w-100 bottom-0 m-0 p-1">
+                            <div class="card-body" style="height: 300px; overflow-y: auto;">
+                                <div id="chatBox">
+                                </div>
+                            </div>
+                            <div class="card-footer bg-light">
                                 <div class="input-group">
-                                    <div class="input-group-text bg-transparent border-0">
-                                        <button type="button" class="btn btn-primary btn-sm"><span class="bi bi-send"></span></button>
-                                    </div>
-                                    <input type="text" class="form-control border-0" placeholder="Write a message...">
+                                    <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje">
+                                    <button id="sendButton" class="btn btn-primary">Enviar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6 ">
-                    <div id="mensaje-turno" style="margin-bottom: 10px; font-weight: bold; font-size: 18px;">
-                        <!-- Aquí se mostrará el turno actual -->
-                    </div>
-                    <div id="fichas-completadas" class="fichas-completadas">
-                        <h3>Fichas Completadas</h3>
-                    </div>
-                    <!-- Contenedor del tablero -->
-                    <div id="tablero" class="tablero-container position-relative" style="width: 600px; height: 600px;">
-                        
-                        
-                    </div>
-                    <button type="button" class="btn btn-danger">Abandonar partida</button>
-                </div>
-                
-                <div class="col mb-3">
-                    <div class="card mx-auto" style="max-width:400px">
-                        <div class="card-header bg-transparent">
-                            <div class="navbar navbar-expand p-0">
-                                <a href="#!" class="navbar-brand">Lobby</a>
-                            </div>
-                        </div>
-                        <div th:each="usuario, iterStat : ${usuarios}"> <!-- Iteración sobre la lista de usuario y recogemos el valor del iterador-->
-                            <div class="card-body p-4" style="">
-                                <ul>
-                                    <li>
-                                        <div class="d-flex align-items-baseline mb-4">
-                                            <div class="position-relative avatar">
-                                                <img th:src="@{${'https://nextbootstrap.netlify.app/assets/images/profiles/' + (iterStat.index % 6 + 1) + '.jpg'}}"
-                                                    class="img-fluid rounded-circle" alt="User Avatar">
-                                            </div>
-                                            <div>
-                                                <div style= "padding:12px"><strong th:text="${usuario.username == session.username} ? 'Tú' : ${usuario.username}"></strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!--
-                            <div class="card-body p-4" style="">
-                                <ul>
-                                    <li>
-                                        <div class="d-flex align-items-baseline mb-4">
-                                            <div class="position-relative avatar">
-                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/1.jpg"
-                                                    class="img-fluid rounded-circle" alt="User Avatar">
-                                            </div>
-                                            <div>
-                                                <div style= "padding:12px"> <strong>You</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex align-items-baseline mb-4">
-                                            <div class="position-relative avatar">
-                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/2.jpg"
-                                                    class="img-fluid rounded-circle" alt="User Avatar">
-                                            </div>
-                                            <div>
-                                                <div style="padding:12px"><strong>Vitlyn_Forever</strong><img src="/img/dice-roll-dice.gif" class="animated-gif" alt="Rolling dice that indicates the turn" style="width:20%">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex align-items-baseline mb-4">
-                                            <div class="position-relative avatar">
-                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/3.jpg"
-                                                    class="img-fluid rounded-circle" alt="User Avatar">
-                                            </div>
-                                            <div>
-                                                <div style="padding:12px"><strong>Jill_Valentine2</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="d-flex align-items-baseline mb-4">
-                                            <div class="position-relative avatar">
-                                                <img src="https://nextbootstrap.netlify.app/assets/images/profiles/4.jpg"
-                                                    class="img-fluid rounded-circle" alt="User Avatar">
-                                            </div>
-                                            <div>
-                                                <div style="padding:12px"><strong>Ezio_TheAssasin</strong>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            -->
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="container mt-4">
+            
+                <!-- Fila de Información de la partida -->
+                <div class="row mt-4">
+                    <div class="col">
                         <div class="card">
                             <div class="card-header">Información de la Partida</div>
                             <div class="card-body">
@@ -241,24 +62,20 @@
                                 <p><strong>Piezas Restantes:</strong> 2</p>
                                 <p><strong>Puntos Acumulados:</strong> 120</p>
                                 <p><strong>Tiempo de Juego:</strong> 15 min</p>
-                                <!--
-                                <p><strong>Rondas Jugadas:</strong> <span id="rondasJugadas" th:text="${informacionPartida['rondasJugadas']}">0</span></p>
-                                <p><strong>Piezas Restantes:</strong> <span id="piezasRestantes" th:text="${informacionPartida['piezasRestantes']}">0</span></p>
-                                <p><strong>Puntos Acumulados:</strong> <span id="puntosAcumulados" th:text="${informacionPartida['puntosAcumulados']}">0</span></p>
-                                <p><strong>Tiempo de Juego:</strong> <span id="tiempoDeJuego" th:text="${informacionPartida['tiempoDeJuego']}">0 min</span></p>
-                                 -->
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </main>
     
     <th:block th:replace="~{fragments/footer.html :: footer}" />
+   <!-- <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.2/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.5.0/umd/stomp.min.js"></script>
+-->
+    <script type= "module" th:src="@{/js/chat.js}"onload="console.log('✅ chat.js cargado correctamente DESDE GAME.HTML');"></script>
     <script type="module" th:src="@{/js/dado.js}"onload="console.log('✅ dado.js cargado correctamente desde GAME.HTML');"></script>
     <script type= "module" th:src="@{/js/game.js}"onload="console.log('✅ game.js cargado correctamente DESDE GAME.HTML');"></script>
-
     <script type="module" th:src="@{/js/tablero.js}"onload="console.log('✅ tablero.js cargado correctamente DESDE GAME.HTML');"></script>
 
 
