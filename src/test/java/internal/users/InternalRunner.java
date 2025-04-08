@@ -8,4 +8,9 @@ class InternalRunner {
     Karate testUsers() {
         return Karate.run("users").relativeTo(getClass());
     }      
+
+    @Karate.Test
+    Karate testTorneo() {
+        return Karate.run("CrearTorneo").relativeTo(getClass());
+    }
 }

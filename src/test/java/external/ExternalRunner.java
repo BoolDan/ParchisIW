@@ -13,4 +13,9 @@ class ExternalRunner {
     Karate testWs() {
         return Karate.run("ws").relativeTo(getClass());
     }  
+    
+    @Karate.Test
+    Karate testTorneo() {
+        return Karate.run("CrearTorneo").relativeTo(getClass());
+    }
 }
