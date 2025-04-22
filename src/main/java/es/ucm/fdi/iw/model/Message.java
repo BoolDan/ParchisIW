@@ -30,6 +30,13 @@ public class Message implements Transferable<Message.Transfer> {
     private User emisor;
 
     @ManyToOne
+	private User recipient;
+
+    @ManyToOne
+	private Topic topic;
+
+
+    @ManyToOne
     @JoinColumn(name="id_partida")
     private Partida partida;
 
@@ -47,6 +54,7 @@ public class Message implements Transferable<Message.Transfer> {
     @Column(nullable = false)
     private boolean reported;
 
+    
     /**
      * Constructor para persistir a/de JSON
      * @author mfreire
@@ -55,8 +63,10 @@ public class Message implements Transferable<Message.Transfer> {
     @AllArgsConstructor
     public static class Transfer {
         private String from;
+        private String to;
         private String sent;
         private String received;
+        private String topic;
         private String text;
         private long id;
         private String gameId;
@@ -64,6 +74,8 @@ public class Message implements Transferable<Message.Transfer> {
         public Transfer(Message m) {
             this.from = m.getEmisor().getUsername();
             this.sent = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateSent());
+            this.to = m.getRecipient() == null ? "null": m.getRecipient().getUsername();
+            this.topic = m.getTopic() == null ? "null": m.getTopic().getName();
             this.received = m.getDateRead() == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateRead());
             this.text = m.getText();
             this.id = m.getId();
@@ -71,13 +83,18 @@ public class Message implements Transferable<Message.Transfer> {
         }
     }
 
+    // @Override
+    // public Transfer toTransfer() {
+    //     return new Transfer(emisor.getUsername(), 
+    //         DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
+    //         dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
+    //         text, id, String.valueOf(partida.getId())
+    //     );
+    // }
+
     @Override
-    public Transfer toTransfer() {
-        return new Transfer(emisor.getUsername(), 
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateSent),
-            dateRead == null ? null : DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(dateRead),
-            text, id, String.valueOf(partida.getId())
-        );
+	public Transfer toTransfer() {
+		return new Transfer(this);
     }
 
     public void report() {
