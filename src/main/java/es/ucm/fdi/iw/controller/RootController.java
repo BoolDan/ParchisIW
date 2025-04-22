@@ -32,7 +32,7 @@ public class RootController {
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {        
-        for (String name : new String[] {"u", "url", "ws"}) {
+        for (String name : new String[] {"u", "url", "ws", "topics"}) {
             model.addAttribute(name, session.getAttribute(name));
         }
     }

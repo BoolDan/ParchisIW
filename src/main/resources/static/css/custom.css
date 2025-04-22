@@ -452,6 +452,22 @@ td {
     z-index: 1;
 }
 
+.casilla.rojo {
+    background-color: #DC143C; /* Color de fondo para la casilla roja */
+}
+
+.casilla.azul {
+    background-color: #1E90FF; /* Color de fondo para la casilla azul */
+}
+
+.casilla.verde {
+    background-color: #2E8B57; /* Color de fondo para la casilla verde */
+}
+
+.casilla.amarillo {
+    background-color: #FFD700; /* Color de fondo para la casilla amarilla */
+}
+
 .token {
     width: 30px;
     height: 30px;
@@ -531,6 +547,37 @@ button.btn-danger {
     }
 }
 
+
+/* Estilos para el dado */
+#dado {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform 1s;
+    margin: auto;
+}
+
+.cara {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    backface-visibility: hidden;
+    display: block;
+}
+
+.punto {
+    width: 12px;
+    height: 12px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%); /* Centra el punto respecto a su posición */
+
 .card-text.estado-ESPERANDO_JUGADORES {
     color: green;
     font-weight: bold;
@@ -544,4 +591,5 @@ button.btn-danger {
 .card-text.estado-FINALIZADA {
     color: red;
     font-weight: bold;
+
 }

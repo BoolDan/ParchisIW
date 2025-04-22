@@ -2,6 +2,7 @@ package es.ucm.fdi.iw.controller;
 
 import es.ucm.fdi.iw.model.Jugador_partida;
 import es.ucm.fdi.iw.model.Partida;
+import es.ucm.fdi.iw.model.Topic;
 import es.ucm.fdi.iw.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class PartidaController {
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
-        for (String name : new String[] {"u", "url", "ws"}) {
+        for (String name : new String[] {"u", "url", "ws", "topics"}) {
             model.addAttribute(name, session.getAttribute(name));
         }
     }
@@ -156,6 +157,11 @@ public class PartidaController {
 
         // Persistir la partida en la base de datos
         entityManager.persist(nuevaPartida);
+
+        Topic topicPartida = new Topic();
+        topicPartida.setName("Partida " + nuevaPartida.getId());
+        topicPartida.setKey(UserController.generateRandomBase64Token(6));
+        entityManager.persist(topicPartida);
 
         // Redirigir al lobby o a la vista de la partida creada
         return "redirect:/lobby";

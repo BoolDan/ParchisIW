@@ -24,7 +24,10 @@ import java.util.List;
         @NamedQuery(name="User.hasUsername",
                 query="SELECT COUNT(u) "
                         + "FROM User u "
-                        + "WHERE u.username = :username")
+                        + "WHERE u.username = :username"), 
+        @NamedQuery(name = "User.topics", query = "SELECT t.key "
+            + "FROM Topic t JOIN t.members u "
+            + "WHERE u.id = :id")
 })
 @Table(name="Usuario")
 public class User implements Transferable<User.Transfer> {
@@ -58,6 +61,8 @@ public class User implements Transferable<User.Transfer> {
 	@OneToMany
 	@JoinColumn(name = "recipient_id")	
 	private List<Message> received = new ArrayList<>();		
+    @ManyToMany(mappedBy = "members")
+    private List<Topic> groups = new ArrayList<>();
 
     /**
      * Checks whether this user has a given role.
@@ -77,12 +82,18 @@ public class User implements Transferable<User.Transfer> {
         private String username;
 		private int totalReceived;
 		private int totalSent;
+        private String groups;
     }
 
 	@Override
     public Transfer toTransfer() {
-		return new Transfer(id,	username, received.size(), sent.size());
-	}
+      StringBuilder gs = new StringBuilder();
+      for (Topic g : groups) {
+        gs.append(g.getName()).append(", ");
+      } 
+      return new Transfer(id, username, received.size(), sent.size(), gs.toString());
+    }
+
 	
 	@Override
 	public String toString() {
