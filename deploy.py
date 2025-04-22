@@ -138,4 +138,3 @@ if __name__ == '__main__':
       print(f"Aborting due to error: {e}")
       sys.exit(1)
     sys.exit(0)
-    
