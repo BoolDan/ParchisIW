@@ -8,6 +8,9 @@
 <body class="d-flex flex-column min-vh-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
+    <!-- Mostrar mensaje si no hay partidas disponibles -->
+    <div th:if="${mensaje}" class="alert alert-warning text-center" th:text="${mensaje}"></div>
+
     <main id="game-container" class="flex-shrink-0 overflow-auto mt-5" th:data-id="${partida.id}"        
             th:data-num-jugadores="${partida.numJugadores}">
             

@@ -547,6 +547,7 @@ button.btn-danger {
     }
 }
 
+
 /* Estilos para el dado */
 #dado {
     width: 80px;
@@ -576,4 +577,19 @@ button.btn-danger {
     border-radius: 50%;
     position: absolute;
     transform: translate(-50%, -50%); /* Centra el punto respecto a su posición */
+
+.card-text.estado-ESPERANDO_JUGADORES {
+    color: green;
+    font-weight: bold;
+}
+
+.card-text.estado-EN_CURSO {
+    color: orange;
+    font-weight: bold;
+}
+
+.card-text.estado-FINALIZADA {
+    color: red;
+    font-weight: bold;
+
 }

@@ -1,15 +1,21 @@
 package es.ucm.fdi.iw.controller;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import es.ucm.fdi.iw.model.Partida;
 
 
 /**
@@ -19,6 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RootController {
 
     private static final Logger log = LogManager.getLogger(RootController.class);
+
+    @Autowired
+    private EntityManager entityManager;
+
 
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {        
@@ -36,6 +46,23 @@ public class RootController {
 
     @GetMapping("/game")
     public String game(Model model) {
+        Partida partida = null;
+         // Buscar una partida en estado "ESPERANDO_JUGADORES"
+        List<Partida> partidasEnEspera = entityManager.createQuery(
+                "SELECT p FROM Partida p WHERE p.estado = :estado", Partida.class)
+                .setParameter("estado", Partida.EstadoPartida.ESPERANDO_JUGADORES)
+                .getResultList();
+
+        if (!partidasEnEspera.isEmpty()) {
+            // Seleccionar una partida al azar
+            partida = partidasEnEspera.get((int) (Math.random() * partidasEnEspera.size()));
+            model.addAttribute("partida", partida);
+            return "redirect:/partida/" + partida.getId(); // Redirigir a la partida
+        }
+
+        // Si no hay partidas en espera, mostrar el lobby con un mensaje
+        model.addAttribute("mensaje", "No hay partidas disponibles en este momento.");    
+
         return "game";
     }
     

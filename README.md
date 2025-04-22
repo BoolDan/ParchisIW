@@ -1,7 +1,7 @@
 # ParchisIW
-Practica de la asignatura de Ingenieria Web.
+Práctica de la asignatura de Ingeniería Web.
 
-
+---
 
 ## Integrantes
 - Carlos Clemente Sánchez
@@ -10,95 +10,126 @@ Practica de la asignatura de Ingenieria Web.
 - Carla Acebes Montalvillo
 - Mario Gallego Hernández
 
+---
 
+## Versión Actualizada del Proyecto
 
-## Versión actual
-La versión actualmente desarrollada de la aplicación funciona como una demostración visual preliminar, diseñada para presentar la estructura y el flujo básico de la interfaz de usuario. En esta fase, las funcionalidades completas no están implementadas, pero se han establecido los fundamentos para su posterior desarrollo e integración.
+La versión actual del proyecto **ParchisIW** es una plataforma funcional que permite a los usuarios jugar partidas de Parchís en línea, gestionar torneos y administrar usuarios y reportes. El proyecto incluye las siguientes características principales:
 
-La aplicación incluye los siguientes componentes clave:
+1. **Landing Page**:
+   - Página de bienvenida que presenta el juego de Parchís Online.
+   - Ofrece opciones para jugar, consultar reglas y ver clasificaciones.
 
-1. **Landing Page**: Esta página sirve como punto de entrada principal, donde los usuarios pueden obtener una visión general de la aplicación y acceder a las diferentes secciones disponibles.
+2. **Clasificación**:
+   - Tablas de clasificación que muestran los torneos en curso y los torneos acabados.
+   - Una vez seleccionado un torneo, se pueden ver los detalles del torneo, incluyendo los participantes y el estado actual.
+   - Los usuarios pueden inscribirse en torneos activos directamente desde esta vista.
 
-2. **Clasificación**: Se ha incorporado una sección que muestra una clasificación, la cual, en futuras iteraciones, podría reflejar el rendimiento de los jugadores, puntuaciones o logros dentro del juego.
+3. **Página de Reglas**:
+   - Explicación detallada de las reglas del juego.
 
-3. **Página de Reglas**: Aquí se presenta una explicación detallada de las reglas del juego, proporcionando a los usuarios la información necesaria para entender cómo jugar.
+4. **Lobby de Partidas**:
+   - Lista de partidas en espera de jugadores.
+   - Botón para crear una nueva partida.
 
-4. **Lobby de Partidas**: Esta área permite a los usuarios visualizar y seleccionar partidas disponibles. Aunque actualmente es una vista estática, está diseñada para facilitar la interacción y la creación de partidas en futuras versiones.
+5. **Configuración del Juego**:
+   - Permite a los usuarios configurar las opciones de una nueva partida, como el número de jugadores, el modo de juego y el tipo de partida.
 
-5. **Configuración del Juego**: En esta pagína se permite al usuario tener control de las opciones que vaya a tener la nueva partida de parchís. 
+6. **Vista de Juego**:
+   - Tablero funcional que permite a los jugadores interactuar con la partida.
+   - Lista de jugadores presentes en la partida.
+   - **Pendiente**: Implementar un chat en tiempo real para la comunicación entre jugadores.
 
-6. **Vista de Juego**: Se ha implementado una vista preliminar donde se simula la experiencia de jugar una partida. Esta sección está preparada para integrar las mecánicas de juego y la interacción en tiempo real en próximas actualizaciones. Cuenta con la vista del tablero sobre el que se juega además de un chat con el que poder conmunicarse con el resto de jugadores, los cuales son visibles en la lista de jugadores. 
+7. **Vista de Administrador**:
+   - Gestión de usuarios: Banear/desbanear usuarios.
+   - Gestión de torneos: Ver torneos en espera, en curso y finalizados.
+   - Gestión de reportes: Revisar reportes enviados por los usuarios y aplicar castigos si el comportamiento del usuario no es el correcto (banear al usuario).
 
-7. **Vista de Administrador**: Se ha modificado la página de administrador previamente dada para que se muestren todos los usuarios, partidas y reportes que tendremos almacenados en la base de datos.
+8. **Base de Datos Completamente Funcional**:
+   - La base de datos almacena información sobre usuarios, torneos, partidas, mensajes y reportes.
 
+9. **Servidor Desplegado**:
+    - El servidor está desplegado y accesible para pruebas y demostraciones.
 
+---
 
-## Funcionalidades
+## Funcionalidades Implementadas y Pendientes
 
-## Landing Page - Página de Bienvenida
+### **Landing Page - Página de Bienvenida**
+- **Implementado**:
+  - Botones para acceder a las diferentes secciones del juego (jugar, reglas, clasificación).
+- **Pendiente**:
+  - (?) Mejorar el diseño visual y agregar animaciones.
 
-Esta vista está diseñada para presentar el juego de Parchís Online, ofrecer opciones de juego (multijugador o contra la IA), y proporcionar información sobre cómo jugar y otras características adicionales del juego como la clasificación de jugadores.
+---
 
-- El botón ***¡Empieza a jugar!*** permite a los usuarios comenzar una partida de Parchís.
-- El botón ***Juega Multijugador o Desafía a la IA*** permite acceder a la lobby de lista de partidas.
-- El botón ***Cómo jugar*** permite acceder a la página donde se encuentran las reglas del juego.
-- El botón ***Clasificación de jugadores*** permite acceder a la clasificación de jugadores.
+### **Página de Clasificación**
+- **Implementado**:
+  - Tablas de clasificación que muestran los torneos en curso y los torneos acabados.
+  - Los usuarios pueden seleccionar un torneo para ver sus detalles, incluyendo participantes y estado.
+  - Posibilidad de inscribirse en torneos activos.
 
-## Página de Clasificación - Cualquier rol
+---
 
-Vista diseñada para que los jugadores puedan ver su puntuación y comparar esta con otros jugadores. Conformada por: 
+### **Página de Reglas**
+- **Implementado**:
+  - Secciones que explican las reglas básicas del juego.
+- **Pendiente**:
+  - (?) Agregar ejemplos visuales o videos explicativos.
 
--   ***Tabla de Clasificación***: Muestra la posición, nombre y puntos de los jugadores divididos en tres columnas.
--   ***Botones de Filtro***: Alterna entre la clasificación local y global.
+---
 
-## Página de Reglas - Cualquier rol
+### **Lobby de Partidas**
+- **Implementado**:
+  - Lista de partidas en espera de jugadores.
+  - Botón para crear una nueva partida.
 
-Vista diseñada para que los jugadores puedan conocer las reglas básicas del juego. Esta se encuentra formada por varias secciones:
+---
 
-- Un subtitulo el cual describe el apartado al que se refiere la información de la regla.
-- Un parrafo con el contenido de la regla a la que se refiere cada apartado.
+### **Página de Configuración**
+- **Implementado**:
+  - Opciones para configurar el número de jugadores, modo de juego y tipo de partida.
 
-## Lobby de Partidas - Requerido rol de usuario
+---
 
-Vista generada a través de la lista de partidas que se encuentran en curso en espera de jugadores antes de iniciar la partida. Está esta formada por un contenedor con la siguiente información:
+### **Página de Juego**
+- **Implementado**:
+  - Tablero funcional que permite a los jugadores interactuar con la partida.
+  - Lista de jugadores presentes en la partida.
+- **Pendiente**:
+  - **Chat en la partida**: Implementar un chat en tiempo real para que los jugadores puedan comunicarse.
 
-- Botón de **crear nueva partida** que permite acceder a la vista de configuración de juego para elegir las opciones deseadas de un nuevo juego.
-- Card formada por una **lista de partidas** que representarán todas aquellas partidas que están esperando jugadores. Cada una cuenta con la información básica del tipo de partida, cuantos jugadores hay y el botón de **unirse partida**.
+---
 
-## Página de configuración - Requerido rol de usuario
+### **Vista de Administrador**
+- **Implementado**:
+  - Gestión de usuarios: Banear/desbanear usuarios.
+  - Gestión de torneos: Ver torneos en curso y finalizados, inscribir jugadores.
+  - Gestión de reportes: Revisar reportes enviados por los usuarios y aplicar castigos si el comportamiento del usuario no es el correcto (por ejemplo, banear al usuario).
+- **Pendiente**:
+  - Agregar filtros búsqueda torneos.
+---
 
-Vista que permite a los usuarios configurar sus partidas en cuanto al numero de jugadores modo de juego y el tipo de partida. Contiene los siguientes elementos:
+### **Base de Datos**
+- **Implementado**:
+  - Tablas para usuarios, torneos, partidas, mensajes y reportes.
+  - Consultas optimizadas para obtener información relevante.
 
-- Una tabla en la que se engloban las opciones disponibles para los usuarios que podrán configurar.
-- Un selector de tipo drop down en la que se selecciona el número de jugadores.
-- Dos selectores de tipo selector circular para confirmar el modo de juego y el tipo de partida.
+---
 
-## Página de juego - Requerido rol de usuario
+### **Servidor**
+- **Implementado**:
+  - Servidor desplegado y accesible.
+  - Integración con la base de datos y las vistas.
 
-Vista de juego que permite al usuario interactuar con el tablero así como observar los jugadores que se encuentran dentro de la sala de juego e interactuar con ellos usando el chat, distribuidos usando Bootstrap 5.3 columns. Así esta vista cuenta con los siguientes elementos:
+---
 
-- Una columna que contiene un ***Chat Interactivo*** que permite a los usuarios enviar y recibir mensajes de todos los participantes de una partida.
-- Una columna que contiene la ***Vista del Tablero*** que permitirá al usuario interactuar con la partida, además de un botón ***Salir de la Partida*** que permitirá al usuario abandonar la partida si así lo desean.
-- Una columna que contiene la ***Lista de Usuarios*** que permitirá al usuario ver los jugadores presentes en la partida. 
-
-## Vista de Administrador - Requerido rol de Administrador
-
-Vista diseñada para que los admins puedan realizar sus funciones propias de administración de nuestro juego. Esta vista está conformada por:
-
-- Una columna de ***Usuarios*** que mostrará todos los usuarios que tendremos almacenados. Cada usuario estará en un botón que llevará a su usuario.
-- Una columna de ***Partidas*** que mostrará botones con todas las partidas jugadas por nuestros usuarios. Al clickar en una partida se podrá observar lo ocurrido en la partida.
-- Una columna de ***Reportes*** que mostrará botones con todos los reportes creados por los usuarios. En el título estará la razón por la que se manda el reporte y la fecha de creación.
-
-
-
-
-
-Material utilizado para la implementación:
-- Estilo de botones: https://www.eniun.com/botones-css-estilos/
-- Estilo de cartas: https://getbootstrap.com/docs/4.0/components/card/
-- Espacio de elementos: https://getbootstrap.com/docs/4.0/utilities/spacing/
-- Estilo del chat: https://www.youtube.com/watch?v=3JyQ2_wBqBU
-- Columnas de bootstrap: https://getbootstrap.com/docs/5.0/layout/columns/
-- Estilo de botones cerrados: https://getbootstrap.com/docs/5.3/components/close-button/
-- Emojis en html: https://www.w3schools.com/html/html_emojis.asp
-- Posicion bootstrap: https://getbootstrap.com/docs/5.0/utilities/position/
+## Material Utilizado para la Implementación
+- **Estilo de botones**: https://www.eniun.com/botones-css-estilos/
+- **Estilo de cartas**: https://getbootstrap.com/docs/4.0/components/card/
+- **Espaciado de elementos**: https://getbootstrap.com/docs/4.0/utilities/spacing/
+- **Estilo del chat**: https://www.youtube.com/watch?v=3JyQ2_wBqBU
+- **Columnas de Bootstrap**: https://getbootstrap.com/docs/5.0/layout/columns/
+- **Estilo de botones cerrados**: https://getbootstrap.com/docs/5.3/components/close-button/
+- **Emojis en HTML**: https://www.w3schools.com/html/html_emojis.asp
+- **Posicionamiento en Bootstrap**: https://getbootstrap.com/docs/5.0/utilities/position/

@@ -46,7 +46,7 @@ class PlantillaApplicationTests {
 	public void countUsers() throws Exception {
 	    MvcResult mvcResult = this.mockMvc.perform(get("/api/users/count"))
 	      .andDo(print()).andExpect(status().isOk())
-	      .andExpect(jsonPath("$.count").value(2))
+	      .andExpect(jsonPath("$.count").value(7))
 	      .andReturn();	     
 	    Assertions.assertEquals("application/json", 
 	      mvcResult.getResponse().getContentType());
