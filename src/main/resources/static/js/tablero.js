@@ -290,6 +290,7 @@ class Tablero {
     }
 
     generarTablero() {
+        let fichaSeleccionada = null; // Variable para almacenar la ficha seleccionada
         const tableroContainer = document.getElementById('tablero');
         if (!tableroContainer) {
             console.error("El contenedor del tablero no existe en el DOM.");
@@ -543,16 +544,16 @@ class Tablero {
                         td.className = `casa ${celda.color}`;
                         if (celda.tokens) {
                             celda.tokens.forEach(token => {
-                                console.log(`Generando token: ${celda.color}-${token.number - 1}`);
+                                console.log(`Generando token: ${celda.color}-${token.number}`);
                                 const tokenElement = document.createElement('div');
                                 tokenElement.className = `token ${token.color}`;
                                 tokenElement.textContent = token.number;
 
                                 // id único para cada ficha
-                                tokenElement.dataset.id = `${celda.color}-${token.number - 1}`; // Ajusta el número para que coincida con el índice
+                                tokenElement.dataset.id = `${celda.color}-${token.number}`;
 
                                 // seleccionar la ficha
-                                tokenElement.addEventListener('click', function () {
+                                tokenElement.addEventListener('click', () =>{
                                     fichaSeleccionada = {
                                         id: tokenElement.dataset.id,
                                         color: token.color,
