@@ -490,9 +490,7 @@ function sacarFichaDeCasa(jugador, ficha) {
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
 
-function moverFicha(ficha, valorDado) {
-    const nuevaPosicion = ficha.posicion + valorDado;
-
+function compruebaComerFicha(ficha, valorDado) {
     // Verificar si hay una ficha en la nueva posición
     const fichaEnDestino = jugadores.flatMap(j => j.fichas).find(f => f.posicion === nuevaPosicion);
 
@@ -501,8 +499,43 @@ function moverFicha(ficha, valorDado) {
         fichaEnDestino.encasa = true;
         fichaEnDestino.posicion = -1; // Enviar la ficha comida a casa
     }
+}
 
-    ficha.posicion = nuevaPosicion; // Actualizar la posición de la ficha
+function compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla) {
+    if ((ficha.posicion + valorDado) > ultimaCasilla) {
+        ficha.enPasillo = true;
+
+        let pasosEnPasillo = (ficha.posicion + valorDado) - ultimaCasilla;
+
+        return pasosEnPasillo;
+    }
+    else {
+        return ficha.posicion + valorDado;
+    }
+}
+
+function moverFicha(ficha, valorDado) {
+    let nuevaPosicion;
+
+    const ultimaCasilla = obtenerUltimaCasilla(ficha.color);
+    const distanceAUltimaCasilla = ultimaCasilla - ficha.posicion;
+
+    console.log(`Distancia a la ultima casilla: ${distanceAUltimaCasilla}`);
+
+    // compruebaComerFicha(ficha, valorDado);
+    if (distanceAUltimaCasilla <= 6 && distanceAUltimaCasilla > 0) {
+        nuevaPosicion = compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla);
+    }
+    else {
+        nuevaPosicion = (ficha.posicion + valorDado) % 68;
+
+        if (nuevaPosicion === 0) {
+            nuevaPosicion = 1;
+        }
+    }
+
+    ficha.posicion = nuevaPosicion; 
+
     console.log(`Ficha ${ficha.color}-${ficha.id} movida a la posición ${nuevaPosicion}`);
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
@@ -530,7 +563,7 @@ function actualizarTablero() {
                 const casa = document.querySelector(`.casa.${ficha.color}`);
                 if (casa) {
                     nuevaFicha.style.position = 'absolute';
-                    
+
                     switch (ficha.id) {
                         case 1:
                             nuevaFicha.style.left = '15px';
