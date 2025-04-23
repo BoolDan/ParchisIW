@@ -10,6 +10,7 @@ export class Dado {
 
         this.crearCaras(); // Crear las caras del dado
         this.actualizarAnimacion(); // Mostrar la cara inicial rotando el cubo
+
     }
 
     crearCaras() {
@@ -50,34 +51,34 @@ export class Dado {
     }
 
     async lanzar() {
-
-        // Marcar el dado como animando y deshabilitar clics
         this.animando = true;
         this.dadoElement.style.pointerEvents = 'none';
-
+    
         const nuevoValor = Math.floor(Math.random() * 6) + 1;
-
-        if (nuevoValor === this.valor) {
-            this.dadoElement.style.transform += ' rotateZ(1deg)';
-            await this.esperar(50);
-            this.valor = nuevoValor;
-        } else {
-            this.valor = nuevoValor;
-        }
-
+    
         const promesa = new Promise((resolve) => {
+            let timeoutId;
+    
             const handler = () => {
+                clearTimeout(timeoutId); // por si transitionend llega antes
                 this.dadoElement.removeEventListener('transitionend', handler);
                 this.animando = false;
                 this.dadoElement.style.pointerEvents = 'auto';
                 console.log('Animación del dado terminada.');
                 resolve(this.valor);
             };
+    
             this.dadoElement.addEventListener('transitionend', handler);
+    
+            // Si no se dispara transitionend en 500ms, forzamos fin
+            timeoutId = setTimeout(() => {
+                handler(); // Se llama igualmente
+            }, 500);
         });
-
+    
+        this.valor = nuevoValor;
         this.actualizarAnimacion();
-
+    
         return await promesa;
     }
 

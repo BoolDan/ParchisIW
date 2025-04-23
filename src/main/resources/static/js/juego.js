@@ -1,12 +1,43 @@
 import { Dado } from './dado.js';
 
+let tablero;
+let dado;
+let jugadores = [];
+let jugadorActual = 0; // Índice del jugador actual (0 a 3 para 4 jugadores)
+let rondasJugadas = 0; // Número de rondas jugadas
+let turnoFinalizado = false; // Indica si el turno ha finalizado
+let fichaSeleccionada; // Ficha seleccionada por el jugador
+
 document.addEventListener('DOMContentLoaded', function() {
-    const tablero = generarEstructuraTablero(); // Genera el tablero al cargar la página
-    const dado = new Dado(); // Crea una instancia del dado
-    const jugadores = generarJugadores(); // Genera los jugadores al cargar la página
+
+    tablero = generarEstructuraTablero(); // Genera el tablero al cargar la página
+    dado = new Dado(); // Crea una instancia del dado
+    jugadores = generarJugadores(); // Genera los jugadores al cargar la página
 
     renderizarTablero(tablero, jugadores, dado); // Renderiza el tablero en la página
+    
+    iniciarJuego(); // Inicia el juego al cargar la página
 });
+
+function obtenerInicio(color) {
+    const inicios = {
+        rojo: 39,
+        azul: 22,
+        verde: 56,
+        amarillo: 5,
+    };
+    return inicios[color] || null; // Devuelve la posición de inicio según el color
+}
+
+function obtenerUltimaCasilla(color) {
+    const ultimasCasillas = {
+        rojo: 34,
+        azul: 17,
+        verde: 51,
+        amarillo: 68,
+    };
+    return ultimasCasillas[color] || null; // Devuelve la última casilla según el color
+}
 
 function generarEstructuraTablero() {
     const estructura = [
@@ -255,7 +286,7 @@ function generarFichasJugador(color) {
 }
 
 function generarJugadores() {
-    let jugadores = [];
+    let listaJugadores = [];
     const colores = ['rojo', 'verde', 'azul', 'amarillo', 'morado', 'cian'];
     const nombres = ['Jugador 1', 'Jugador 2', 'Jugador 3', 'Jugador 4', 'Jugador 5', 'Jugador 6'];
 
@@ -265,12 +296,12 @@ function generarJugadores() {
         const nombre = nombres[i];
         const fichas = generarFichasJugador(color); // Genera las fichas para el jugador
 
-        jugadores.push({ nombre, color, fichas });
+        listaJugadores.push({ nombre, color, fichas });
     }
     
-    console.log("Jugadores inicializados:", jugadores);
+    console.log("Jugadores inicializados:", listaJugadores);
 
-    return jugadores;
+    return listaJugadores;
 }
 
 function renderizarTablero(tablero, jugadores, dado) {
@@ -368,30 +399,129 @@ function renderizarTablero(tablero, jugadores, dado) {
     tableroContainer.appendChild(table);
 }
 
-function iniciarTurno(jugador) {
-    console.log(`Es el turno de ${jugador.nombre}`);
-    // Aquí puedes agregar la lógica para iniciar el turno del jugador
+function iniciarJuego() {
+    const jugador = jugadores[jugadorActual]; // Obtener el jugador actual
+    iniciarTurno(jugador); // Iniciar el turno del jugador actual
 }
 
-function lanzarDado() {
-    dado.lanzar().then(valor => {
-        console.log("Dado lanzado con valor:", valor);
-        // Aquí puedes agregar la lógica para mover las fichas del jugador actual
+function siguienteTurno() {
+    jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
+    rondasJugadas++; // Incrementar el número de rondas jugadas 
+}
+
+function iniciarTurno(jugador) {
+    console.log(`Es el turno de ${jugador.nombre}`);
+    lanzarDado(dado); // Lanzar el dado al iniciar el turno
+}
+
+function lanzarDado(dado) {
+    const dadoElement = dado.getElemento();
+    dadoElement.addEventListener('click', async () => {
+        if (!dado.animando) {
+            const valor = await dado.lanzar();
+            console.log("Dado lanzado con valor:", valor);
+            habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
+        }
     });
 }
 
-function manejarResultadoDado(dado, jugador) {
+function habilitarFichasClicables(valorDado, jugador) {
+    const fichasClicables = jugador.fichas.filter(ficha => {
+        if (valorDado === 5 && ficha.encasa) {
+            // Si el dado es 5, habilita las fichas en casa
+            return !hayDosFichasEnSalida(jugador); // Solo si no hay dos fichas en la salida
+        } else if (!ficha.encasa && ficha.posicion >= 0) {
+            // Si el dado no es 5, habilita las fichas que están en el tablero
+            return true;
+        }
+        return false;
+    });
+    console.log("Fichas clicables:", fichasClicables);
 
+    // Habilitar las fichas clicables
+    fichasClicables.forEach(ficha => {
+        const fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
+        if (fichaElement) {
+            fichaElement.classList.add('clicable'); // Agregar clase para indicar que es clicable
+            fichaElement.addEventListener('click', () => {
+                if (ficha.encasa) {
+                    sacarFichaDeCasa(jugador, ficha);
+                } else {
+                    moverFicha(ficha, valorDado);
+                }
+                deshabilitarFichasClicables(jugador); // Deshabilitar las fichas después de hacer clic
+            });
+        }
+    });
 }
 
-function moverFicha(ficha, dado) {
-    // Aquí puedes agregar la lógica para mover la ficha en el tablero
-    console.log(`Moviendo ficha ${ficha.id} con dado ${dado}`);
-    // Actualiza la posición de la ficha en el tablero y en el objeto jugador
-    // ficha.posicion += dado; // Ejemplo de movimiento
+function deshabilitarFichasClicables(jugador) {
+    jugador.fichas.forEach(ficha => {
+        const fichaElement = document.querySelector(`[data-id="${ficha.color}-${ficha.id}"]`);
+        if (fichaElement) {
+            fichaElement.classList.remove('clicable'); // Quitar la clase clicable
+            fichaElement.replaceWith(fichaElement.cloneNode(true)); // Eliminar los EventListeners
+        }
+    });
+}
+
+function hayDosFichasEnSalida(jugador) {
+    return jugador.fichas.filter(ficha => ficha.posicion === obtenerInicio(jugador.color)).length >= 2;
+}    
+
+function sacarFichaDeCasa(jugador, ficha) {
+    const posicionInicio = obtenerInicio(jugador.color);
+    if (hayDosFichasEnSalida(jugador)) {
+        console.log("No puedes sacar una ficha de casa porque ya tienes dos en salida.");
+        return;
+    }
+
+    ficha.encasa = false;
+    ficha.posicion = posicionInicio;
+    console.log(`Ficha ${ficha.color}-${ficha.id} sacada de casa a la posición ${posicionInicio}`);
+    actualizarTablero();
+}
+
+function moverFicha(ficha, valorDado) {
+    const nuevaPosicion = ficha.posicion + valorDado;
+
+    // Verificar si hay una ficha en la nueva posición
+    const fichaEnDestino = jugadores.flatMap(j => j.fichas).find(f => f.posicion === nuevaPosicion);
+
+    if (fichaEnDestino) {
+        console.log(`Ficha ${fichaEnDestino.color}-${fichaEnDestino.id} comida y enviada a casa.`);
+        fichaEnDestino.encasa = true;
+        fichaEnDestino.posicion = -1; // Enviar la ficha comida a casa
+    }
+
+    ficha.posicion = nuevaPosicion; // Actualizar la posición de la ficha
+    console.log(`Ficha ${ficha.color}-${ficha.id} movida a la posición ${nuevaPosicion}`);
+    actualizarTablero(); // Actualizar el tablero visualmente
+}
+
+function actualizarTablero() {
+    // Limpia el tablero y vuelve a renderizar las fichas en sus nuevas posiciones
+    jugadores.forEach(jugador => {
+        jugador.fichas.forEach(ficha => {
+            const fichaElement = document.getElementById(`${ficha.color}-${ficha.id}`);
+            if (fichaElement) {
+                if (ficha.encasa) {
+                    fichaElement.style.left = ''; // Restablecer posición en casa
+                    fichaElement.style.top = '';
+                } else {
+                    const casilla = document.querySelector(`[data-position="${ficha.posicion}"]`);
+                    if (casilla) {
+                        casilla.appendChild(fichaElement); // Mover la ficha a la nueva casilla
+                    }
+                }
+            }
+        });
+    });
 }
 
 function finalizarTurno(jugador) {
     console.log(`Turno de ${jugador.nombre} finalizado`);
     // Aquí puedes agregar la lógica para finalizar el turno del jugador
+    turnoFinalizado = true; // Marcar el turno como finalizado
+    siguienteTurno(); // Avanzar al siguiente turno
 }
