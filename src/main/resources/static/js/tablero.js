@@ -70,7 +70,7 @@ class Tablero {
         }
 
         // Limpiar todas las fichas del tablero
-        const fichasDOM = tableroContainer.querySelectorAll('.ficha');
+        const fichasDOM = tableroContainer.querySelectorAll('.token');
         fichasDOM.forEach(ficha => ficha.remove());
     
         // Actualizar las casillas

@@ -341,6 +341,8 @@ function renderizarTablero(tablero, jugadores, dado) {
                         ficha.style.left = `${token.x}px`;
                         ficha.style.top = `${token.y}px`;
 
+                        jugadores
+
                         td.appendChild(ficha);
                     });
                     break;
@@ -425,8 +427,8 @@ function lanzarDado(dado) {
     });
 }
 
-function habilitarFichasClicables(valorDado, jugador) {
-    const fichasClicables = jugador.fichas.filter(ficha => {
+function obtenerFichasClicables(valorDado, jugador) {
+    let fichasClicables = jugador.fichas.filter(ficha => {
         if (valorDado === 5 && ficha.encasa) {
             // Si el dado es 5, habilita las fichas en casa
             return !hayDosFichasEnSalida(jugador); // Solo si no hay dos fichas en la salida
@@ -436,6 +438,12 @@ function habilitarFichasClicables(valorDado, jugador) {
         }
         return false;
     });
+
+    return fichasClicables;
+}
+
+function habilitarFichasClicables(valorDado, jugador) {
+    const fichasClicables = obtenerFichasClicables(valorDado, jugador); // Obtener las fichas que se pueden mover
     console.log("Fichas clicables:", fichasClicables);
 
     // Habilitar las fichas clicables
@@ -479,7 +487,7 @@ function sacarFichaDeCasa(jugador, ficha) {
     ficha.encasa = false;
     ficha.posicion = posicionInicio;
     console.log(`Ficha ${ficha.color}-${ficha.id} sacada de casa a la posición ${posicionInicio}`);
-    actualizarTablero();
+    actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
 
 function moverFicha(ficha, valorDado) {
@@ -496,23 +504,66 @@ function moverFicha(ficha, valorDado) {
 
     ficha.posicion = nuevaPosicion; // Actualizar la posición de la ficha
     console.log(`Ficha ${ficha.color}-${ficha.id} movida a la posición ${nuevaPosicion}`);
-    actualizarTablero(); // Actualizar el tablero visualmente
+    actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
 
 function actualizarTablero() {
-    // Limpia el tablero y vuelve a renderizar las fichas en sus nuevas posiciones
+    
+    const tableroContainer = document.getElementById('tablero');
+    if (!tableroContainer) {
+        console.error("No se encontró el contenedor del tablero.");
+        return;
+    }
+
+    // Elimina todas las fichas visibles actualmente
+    const fichasActuales = tableroContainer.querySelectorAll('.token');
+    fichasActuales.forEach(ficha => ficha.remove());
+
     jugadores.forEach(jugador => {
         jugador.fichas.forEach(ficha => {
-            const fichaElement = document.getElementById(`${ficha.color}-${ficha.id}`);
-            if (fichaElement) {
-                if (ficha.encasa) {
-                    fichaElement.style.left = ''; // Restablecer posición en casa
-                    fichaElement.style.top = '';
-                } else {
-                    const casilla = document.querySelector(`[data-position="${ficha.posicion}"]`);
-                    if (casilla) {
-                        casilla.appendChild(fichaElement); // Mover la ficha a la nueva casilla
+            const nuevaFicha = document.createElement('div');
+            nuevaFicha.classList.add('token', ficha.color);
+            nuevaFicha.textContent = ficha.id;
+            nuevaFicha.dataset.id = `${ficha.color}-${ficha.id}`;
+
+            if (ficha.encasa) {
+                const casa = document.querySelector(`.casa.${ficha.color}`);
+                if (casa) {
+                    nuevaFicha.style.position = 'absolute';
+                    
+                    switch (ficha.id) {
+                        case 1:
+                            nuevaFicha.style.left = '15px';
+                            nuevaFicha.style.top = '15px';
+                            break;
+                        case 2:
+                            nuevaFicha.style.left = '150px';
+                            nuevaFicha.style.top = '15px';
+                            break;
+                        case 3:
+                            nuevaFicha.style.left = '15px';
+                            nuevaFicha.style.top = '150px';
+                            break;
+                        case 4:
+                            nuevaFicha.style.left = '150px';
+                            nuevaFicha.style.top = '150px';
+                            break;
                     }
+                    casa.appendChild(nuevaFicha);
+                } else {
+                    console.warn(`No se encontró la casa para el color ${ficha.color}`);
+                }
+            } else {
+                // Ficha fuera de casa: en una casilla
+                const casilla = document.querySelector(`[data-position="${ficha.posicion}"]`);
+                if (casilla) {
+                    // Aseguramos que no se conserve estilo absoluto
+                    nuevaFicha.style.position = 'relative';
+                    nuevaFicha.style.left = '0';
+                    nuevaFicha.style.top = '0';
+                    casilla.appendChild(nuevaFicha);
+                } else {
+                    console.warn(`No se encontró la casilla para posición ${ficha.posicion}`);
                 }
             }
         });
