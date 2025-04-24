@@ -514,25 +514,63 @@ function compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla) {
     }
 }
 
+function compruebaLlegaAMeta(ficha, valorDado) {
+    if ((ficha.posicion + valorDado) === 8) {
+        ficha.completada = true; // La ficha ha llegado a la meta
+        ficha.enPasillo = false; // La ficha ya no está en el pasillo-
+        ficha.enCasa = true; // La ficha regresa a casa
+        console.log(`Ficha ${ficha.color}-${ficha.id} ha llegado a la meta.`);
+        return 0; // Regresar a la posición inicial
+    }
+    else if ((ficha.posicion + valorDado) > 8) {
+        console.log(`Ficha ${ficha.color}-${ficha.id} no puede moverse más allá de la meta.`);
+        return ficha.posicion;
+    }
+    else {
+        return ficha.posicion + valorDado;
+    }
+}
+
 function moverFicha(ficha, valorDado) {
     let nuevaPosicion;
 
     const ultimaCasilla = obtenerUltimaCasilla(ficha.color);
-    const distanceAUltimaCasilla = ultimaCasilla - ficha.posicion;
-
-    console.log(`Distancia a la ultima casilla: ${distanceAUltimaCasilla}`);
 
     // compruebaComerFicha(ficha, valorDado);
-    if (distanceAUltimaCasilla <= 6 && distanceAUltimaCasilla > 0) {
-        nuevaPosicion = compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla);
-    }
-    else {
-        nuevaPosicion = (ficha.posicion + valorDado) % 68;
 
-        if (nuevaPosicion === 0) {
-            nuevaPosicion = 1;
+    // Si la ficha está en las casillas
+    if (!ficha.enPasillo) {
+        const distanceAUltimaCasilla = ultimaCasilla - ficha.posicion;
+
+        console.log(`Distancia a la ultima casilla: ${distanceAUltimaCasilla}`);
+
+        // Si la ficha puede llegar a la última casilla
+        if (distanceAUltimaCasilla <= 6 && distanceAUltimaCasilla >= 0) {
+            nuevaPosicion = compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla);
+        }
+        // Movimiento alrededor del tablero
+        else {
+            nuevaPosicion = (ficha.posicion + valorDado) % 68;
+
+            if (nuevaPosicion === 0) {
+                nuevaPosicion = 1;
+            }
         }
     }
+    // La ficha ya está en el pasillo
+    else {
+        const distanciaAMeta = 8 - ficha.posicion;
+
+        // Si la ficha puede llegar a la meta
+        if (distanciaAMeta <= 6) {
+            nuevaPosicion = compruebaLlegaAMeta(ficha, valorDado);
+        }
+        //Movimiento dentro del pasillo
+        else {
+            nuevaPosicion = (ficha.posicion + valorDado);
+        }
+    }
+    
 
     ficha.posicion = nuevaPosicion; 
 
