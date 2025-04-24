@@ -299,8 +299,6 @@ function generarJugadores() {
         listaJugadores.push({ nombre, color, fichas });
     }
     
-    console.log("Jugadores inicializados:", listaJugadores);
-
     return listaJugadores;
 }
 
@@ -331,7 +329,6 @@ function renderizarTablero(tablero, jugadores, dado) {
                 case 'casa':
                     td.className = `casa ${celda.color}`;
                     celda.tokens.forEach(token => {
-                        console.log(`Generando token: ${celda.color}-${token.number}`);
                         const ficha = document.createElement('div');
                         ficha.className = `token ${token.color}`;
                         ficha.textContent = token.number;
@@ -403,16 +400,11 @@ function renderizarTablero(tablero, jugadores, dado) {
 
 function iniciarJuego() {
     const jugador = jugadores[jugadorActual]; // Obtener el jugador actual
+    console.log(`Inicia juego para el jugador ${jugador.color}`);
     iniciarTurno(jugador); // Iniciar el turno del jugador actual
 }
 
-function siguienteTurno() {
-    jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
-    rondasJugadas++; // Incrementar el número de rondas jugadas 
-}
-
 function iniciarTurno(jugador) {
-    console.log(`Es el turno de ${jugador.nombre}`);
     lanzarDado(dado); // Lanzar el dado al iniciar el turno
 }
 
@@ -424,7 +416,7 @@ function lanzarDado(dado) {
             console.log("Dado lanzado con valor:", valor);
             habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
         }
-    });
+    }, { once: true }); // Eliminar el evento después de lanzarlo una vez
 }
 
 function obtenerFichasClicables(valorDado, jugador) {
@@ -444,7 +436,12 @@ function obtenerFichasClicables(valorDado, jugador) {
 
 function habilitarFichasClicables(valorDado, jugador) {
     const fichasClicables = obtenerFichasClicables(valorDado, jugador); // Obtener las fichas que se pueden mover
-    console.log("Fichas clicables:", fichasClicables);
+
+    if (!fichasClicables) {
+        console.log(`El jugador ${jugador.color} no puede mover`);
+        finalizarTurno(jugador); // Si no hay fichas clicables, finalizar el turno
+        return;
+    }
 
     // Habilitar las fichas clicables
     fichasClicables.forEach(ficha => {
@@ -458,6 +455,7 @@ function habilitarFichasClicables(valorDado, jugador) {
                     moverFicha(ficha, valorDado);
                 }
                 deshabilitarFichasClicables(jugador); // Deshabilitar las fichas después de hacer clic
+                finalizarTurno(jugador); // Finalizar el turno después de mover la ficha
             });
         }
     });
@@ -667,6 +665,13 @@ function actualizarTablero() {
             }   
         });
     });
+}
+
+function siguienteTurno() {
+    jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
+    console.log(`-------------------------------------------------------------`);
+    console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
+    rondasJugadas++; // Incrementar el número de rondas jugadas 
 }
 
 function finalizarTurno(jugador) {
