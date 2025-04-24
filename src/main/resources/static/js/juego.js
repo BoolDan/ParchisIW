@@ -427,10 +427,12 @@ function lanzarDado(dado) {
 }
 
 function obtenerFichasClicables(valorDado, jugador) {
+    const posicionInicio = obtenerInicio(jugador.color);
+
     let fichasClicables = jugador.fichas.filter(ficha => {
         if (valorDado === 5 && ficha.encasa && !ficha.completada) {
             // Si el dado es 5, habilita las fichas en casa
-            return !hayDosFichasEnSalida(jugador); // Solo si no hay dos fichas en la salida
+            return !hayMurallaEnCasilla(posicionInicio); // Solo si no hay dos fichas en la salida
         } else if (!ficha.encasa && ficha.posicion >= 0) {
             // Si el dado no es 5, habilita las fichas que están en el tablero
             return true;
@@ -478,14 +480,82 @@ function deshabilitarFichasClicables(jugador) {
     });
 }
 
-function hayDosFichasEnSalida(jugador) {
-    return jugador.fichas.filter(ficha => ficha.posicion === obtenerInicio(jugador.color)).length >= 2;
-}    
+function hayMurallaEnCasilla(posicion) {
+    const fichasEnCasilla = jugadores
+        .flatMap(j => j.fichas)
+        .filter(ficha => ficha.posicion === posicion && !ficha.completada && !ficha.encasa && !ficha.enPasillo);
+
+    return fichasEnCasilla.length === 2;
+}  
+
+function hayMurallaEnPasillo(posicion) {
+    const fichasEnPasillo = jugadores
+        .flatMap(j => j.fichas)
+        .filter(ficha => ficha.enPasillo && ficha.posicion === posicion && !ficha.completada && !ficha.encasa); 
+
+    return fichasEnPasillo.length === 2;
+}
+
+function compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla) {
+    let posicion = ficha.posicion;
+    let pasosRestantes = valorDado;
+
+    while (pasosRestantes > 0) {
+
+        // AVANZA
+
+        // Ficha está en casilla
+        if (!ficha.enPasillo) {
+            // Ha llegado a la ultima casilla
+            if (posicion === ultimaCasilla) {
+                posicion = 1;
+                enPasillo = true;
+            } 
+            // Movimiento alrededor del tablero
+            else {
+                posicion = (posicion % 68) + 1;
+            }
+        }
+        // Ficha está en pasillo 
+        else {
+            posicion++;
+        }
+
+        // VERIFICA MURALLA
+
+        // Ficha en casilla
+        if (!ficha.enPasillo && hayMurallaEnCasilla(posicion)) {
+            console.log(`Muralla encontrada en casilla ${posicion}. Deteniéndose en la anterior.`);
+            return (posicion - 1 === 0) ? 68 : posicion - 1;
+        }
+        // Ficha en pasillo 
+        else if (ficha.enPasillo && hayMurallaEnPasillo(posicion)) {
+            console.log(`Muralla encontrada en pasillo ${ficha.color}, posición ${posicion}. Deteniéndose en la anterior.`);
+            return (posicion - 1 === 0) ? ultimaCasilla : posicion - 1;
+        }
+
+        pasosRestantes--;
+    }
+
+    if (ficha.enPasillo && posicion === 8) {
+        console.log(`Ficha ${ficha.color}-${ficha.id} ha llegado a la meta.`);
+        ficha.completada = true;
+        ficha.enPasillo = false;
+        ficha.encasa = true;
+        return -1; // Indicar que la ficha ha completado su recorrido
+    }
+    else if (ficha.enPasillo && posicion > 8) {
+        console.log(`Ficha ${ficha.color}-${ficha.id} no puede moverse más allá de la meta.`);
+        return ficha.posicion; 
+    }
+
+    return posicion; // Si no hay muralla, devolver la nueva posición
+}
 
 function sacarFichaDeCasa(jugador, ficha) {
     const posicionInicio = obtenerInicio(jugador.color);
     //const posicionInicio = obtenerInicio(jugador.color);
-    if (hayDosFichasEnSalida(jugador)) {
+    if (hayMurallaEnCasilla(posicionInicio)) {
         console.log("No puedes sacar una ficha de casa porque ya tienes dos en salida.");
         return;
     }
@@ -496,9 +566,17 @@ function sacarFichaDeCasa(jugador, ficha) {
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
 
-function compruebaComerFicha(ficha, valorDado) {
-    // Verificar si hay una ficha en la nueva posición
-    const fichaEnDestino = jugadores.flatMap(j => j.fichas).find(f => f.posicion === nuevaPosicion);
+function compruebaComerFicha(nuevaPosicion) {
+    // Verificar si hay una ficha en la nueva posición que no sea del jugador actual
+    const fichaEnDestino = jugadores
+        .filter(j => j !== jugadores[jugadorActual]) // Excluir al jugador actual
+        .flatMap(j => j.fichas)
+        .find(f =>
+            f.posicion === nuevaPosicion &&
+            !f.enpasillo && 
+            !f.encasa &&
+            !f.completada
+        );
 
     if (fichaEnDestino) {
         console.log(`Ficha ${fichaEnDestino.color}-${fichaEnDestino.id} comida y enviada a casa.`);
@@ -509,7 +587,7 @@ function compruebaComerFicha(ficha, valorDado) {
 
 function compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla) {
     if ((ficha.posicion + valorDado) > ultimaCasilla) {
-        ficha.enPasillo = true;
+        //ficha.enPasillo = true;
 
         let pasosEnPasillo = (ficha.posicion + valorDado) - ultimaCasilla;
 
@@ -522,9 +600,9 @@ function compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla) {
 
 function compruebaLlegaAMeta(ficha, valorDado) {
     if ((ficha.posicion + valorDado) === 8) {
-        ficha.completada = true; // La ficha ha llegado a la meta
-        ficha.enPasillo = false; // La ficha ya no está en el pasillo-
-        ficha.encasa = true; // La ficha regresa a casa
+        //ficha.completada = true; 
+        //ficha.enPasillo = false;
+        //ficha.encasa = true;
         console.log(`Ficha ${ficha.color}-${ficha.id} ha llegado a la meta.`);
         return -1; // Regresar a la posición inicial
     }
@@ -538,47 +616,16 @@ function compruebaLlegaAMeta(ficha, valorDado) {
 }
 
 function moverFicha(ficha, valorDado) {
-    let nuevaPosicion;
-
     const ultimaCasilla = obtenerUltimaCasilla(ficha.color);
 
-    // compruebaComerFicha(ficha, valorDado);
+    // Calcular la nueva posición considerando murallas y reglas del tablero
+    const nuevaPosicion = compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla);
 
-    // Si la ficha está en las casillas
-    if (!ficha.enPasillo) {
-        const distanceAUltimaCasilla = ultimaCasilla - ficha.posicion;
+    // Verificar si hay fichas para comer en la nueva posición
+    compruebaComerFicha(nuevaPosicion);
 
-        console.log(`Distancia a la ultima casilla: ${distanceAUltimaCasilla}`);
-
-        // Si la ficha puede llegar a la última casilla
-        if (distanceAUltimaCasilla <= 6 && distanceAUltimaCasilla >= 0) {
-            nuevaPosicion = compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla);
-        }
-        // Movimiento alrededor del tablero
-        else {
-            nuevaPosicion = (ficha.posicion + valorDado) % 68;
-
-            if (nuevaPosicion === 0) {
-                nuevaPosicion = 1;
-            }
-        }
-    }
-    // La ficha ya está en el pasillo
-    else {
-        const distanciaAMeta = 8 - ficha.posicion;
-
-        // Si la ficha puede llegar a la meta
-        if (distanciaAMeta <= 6) {
-            nuevaPosicion = compruebaLlegaAMeta(ficha, valorDado);
-        }
-        //Movimiento dentro del pasillo
-        else {
-            nuevaPosicion = (ficha.posicion + valorDado);
-        }
-    }
-    
-
-    ficha.posicion = nuevaPosicion; 
+    // Actualizar la posición de la ficha
+    ficha.posicion = nuevaPosicion;
 
     console.log(`Ficha ${ficha.color}-${ficha.id} movida a la posición ${nuevaPosicion}`);
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
