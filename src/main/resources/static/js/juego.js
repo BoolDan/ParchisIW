@@ -552,6 +552,7 @@ function actualizarTablero() {
     const fichasActuales = tableroContainer.querySelectorAll('.token');
     fichasActuales.forEach(ficha => ficha.remove());
 
+    // Actualiza las fichas en el tablero
     jugadores.forEach(jugador => {
         jugador.fichas.forEach(ficha => {
             const nuevaFicha = document.createElement('div');
@@ -559,6 +560,7 @@ function actualizarTablero() {
             nuevaFicha.textContent = ficha.id;
             nuevaFicha.dataset.id = `${ficha.color}-${ficha.id}`;
 
+            // Fichas en casa
             if (ficha.encasa) {
                 const casa = document.querySelector(`.casa.${ficha.color}`);
                 if (casa) {
@@ -586,8 +588,9 @@ function actualizarTablero() {
                 } else {
                     console.warn(`No se encontró la casa para el color ${ficha.color}`);
                 }
-            } else {
-                // Ficha fuera de casa: en una casilla
+            } 
+            // Ficha fuera de casa: en una casilla
+            else if (!ficha.enPasillo) {
                 const casilla = document.querySelector(`[data-position="${ficha.posicion}"]`);
                 if (casilla) {
                     // Aseguramos que no se conserve estilo absoluto
@@ -599,6 +602,22 @@ function actualizarTablero() {
                     console.warn(`No se encontró la casilla para posición ${ficha.posicion}`);
                 }
             }
+            // Ficha fuera de casa: en el pasillo
+            else if (ficha.enPasillo) {
+                const pasillo = document.querySelector(`[data-pasillo="${ficha.color}-${ficha.posicion}"]`);
+                if (pasillo) {
+                    // Aseguramos que no se conserve estilo absoluto
+                    nuevaFicha.style.position = 'relative';
+                    nuevaFicha.style.left = '0';
+                    nuevaFicha.style.top = '0';
+                    pasillo.appendChild(nuevaFicha);
+                } else {
+                    console.warn(`No se encontró el pasillo para posición ${ficha.posicion}`);
+                }
+            }
+            else {
+                console.warn(`Ficha ${ficha.color}-${ficha.id} no tiene posición válida`);
+            }   
         });
     });
 }
