@@ -585,36 +585,6 @@ function compruebaComerFicha(nuevaPosicion) {
     }
 }
 
-function compruebaLlegaAPasillo(ficha, valorDado, ultimaCasilla) {
-    if ((ficha.posicion + valorDado) > ultimaCasilla) {
-        //ficha.enPasillo = true;
-
-        let pasosEnPasillo = (ficha.posicion + valorDado) - ultimaCasilla;
-
-        return pasosEnPasillo;
-    }
-    else {
-        return ficha.posicion + valorDado;
-    }
-}
-
-function compruebaLlegaAMeta(ficha, valorDado) {
-    if ((ficha.posicion + valorDado) === 8) {
-        //ficha.completada = true; 
-        //ficha.enPasillo = false;
-        //ficha.encasa = true;
-        console.log(`Ficha ${ficha.color}-${ficha.id} ha llegado a la meta.`);
-        return -1; // Regresar a la posición inicial
-    }
-    else if ((ficha.posicion + valorDado) > 8) {
-        console.log(`Ficha ${ficha.color}-${ficha.id} no puede moverse más allá de la meta.`);
-        return ficha.posicion;
-    }
-    else {
-        return ficha.posicion + valorDado;
-    }
-}
-
 function moverFicha(ficha, valorDado) {
     const ultimaCasilla = obtenerUltimaCasilla(ficha.color);
 
