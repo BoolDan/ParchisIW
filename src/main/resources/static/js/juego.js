@@ -509,7 +509,7 @@ function compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla) {
             // Ha llegado a la ultima casilla
             if (posicion === ultimaCasilla) {
                 posicion = 1;
-                enPasillo = true;
+                ficha.enPasillo = true;
             } 
             // Movimiento alrededor del tablero
             else {
