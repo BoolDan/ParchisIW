@@ -7,6 +7,7 @@ let jugadorActual = 0; // Índice del jugador actual (0 a 3 para 4 jugadores)
 let rondasJugadas = 0; // Número de rondas jugadas
 let turnoFinalizado = false; // Indica si el turno ha finalizado
 let fichaSeleccionada; // Ficha seleccionada por el jugador
+let dadoLanzado = false; // Indica si el dado ha sido lanzado
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -411,12 +412,18 @@ function iniciarTurno(jugador) {
 function lanzarDado(dado) {
     const dadoElement = dado.getElemento();
     dadoElement.addEventListener('click', async () => {
+        if (dadoLanzado) {
+            console.log("El dado ya ha sido lanzado");
+            return; // Evitar lanzar el dado varias veces
+        }
+
         if (!dado.animando) {
+            dadoLanzado = true;
             const valor = await dado.lanzar();
             console.log("Dado lanzado con valor:", valor);
             habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
         }
-    }, { once: true }); // Eliminar el evento después de lanzarlo una vez
+    }); // Eliminar el evento después de lanzarlo una vez
 }
 
 function obtenerFichasClicables(valorDado, jugador) {
@@ -437,7 +444,7 @@ function obtenerFichasClicables(valorDado, jugador) {
 function habilitarFichasClicables(valorDado, jugador) {
     const fichasClicables = obtenerFichasClicables(valorDado, jugador); // Obtener las fichas que se pueden mover
 
-    if (!fichasClicables) {
+    if (fichasClicables.length === 0) {
         console.log(`El jugador ${jugador.color} no puede mover`);
         finalizarTurno(jugador); // Si no hay fichas clicables, finalizar el turno
         return;
@@ -678,5 +685,7 @@ function finalizarTurno(jugador) {
     console.log(`Turno de ${jugador.nombre} finalizado`);
     // Aquí puedes agregar la lógica para finalizar el turno del jugador
     turnoFinalizado = true; // Marcar el turno como finalizado
+    dadoLanzado = false; // Reiniciar el estado del dado lanzado
+
     siguienteTurno(); // Avanzar al siguiente turno
 }
