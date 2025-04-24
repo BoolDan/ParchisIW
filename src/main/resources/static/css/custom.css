@@ -489,7 +489,7 @@ td {
     transform: scale(1.2);
     z-index: 3;
 }
-
+.token.negro { background-color: #000; border: 1px solid #333; color: #ffffff; }
 .token.red { background-color: #DC143C; border: 1px solid #A52A2A; }
 .token.blue { background-color: #1E90FF; border: 1px solid #00008B; }
 .token.yellow { background-color: #FFD700; border: 1px solid #DAA520; color: #333; }

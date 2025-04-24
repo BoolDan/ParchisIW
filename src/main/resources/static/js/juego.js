@@ -429,7 +429,7 @@ function lanzarDado(dado) {
 
 function obtenerFichasClicables(valorDado, jugador) {
     let fichasClicables = jugador.fichas.filter(ficha => {
-        if (valorDado === 5 && ficha.encasa) {
+        if (valorDado === 5 && ficha.encasa && !ficha.completada) {
             // Si el dado es 5, habilita las fichas en casa
             return !hayDosFichasEnSalida(jugador); // Solo si no hay dos fichas en la salida
         } else if (!ficha.encasa && ficha.posicion >= 0) {
@@ -479,6 +479,7 @@ function hayDosFichasEnSalida(jugador) {
 
 function sacarFichaDeCasa(jugador, ficha) {
     const posicionInicio = obtenerInicio(jugador.color);
+    //const posicionInicio = obtenerInicio(jugador.color);
     if (hayDosFichasEnSalida(jugador)) {
         console.log("No puedes sacar una ficha de casa porque ya tienes dos en salida.");
         return;
@@ -518,9 +519,9 @@ function compruebaLlegaAMeta(ficha, valorDado) {
     if ((ficha.posicion + valorDado) === 8) {
         ficha.completada = true; // La ficha ha llegado a la meta
         ficha.enPasillo = false; // La ficha ya no está en el pasillo-
-        ficha.enCasa = true; // La ficha regresa a casa
+        ficha.encasa = true; // La ficha regresa a casa
         console.log(`Ficha ${ficha.color}-${ficha.id} ha llegado a la meta.`);
-        return 0; // Regresar a la posición inicial
+        return -1; // Regresar a la posición inicial
     }
     else if ((ficha.posicion + valorDado) > 8) {
         console.log(`Ficha ${ficha.color}-${ficha.id} no puede moverse más allá de la meta.`);
@@ -594,7 +595,15 @@ function actualizarTablero() {
     jugadores.forEach(jugador => {
         jugador.fichas.forEach(ficha => {
             const nuevaFicha = document.createElement('div');
-            nuevaFicha.classList.add('token', ficha.color);
+            nuevaFicha.classList.add('token');
+
+            if (ficha.completada) {
+                nuevaFicha.classList.add('negro');
+            }
+            else {
+                nuevaFicha.classList.add(ficha.color);
+            }
+
             nuevaFicha.textContent = ficha.id;
             nuevaFicha.dataset.id = `${ficha.color}-${ficha.id}`;
 
