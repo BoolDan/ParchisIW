@@ -183,6 +183,8 @@ class Tablero {
         return false;
     }
 
+    
+
     moverFicha(ficha, dado) {
         console.log(`Intentando mover ${ficha.color}-${ficha.id}, posición: ${ficha.posicion}, dado: ${dado}`);
     

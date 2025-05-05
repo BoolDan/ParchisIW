@@ -211,4 +211,3 @@ document.addEventListener("DOMContentLoaded", () => {
     // 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
     //   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
-

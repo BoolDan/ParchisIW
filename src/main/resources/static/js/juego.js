@@ -695,6 +695,7 @@ function siguienteTurno() {
     jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
     console.log(`-------------------------------------------------------------`);
     console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
+    document.getElementById('mensaje-turno').innerHTML = 'Turno del jugador (' + jugadores[jugadorActual].color + ')'; //Actualizar el mensaje del turno en la interfaz
     rondasJugadas++; // Incrementar el número de rondas jugadas 
 }
 
