@@ -577,6 +577,7 @@ button.btn-danger {
     border-radius: 50%;
     position: absolute;
     transform: translate(-50%, -50%); /* Centra el punto respecto a su posición */
+}
 
 .card-text.estado-ESPERANDO_JUGADORES {
     color: green;

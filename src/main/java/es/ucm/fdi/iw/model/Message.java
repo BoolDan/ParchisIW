@@ -59,7 +59,7 @@ public class Message implements Transferable<Message.Transfer> {
      * Constructor para persistir a/de JSON
      * @author mfreire
      */
-    @Getter
+    @Data
     @AllArgsConstructor
     public static class Transfer {
         private String from;
@@ -70,7 +70,7 @@ public class Message implements Transferable<Message.Transfer> {
         private String text;
         private long id;
         private String gameId;
-
+        public Transfer(){}
         public Transfer(Message m) {
             this.from = m.getEmisor().getUsername();
             this.sent = DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(m.getDateSent());

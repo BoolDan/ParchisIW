@@ -46,10 +46,13 @@
                                 </div>
                             </div>
                             <div class="card-footer bg-light">
-                                <div class="input-group">
+                                <!-- <div class="input-group">
                                     <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje">
                                     <button id="sendButton" class="btn btn-primary">Enviar</button>
-                                </div>
+                                </div> -->
+                                
+                                    <input type="text" id="messageInput" placeholder="escribe a este usuario" />
+                                    <button id="sendButton" class="btn btn-secondary" type="submit">Enviar</button>
                             </div>
                         </div>
                     </div>
@@ -80,6 +83,5 @@
     <script type="module" th:src="@{/js/dado.js}"onload="console.log('✅ dado.js cargado correctamente desde GAME.HTML');"></script>
     <script type= "module" th:src="@{/js/game.js}"onload="console.log('✅ game.js cargado correctamente DESDE GAME.HTML');"></script>
     <script type="module" th:src="@{/js/tablero.js}"onload="console.log('✅ tablero.js cargado correctamente DESDE GAME.HTML');"></script>
-
 
 </body>

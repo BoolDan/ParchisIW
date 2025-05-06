@@ -48,17 +48,15 @@ public class GameChatController {
         this.entityManager = entityManager;
     }
 
-    @MessageMapping("/chat.sendMessage/{gameId}")
+    @PostMapping("/sendMessage/{gameId}")
     @Transactional
-    public void sendMessage(Message.Transfer messageTransfer, Principal principal) {
+    @ResponseBody
+    public void sendMessage(@RequestBody Message.Transfer messageTransfer, HttpSession session) {
         System.out.println("Mensaje recibido en el servidor: " + messageTransfer); // Verifica el mensaje recibido
     
-        User sender = entityManager.find(User.class, principal.getName());
-        if (sender == null) {
-            System.err.println("Usuario no encontrado: " + principal.getName()); // Log de error si el usuario no existe
-            return;
-        }
-    
+        User sender = entityManager.find(User.class, 
+            ((User)session.getAttribute("u")).getId());
+        
         Partida partida = entityManager.find(Partida.class, Long.parseLong(messageTransfer.getGameId()));
         if (partida == null) {
             System.err.println("Partida no encontrada: " + messageTransfer.getGameId()); // Log de error si la partida no existe
@@ -71,15 +69,14 @@ public class GameChatController {
         message.setPartida(partida);
         message.setText(messageTransfer.getText());
         message.setDateSent(LocalDateTime.now());
-    
         entityManager.persist(message);
         entityManager.flush();
     
-        System.out.println("Mensaje guardado en la base de datos: " + message); // Verifica si el mensaje se guarda correctamente
+        log.info("Mensaje guardado en la base de datos: " + message); // Verifica si el mensaje se guarda correctamente
     
         // Enviar mensaje al canal público de la partida
         messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), new Message.Transfer(message));
-        System.out.println("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
+        log.info("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
     }
 
 
@@ -98,7 +95,7 @@ public class GameChatController {
      * @param o  JSON-ized message, similar to {"message": "text goes here"}
      * @throws JsonProcessingException
      */
-    @PostMapping("/topic/{name}")
+    @PostMapping("/topic/game/{gameId}")
     @ResponseBody
     @Transactional
     public Map<String,String> postMsg(@PathVariable String name,
@@ -135,36 +132,5 @@ public class GameChatController {
         return Map.of("result", "message sent");
     }
 
-        /**
-     * Posts a message to a topic.
-     * 
-     * @param topic of target user (source user is from ID)
-     * @param o  JSON-ized message, similar to {"message": "text goes here"}
-     * @throws JsonProcessingException
-     */
-    @GetMapping("/topic/{name}")
-    @ResponseBody
-    @Transactional
-    public Map<String,String> getMessages(@PathVariable String name, HttpSession session,
-            HttpServletResponse response)
-        throws JsonProcessingException {
-
-        User requester = entityManager.find(
-            User.class, ((User) session.getAttribute("u")).getId());
-        Topic target = entityManager.createNamedQuery("Topic.byKey", Topic.class)
-            .setParameter("key", name).getSingleResult();  
-    
-        // verify permissions
-        if (! requester.hasRole(Role.ADMIN) && ! target.getMembers().contains(requester)) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            return Map.of("error", "user not in group");
-        } 
-        // return result
-        return Map.of("messages", new ObjectMapper().writeValueAsString(
-            target.getMessages().stream()
-            .map(Message::toTransfer).toArray()
-        ));
-    }
-    
-
+       
 }

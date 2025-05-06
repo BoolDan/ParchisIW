@@ -646,6 +646,7 @@ class Tablero {
 document.addEventListener('DOMContentLoaded', function () {
     const game = window.game; // Instancia de la clase ParchisGame
     const tablero = new Tablero(game); // Instancia de la clase Tablero
+    window.tablero = tablero; // Hacer que la instancia de Tablero sea accesible globalmente
 
     // Agregar jugadores
     game.agregarJugador("Jugador 1", "rojo");

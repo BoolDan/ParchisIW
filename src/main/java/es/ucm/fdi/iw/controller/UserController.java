@@ -292,12 +292,28 @@ public class UserController {
 			@RequestBody JsonNode o, Model model, HttpSession session) 
 		throws JsonProcessingException {
 		
+		System.out.println("Mensaje enviado a usuario con ID: " + id + " - Mensaje: " + o.get("message").asText());
+
 		String text = o.get("message").asText();
+		log.info("Mensaje recibido: {}", text);
+
 		//Partida partida = entityManager.find(Partida.class, o.get("id_partida").asLong());
 		User u = entityManager.find(User.class, id);
+		if (u == null) {
+			log.error("Usuario con ID {} no encontrado", id);
+			return "{\"error\": \"Usuario no encontrado\"}";
+		}
+		model.addAttribute("user", u);
+
 		User sender = entityManager.find(
 				User.class, ((User)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
+		if (sender == null) {
+			log.error("Usuario remitente no encontrado en la sesión");
+			return "{\"error\": \"Usuario remitente no encontrado\"}";
+		}
+
+		log.info("Creando mensaje de {} para {}", sender.getUsername(), u.getUsername());
+
 		
 		// construye mensaje, lo guarda en BD
 		Message m = new Message();
@@ -305,6 +321,8 @@ public class UserController {
 		m.setEmisor(sender);
 		m.setDateSent(LocalDateTime.now());
 		m.setText(text);
+
+		
 		entityManager.persist(m);
 		entityManager.flush(); // to get Id before commit
 		

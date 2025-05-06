@@ -87,6 +87,11 @@ public class PartidaController {
                 .setParameter("id", id)
                 .getResultList();
     
+         // Añadir el usuario al topic de la partida
+         Topic topicPartida = entityManager.createQuery("SELECT t FROM Topic t WHERE t.name = :name", Topic.class)
+         .setParameter("name", "Partida" + partida.getId())
+         .getSingleResult();
+
         // Si me quiero unir a la partida (POST)
         if ("POST".equalsIgnoreCase(request.getMethod())) {
             // Validar si la partida tiene espacio para más jugadores
@@ -118,6 +123,10 @@ public class PartidaController {
             // Incrementar el número de jugadores
             partida.setNumJugadores(partida.getNumJugadores() + 1);
 
+
+            topicPartida.getMembers().add(usuarioActual);
+            entityManager.merge(topicPartida);
+            
                 // Si la partida alcanza el máximo de jugadores, actualizar su estado
             if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
                 partida.setEstado(Partida.EstadoPartida.EN_CURSO); // Cambiar el estado a EN_CURSO
@@ -128,11 +137,16 @@ public class PartidaController {
     
             log.info("El usuario con ID {} se ha unido a la partida con ID: {}", usuarioActual.getId(), id);
     
+            // Pasar la partida, topic y los usuarios al modelo
+            model.addAttribute("topic", topicPartida);
+            model.addAttribute("partida", partida);
+            model.addAttribute("usuarios", usuarios);
             // Redirigir a la vista de la partida
             return "redirect:/partida/" + id;
         }
     
-        // Pasar la partida y los usuarios al modelo
+        // Pasar la partida, topic y los usuarios al modelo
+        model.addAttribute("topic", topicPartida);
         model.addAttribute("partida", partida);
         model.addAttribute("usuarios", usuarios);
     
@@ -159,7 +173,7 @@ public class PartidaController {
         entityManager.persist(nuevaPartida);
 
         Topic topicPartida = new Topic();
-        topicPartida.setName("Partida " + nuevaPartida.getId());
+        topicPartida.setName("Partida" + nuevaPartida.getId());
         topicPartida.setKey(UserController.generateRandomBase64Token(6));
         entityManager.persist(topicPartida);
 
