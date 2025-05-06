@@ -197,6 +197,14 @@ function postImage(img, endpoint, name, filename) {
 document.addEventListener("DOMContentLoaded", () => {
     if (config.socketUrl) {
         let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+
+        if (config.topics && config.topics.length > 0) {
+            subs = subs.concat(config.topics.split(",").map(t => `/topic/${t}`));
+        }
+        if (config.gameId) {
+            subs.push(`/topic/game/${config.gameId}`);
+            subs.push(`/topic/game/updates/${config.gameId}`);
+        }
         ws.initialize(config.socketUrl, subs);
 
         let p = document.querySelector("#nav-unread");
