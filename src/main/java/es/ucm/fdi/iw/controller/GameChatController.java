@@ -51,7 +51,7 @@ public class GameChatController {
     @PostMapping("/sendMessage/{gameId}")
     @Transactional
     @ResponseBody
-    public void sendMessage(@RequestBody Message.Transfer messageTransfer, HttpSession session) {
+    public Object sendMessage(@RequestBody Message.Transfer messageTransfer, HttpSession session) {
         System.out.println("Mensaje recibido en el servidor: " + messageTransfer); // Verifica el mensaje recibido
     
         User sender = entityManager.find(User.class, 
@@ -60,7 +60,7 @@ public class GameChatController {
         Partida partida = entityManager.find(Partida.class, Long.parseLong(messageTransfer.getGameId()));
         if (partida == null) {
             System.err.println("Partida no encontrada: " + messageTransfer.getGameId()); // Log de error si la partida no existe
-            return;
+            return Map.of("result", "BAD gameID");
         }
     
         // Crear y guardar el mensaje en la base de datos
@@ -77,8 +77,29 @@ public class GameChatController {
         // Enviar mensaje al canal público de la partida
         messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), new Message.Transfer(message));
         log.info("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
+        return Map.of("result", "OK");
     }
 
+    
+    @PostMapping("/sendState/{gameId}")
+    @Transactional
+    @ResponseBody
+    public Object sendState(@RequestBody String estado, @PathVariable long gameId, HttpSession session) {
+        System.out.println("Estado recibido en el servidor: " + estado);
+    
+        User sender = entityManager.find(User.class, 
+            ((User)session.getAttribute("u")).getId());
+        // FIXME: comprobar que el jugador está jugando en la partida
+            
+        Partida partida = entityManager.find(Partida.class, gameId);
+        partida.setInformacionPartida(estado);
+        log.info("Estado guardado en la base de datos: " + estado); // Verifica si el mensaje se guarda correctamente
+    
+        // Enviar mensaje al canal público de la partida
+        messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), estado);
+        log.info("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
+        return Map.of("result", "OK");
+    }
 
 
     /*

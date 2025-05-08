@@ -14,7 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("El botón de enviar no se encontró.");
     }
 
-    ws.receive = mostrarMensaje;
+    const oldReceive = ws.receive;
+    ws.receive = (data) => {
+        mostrarMensaje(data);
+        oldReceive(data);
+    }
 });
 
 
@@ -31,9 +35,11 @@ function enviarMensaje() {
 }
 
 function mostrarMensaje(message) {
-    console.log("Mostrando mensaje en el chat:", message);
-    let chatBox = document.getElementById("chatBox");
-    let mensaje = document.createElement("p");
-    mensaje.textContent = `${message.from}: ${message.text}`;
-    chatBox.appendChild(mensaje);
+    if (message.from) {
+        console.log("Mostrando mensaje en el chat:", message);
+        let chatBox = document.getElementById("chatBox");
+        let mensaje = document.createElement("p");
+        mensaje.textContent = `${message.from}: ${message.text}`;
+        chatBox.appendChild(mensaje);
+    } 
 }

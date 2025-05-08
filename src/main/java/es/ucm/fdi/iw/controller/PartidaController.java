@@ -180,30 +180,4 @@ public class PartidaController {
         // Redirigir al lobby o a la vista de la partida creada
         return "redirect:/lobby";
     }
-
-    @PostMapping("/partida/{id}/actualizar")
-    @ResponseBody
-    @Transactional
-    public Map<String, Object> actualizarPartida(@PathVariable long id, @RequestBody Map<String, Object> datos) {
-        Partida partida = entityManager.find(Partida.class, id);
-        if (partida == null) {
-            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
-        }
-
-        // Obtener la información actual de la partida
-        Map<String, Object> info = partida.getInformacionPartida();
-        if (info == null) {
-            info = new HashMap<>();
-        }
-
-        // Actualizar los datos recibidos
-        info.putAll(datos);
-        partida.setInformacionPartida(info);
-
-        // Guardar los cambios
-        entityManager.merge(partida);
-
-        // Devolver la información actualizada
-        return info;
-    }
 }
