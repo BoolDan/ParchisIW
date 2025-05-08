@@ -195,8 +195,16 @@ function postImage(img, endpoint, name, filename) {
  * Actions to perform once the page is fully loaded
  */
 document.addEventListener("DOMContentLoaded", () => {
+
     if (config.socketUrl) {
         let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+
+        const gameIdInput = document.getElementById("gameId");
+        config.gameId = gameIdInput ? gameIdInput.value : null;
+
+        console.log("GameId: ", config.gameId);
+        console.log("Config al iniciar: ", config);
+
         if (config.topics && config.topics.length > 0) {
             subs = subs.concat(config.topics.split(",").map(t => `/topic/${t}`));
         }
