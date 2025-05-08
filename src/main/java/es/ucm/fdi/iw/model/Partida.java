@@ -51,56 +51,22 @@ public class Partida implements Transferable<Partida.Transfer> {
     @SequenceGenerator(name = "gen", sequenceName = "gen")
     private long id;
 
-    @Column
     private String colorTurno;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING) //store the string value of the enum
     private EstadoPartida estado = EstadoPartida.ESPERANDO_JUGADORES;
 
-    @Column
     private int numJugadores;
-
-    @Column
     private int jugadoresMax;
-
-    @Column
     private String resultadoFinal;
-
-    @Column
     private String movimientos_turno;
-
-    @Column 
     private String tipoPartida;
-
-    @Column 
     private String modoJuego;
-
-    @Column
     private String posicionesFichas; //JSON con las posiciones de las fichas en el tablero
 
-    @Column(columnDefinition = "TEXT") // Para permitir JSON largos
+    @Column(length=2048) // Para permitir JSON largos
     private String informacionPartida; // JSON con información adicional de la partida
-
-    // Métodos para manejar el JSON
-    public Map<String, Object> getInformacionPartida() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(this.informacionPartida, Map.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void setInformacionPartida(Map<String, Object> info) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            this.informacionPartida = objectMapper.writeValueAsString(info);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /*@Column
     private String chat_token;*/

@@ -1,4 +1,4 @@
-export class Dado {
+class Dado {
     constructor() {
         this.valor = 1; // Valor inicial del dado
         this.animando = false; // Bandera para controlar si el dado está en animación

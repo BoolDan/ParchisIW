@@ -14,6 +14,7 @@ const ws = {
      * Default action when message is received. 
      */
     receive: (text) => {
+        
         console.log(text);
         let p = document.querySelector("#nav-unread");
         if (p) {

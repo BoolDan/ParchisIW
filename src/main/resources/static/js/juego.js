@@ -1,5 +1,3 @@
-import { Dado } from './dado.js';
-
 let tablero;
 let dado;
 let jugadores = [];
@@ -8,6 +6,39 @@ let rondasJugadas = 0; // Número de rondas jugadas
 let turnoFinalizado = false; // Indica si el turno ha finalizado
 let fichaSeleccionada; // Ficha seleccionada por el jugador
 let dadoLanzado = false; // Indica si el dado ha sido lanzado
+
+function serializaEstado() {
+    return {
+        rondasJugadas: rondasJugadas,
+        jugadorActual: jugadorActual,
+        jugadores: jugadores.map(jugador => ({
+            nombre: jugador.nombre,
+            color: jugador.color,
+            fichas: jugador.fichas.map(ficha => ({
+                id: ficha.id,
+                posicion: ficha.posicion,
+                encasa: ficha.encasa,
+            }))
+        }))
+    };
+}
+
+function deserializaEstado(datos) {
+    rondasJugadas = datos.rondasJugadas;
+    jugadorActual = datos.jugadorActual;
+    console.log("Jugadores son: ", datos.jugadores);
+    jugadores =  datos.jugadores.map(jugador => ({
+        nombre: jugador.nombre,
+        color: jugador.color,
+        fichas: jugador.fichas.map(ficha => ({
+            id: ficha.id,
+            posicion: ficha.posicion,
+            encasa: ficha.encasa,
+        }))
+    }))
+    console.log("Jugadores deserializados: ", jugadores);
+    actualizarTablero();
+}
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -339,8 +370,6 @@ function renderizarTablero(tablero, jugadores, dado) {
                         ficha.style.left = `${token.x}px`;
                         ficha.style.top = `${token.y}px`;
 
-                        jugadores
-
                         td.appendChild(ficha);
                     });
                     break;
@@ -616,6 +645,8 @@ function actualizarTablero() {
     // Actualiza las fichas en el tablero
     jugadores.forEach(jugador => {
         jugador.fichas.forEach(ficha => {
+            ficha.color = jugador.color;
+            console.log(`Actualizando ficha ${ficha.color}-${ficha.id} en la posición ${ficha.posicion}`);
             const nuevaFicha = document.createElement('div');
             nuevaFicha.classList.add('token');
 
@@ -697,6 +728,10 @@ function siguienteTurno() {
     console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
     document.getElementById('mensaje-turno').innerHTML = 'Turno del jugador (' + jugadores[jugadorActual].color + ')'; //Actualizar el mensaje del turno en la interfaz
     rondasJugadas++; // Incrementar el número de rondas jugadas 
+
+    if (config.socketUrl) {
+        enviarEstado();    
+    }
 }
 
 function finalizarTurno(jugador) {
