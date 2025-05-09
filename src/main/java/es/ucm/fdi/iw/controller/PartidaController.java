@@ -70,7 +70,7 @@ public class PartidaController {
         return "lobby";
     }
 
-    @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/game/updates/{id}", method = {RequestMethod.GET, RequestMethod.POST})
     @Transactional
     public String manejarPartida(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
         log.info("Solicitud {} recibida para la partida con ID: {}", request.getMethod(), id);
@@ -89,7 +89,7 @@ public class PartidaController {
     
          // Añadir el usuario al topic de la partida
          Topic topicPartida = entityManager.createQuery("SELECT t FROM Topic t WHERE t.name = :name", Topic.class)
-         .setParameter("name", "Partida" + partida.getId())
+         .setParameter("name", "game/updates/" + partida.getId())
          .getSingleResult();
 
         // Si me quiero unir a la partida (POST)
@@ -152,6 +152,10 @@ public class PartidaController {
     
         return "game"; // Renderizar la vista de la partida
     }
+
+
+
+
 
     @PostMapping("/partida/crear")
     @Transactional
