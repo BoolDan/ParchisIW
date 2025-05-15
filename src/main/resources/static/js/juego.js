@@ -317,6 +317,10 @@ function generarFichasJugador(color) {
     return fichas;
 }
 
+function tuTurno(){
+
+}
+
 function generarJugadores() {
     let listaJugadores = [];
     const colores = ['rojo', 'verde', 'azul', 'amarillo', 'morado', 'cian'];
@@ -450,7 +454,9 @@ function lanzarDado(dado) {
             dadoLanzado = true;
             const valor = await dado.lanzar();
             console.log("Dado lanzado con valor:", valor);
-            habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
+            if (jugador == jugadores[jugadorActual]){
+                habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
+            }
         }
     }); // Eliminar el evento después de lanzarlo una vez
 }

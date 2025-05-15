@@ -50,8 +50,6 @@ public class User implements Transferable<User.Transfer> {
     private String correo;
     private String pais;
 
-    private String colorFavorito;
-
     private boolean enabled;
     private String roles; // split by ',' to separate roles
 

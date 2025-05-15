@@ -1,31 +1,31 @@
 -- insert admin (username a, password aa)
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (1, TRUE, 'ADMIN,USER', 'a',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'a@gmail.com');
 
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (2, TRUE, 'USER', 'b',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'En', 'b@gmail.com');
 
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (3, TRUE, 'USER', 'c',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'c@gmail.com');
 
-    INSERT INTO Usuario (id, enabled, roles, username, password)
+    INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (4, TRUE, 'USER', 'd',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'd@gmail.com');
     
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (5, TRUE, 'USER', 'e',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'e@gmail.com');
 
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (6, TRUE, 'USER', 'f',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W');
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'f@gmail.com');
 
-INSERT INTO Usuario (id, enabled, roles, username, password)
+INSERT INTO Usuario (id, enabled, roles, username, password, pais, correo)
 VALUES (7, TRUE, 'USER', 'g',
-    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W'); 
+    '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'Esp', 'g@gmail.com');
 
 -- Consultas para probar insertar torneos
 INSERT INTO Torneo (id, nombre, num_Participantes, ganador, puntos, estado, hora_Inicio, hora_Fin) 
