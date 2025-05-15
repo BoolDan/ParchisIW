@@ -454,9 +454,7 @@ function lanzarDado(dado) {
             dadoLanzado = true;
             const valor = await dado.lanzar();
             console.log("Dado lanzado con valor:", valor);
-            if (jugador == jugadores[jugadorActual]){
-                habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
-            }
+            habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
         }
     }); // Eliminar el evento después de lanzarlo una vez
 }
@@ -728,7 +726,9 @@ function actualizarTablero() {
     });
 }
 
-function siguienteTurno() {
+function siguienteTurno(jugador) {
+
+    jugadorSender = jugadorActual;
     jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
     console.log(`-------------------------------------------------------------`);
     console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
@@ -736,7 +736,10 @@ function siguienteTurno() {
     rondasJugadas++; // Incrementar el número de rondas jugadas 
 
     if (config.socketUrl) {
-        enviarEstado();    
+        if (jugador == jugadores[jugadorSender]){
+            enviarEstado();    
+            jugadorSender = (jugadorSender + 1) % jugadores.length;
+        }
     }
 }
 
@@ -745,6 +748,6 @@ function finalizarTurno(jugador) {
     // Aquí puedes agregar la lógica para finalizar el turno del jugador
     turnoFinalizado = true; // Marcar el turno como finalizado
     dadoLanzado = false; // Reiniciar el estado del dado lanzado
-
-    siguienteTurno(); // Avanzar al siguiente turno
+    
+    siguienteTurno(jugador); // Avanzar al siguiente turno
 }

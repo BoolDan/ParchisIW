@@ -53,6 +53,12 @@ VALUES (3, 'AMARILLO', 'FINALIZADA', 4, 4, 'PRIMER LUGAR: NO SE', NULL, 4);
 INSERT INTO Partida (id, color_turno, estado, num_jugadores, jugadores_max, resultado_final, movimientos_turno, id_torneo)
 VALUES (4, 'AZUL', 'EN_CURSO', 5, 6, 'ALE', NULL, 3);
 
+--Consultas para Topic
+--INSERT INTO Topic (id, id_partida, id_usuario, text, fecha_creacion) VALUES
+
+
+
+
 -- Consultas para Jugador_partida
 
 -- Jugadores en la partida con id 1 (2 jugadores)
