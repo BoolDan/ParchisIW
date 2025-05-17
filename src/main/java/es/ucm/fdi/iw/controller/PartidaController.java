@@ -11,13 +11,17 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.NoResultException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +41,10 @@ public class PartidaController {
     private static final Logger log = LogManager.getLogger(AdminController.class);
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @ModelAttribute
     public void populateModel(HttpSession session, Model model) {
         for (String name : new String[] {"u", "url", "ws", "topics"}) {
@@ -72,87 +80,129 @@ public class PartidaController {
 
         log.info("Solicitud {} recibida para la partida con ID: {}", request.getMethod(), id);
         // Buscar la partida en la base de datos
+        
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
             throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
         }
 
+        // Obtener/crear el Topic
+        Topic topicPartida;
+        try {
+            topicPartida = entityManager.createQuery("SELECT t FROM Topic t WHERE t.name = :name", Topic.class)
+                .setParameter("name", "Partida" + partida.getId())
+                .getSingleResult();
+        } catch (NoResultException e) {
+            topicPartida = new Topic();
+            topicPartida.setName("Partida" + partida.getId());
+            topicPartida.setKey(UserController.generateRandomBase64Token(6));
+            entityManager.persist(topicPartida);
+        }
 
 
-        // Lógica para mostrar la información de la partida (GET)
+        // Si me quiero unir a la partida (POST)
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            User usuarioActual = (User) session.getAttribute("u");
+            if (usuarioActual == null) {
+                throw new IllegalStateException("No se encontró un usuario en la sesión.");
+            }
+
+             // Comprobar si ya está
+            boolean yaEnPartida = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
+                .setParameter("pid", id)
+                .setParameter("uid", usuarioActual.getId())
+                .getSingleResult() > 0;
+
+            if (!yaEnPartida) {
+                // Solo lo añadimos si no está
+                if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
+                    model.addAttribute("error", "La partida ya está llena.");
+                    return "redirect:/lobby";
+                }
+
+                Jugador_partida jugadorPartida = new Jugador_partida();
+                jugadorPartida.setUsuario(usuarioActual);
+                jugadorPartida.setPartida(partida);
+                // Asignar un color de jugador
+                // Colores disponibles
+                List<Jugador_partida.Color_Jugador> coloresDisponibles = new ArrayList<>(
+                List.of(Jugador_partida.Color_Jugador.values()));
+
+                // Colores ya usados
+                List<Jugador_partida.Color_Jugador> coloresUsados = entityManager.createQuery(
+                    "SELECT jp.colorJugador FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.Color_Jugador.class)
+                    .setParameter("id", partida.getId())
+                    .getResultList();
+
+                coloresDisponibles.removeAll(coloresUsados);
+
+                // Asignar el primero disponible
+                if (!coloresDisponibles.isEmpty()) {
+                    jugadorPartida.setColorJugador(coloresDisponibles.get(0));
+                } else {
+                    // Fallback si todos están usados (no debería pasar)
+                    jugadorPartida.setColorJugador(Jugador_partida.Color_Jugador.ROJO);
+                }
+
+                entityManager.persist(jugadorPartida);
+                // Notificar a todos los jugadores por WebSocket
+                messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), Map.of(
+                    "tipo", "nuevoJugador"
+                ));
+
+                partida.setNumJugadores(partida.getNumJugadores() + 1);
+                topicPartida.getMembers().add(usuarioActual);
+                entityManager.merge(topicPartida);
+
+                if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
+                    partida.setEstado(Partida.EstadoPartida.EN_CURSO);
+                }
+                entityManager.merge(partida);
+            }
+            
+        }
+        
+        //Recalcular la lista de usuarios y jugadores después del POST
         List<User> usuarios = entityManager.createQuery(
                 "SELECT u FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", User.class)
                 .setParameter("id", id)
                 .getResultList();
 
-         // Añadir el usuario al topic de la partida
-         Topic topicPartida = new Topic();
-            topicPartida.setName("Partida" + partida.getId());
-            topicPartida.setKey(UserController.generateRandomBase64Token(6));
-         try{
-            topicPartida = entityManager.createQuery("SELECT t FROM Topic t WHERE t.name = :name", Topic.class)
-                .setParameter("name", "Partida" + partida.getId())
-                .getSingleResult();
-         } catch (NoResultException e) {
-            entityManager.persist(topicPartida);
-         }
+        // Asignar colores a los jugadores
+        List<String> colores = List.of("rojo", "verde", "azul", "amarillo", "morado", "cian");
+        List<Map<String, String>> jugadores = IntStream.range(0, usuarios.size())
+                .mapToObj(i -> {
+                    String nombre = usuarios.get(i).getUsername();
+                    String color = colores.get(i % colores.size());
+                    return Map.of("nombre", nombre, "color", color);
+                })
+                .collect(Collectors.toList());
 
-        // Si me quiero unir a la partida (POST)
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            // Validar si la partida tiene espacio para más jugadores
-            if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
-                log.warn("La partida con ID {} ya está llena.", id);
-                model.addAttribute("error", "La partida ya está llena.");
-                return "redirect:/lobby"; // Redirigir al lobby con un mensaje de error
-            }
-
-            // Obtener el usuario actual desde la sesión
-            User usuarioActual = (User) session.getAttribute("u");
-            if (usuarioActual == null) {
-                throw new IllegalStateException("No se encontró un usuario en la sesión.");
-            }
-            // Verificar si el usuario ya está en la partida
-            boolean yaEnPartida = usuarios.stream().anyMatch(u -> u.getId() == usuarioActual.getId());
-            if (yaEnPartida) {
-                log.warn("El usuario con ID {} ya está en la partida con ID {}.", usuarioActual.getId(), id);
-                return "redirect:/partida/" + id; // Redirigir a la vista de la partida
-            }
-            // Añadir el usuario a la partida (a través de Jugador_partida)
-            Jugador_partida jugadorPartida = new Jugador_partida();
-            jugadorPartida.setUsuario(usuarioActual);
-            jugadorPartida.setPartida(partida);
-            entityManager.persist(jugadorPartida);
-
-            // Incrementar el número de jugadores
-            partida.setNumJugadores(partida.getNumJugadores() + 1);
-            topicPartida.getMembers().add(usuarioActual);
-            entityManager.merge(topicPartida);
-
-            // Si la partida alcanza el máximo de jugadores, actualizar su estado
-            if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
-                partida.setEstado(Partida.EstadoPartida.EN_CURSO); // Cambiar el estado a EN_CURSO
-                log.info("La partida con ID {} ha alcanzado el máximo de jugadores y ahora está EN_CURSO.", id);
-            }
-            entityManager.merge(partida);
-            log.info("El usuario con ID {} se ha unido a la partida con ID: {}", usuarioActual.getId(), id);
-
-            // Pasar la partida, topic y los usuarios al modelo
-            model.addAttribute("topic", topicPartida);
-            model.addAttribute("partida", partida);
-            model.addAttribute("usuarios", usuarios);
-            // Redirigir a la vista de la partida
-            return "redirect:/partida/" + id;
-        }
-
-        // Pasar la partida, topic y los usuarios al modelo
+        // Añadir todo al modelo
+        model.addAttribute("jugadores", jugadores);
         model.addAttribute("topic", topicPartida);
         model.addAttribute("partida", partida);
-        model.addAttribute("usuarios", usuarios);
-        return "game"; // Renderizar la vista de la partida
+        // model.addAttribute("usuarios", usuarios);
 
+        return "game";
     }
 
+    @GetMapping("/partida/{id}/jugadores")
+    @ResponseBody
+    public List<Map<String, String>> obtenerJugadores(@PathVariable long id) {
+        List<Jugador_partida> jugadoresPartida = entityManager.createQuery(
+            "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.class)
+            .setParameter("id", id)
+            .getResultList();
 
+        return jugadoresPartida.stream()
+            .map(jp -> Map.of(
+                "nombre", jp.getUsuario().getUsername(),
+                "color", jp.getColorJugador().name().toLowerCase()
+            ))
+            .collect(Collectors.toList());
+    }
 
     @PostMapping("/partida/crear")
     @Transactional
@@ -171,8 +221,11 @@ public class PartidaController {
         topicPartida.setName("Partida" + nuevaPartida.getId());
         topicPartida.setKey(UserController.generateRandomBase64Token(6));
         entityManager.persist(topicPartida);
-        // Redirigir al lobby o a la vista de la partida creada
-        return "redirect:/partida/" + nuevaPartida.getId();
+        // Redirigir al lobby
+        return "redirect:/lobby";
 
     }
+
+
+    
 }

@@ -50,4 +50,8 @@ public class Jugador_partida {
     @ManyToOne // @OneToOne pero de momento lo dejamos así para pruebas
     @JoinColumn(name = "ID_Usuario", nullable = false)
     private User usuario;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Color_Jugador colorJugador;
 }

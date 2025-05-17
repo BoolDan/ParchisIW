@@ -42,13 +42,30 @@ function deserializaEstado(datos) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    tablero = generarEstructuraTablero(); // Genera el tablero al cargar la página
-    dado = new Dado(); // Crea una instancia del dado
-    jugadores = generarJugadores(); // Genera los jugadores al cargar la página
+    fetch(`/partida/${config.gameId}/jugadores`)
+        .then(r => r.json())
+        .then(data => {
 
-    renderizarTablero(tablero, jugadores, dado); // Renderiza el tablero en la página
-    
-    iniciarJuego(); // Inicia el juego al cargar la página
+            config.jugadores = data; // lo guardas si quieres usarlo en otros sitios
+            jugadores = generarJugadores(data); // <--- usamos los datos reales
+
+            tablero = generarEstructuraTablero();
+            dado = new Dado();
+            renderizarTablero(tablero, jugadores, dado);
+            iniciarJuego(); 
+                        
+            // Fabricamos un "estado" inicial solo con rondas = 0
+            actualizarVistaInfoPartida({
+                rondasJugadas: 0,
+                jugadorActual: 0,
+                jugadores: data
+            });
+
+        })
+        .catch(err => {
+            console.error("Error al cargar jugadores:", err);
+        });
+
 });
 
 function obtenerInicio(color) {
@@ -321,21 +338,36 @@ function tuTurno(){
 
 }
 
-function generarJugadores() {
-    let listaJugadores = [];
-    const colores = ['rojo', 'verde', 'azul', 'amarillo', 'morado', 'cian'];
-    const nombres = ['Jugador 1', 'Jugador 2', 'Jugador 3', 'Jugador 4', 'Jugador 5', 'Jugador 6'];
+function esMiTurno() {
+    const miIndice = config.jugadores.findIndex(j => j.nombre === config.username);
+    console.log("Mi índice es: ", miIndice);
+    return jugadorActual === miIndice;
+}
 
-    // Por el momento se generan 4 jugadores
-    for (let i = 0; i < 4; i++) {
-        const color = colores[i];
-        const nombre = nombres[i];
-        const fichas = generarFichasJugador(color); // Genera las fichas para el jugador
+function generarJugadores(datosJugadores) {
+    // let listaJugadores = [];
+    // const colores = ['rojo', 'verde', 'azul', 'amarillo', 'morado', 'cian'];
+    // const nombres = ['Jugador 1', 'Jugador 2', 'Jugador 3', 'Jugador 4', 'Jugador 5', 'Jugador 6'];
 
-        listaJugadores.push({ nombre, color, fichas });
-    }
+    // // Por el momento se generan 4 jugadores
+    // for (let i = 0; i < 4; i++) {
+    //     const color = colores[i];
+    //     const nombre = nombres[i];
+    //     const fichas = generarFichasJugador(color); // Genera las fichas para el jugador
+
+    //     listaJugadores.push({ nombre, color, fichas });
+    // }
     
-    return listaJugadores;
+    // return listaJugadores;
+
+     return datosJugadores.map(j => {
+        const fichas = generarFichasJugador(j.color);
+        return {
+            nombre: j.nombre,
+            color: j.color,
+            fichas: fichas
+        };
+    });
 }
 
 function renderizarTablero(tablero, jugadores, dado) {
@@ -445,6 +477,13 @@ function iniciarTurno(jugador) {
 function lanzarDado(dado) {
     const dadoElement = dado.getElemento();
     dadoElement.addEventListener('click', async () => {
+
+        // Antes de tirar, verifica si es tu turno
+        if (!esMiTurno()) {
+            alert("¡No es tu turno!");
+            return;
+        }
+
         if (dadoLanzado) {
             console.log("El dado ya ha sido lanzado");
             return; // Evitar lanzar el dado varias veces
@@ -726,13 +765,13 @@ function actualizarTablero() {
     });
 }
 
+
 function siguienteTurno(jugador) {
 
     jugadorSender = jugadorActual;
     jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
     console.log(`-------------------------------------------------------------`);
     console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
-    document.getElementById('mensaje-turno').innerHTML = 'Turno del jugador (' + jugadores[jugadorActual].color + ')'; //Actualizar el mensaje del turno en la interfaz
     rondasJugadas++; // Incrementar el número de rondas jugadas 
 
     if (config.socketUrl) {

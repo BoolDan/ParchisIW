@@ -2,6 +2,7 @@ package es.ucm.fdi.iw.controller;
 
 import java.util.Map;
 
+import es.ucm.fdi.iw.model.Jugador_partida;
 import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
@@ -52,7 +53,7 @@ public class GameChatController {
     @Transactional
     @ResponseBody
     public Object sendMessage(@RequestBody Message.Transfer messageTransfer, HttpSession session) {
-        System.out.println("Mensaje recibido en el servidor: " + messageTransfer); // Verifica el mensaje recibido
+        log.info("Mensaje recibido en el servidor: " + messageTransfer); // Verifica el mensaje recibido
     
         User sender = entityManager.find(User.class, 
             ((User)session.getAttribute("u")).getId());
@@ -81,16 +82,34 @@ public class GameChatController {
     }
 
     
+    /**
+     * @param estado
+     * @param gameId
+     * @param session
+     * @return
+     */
     @PostMapping("/sendState/{gameId}")
     @Transactional
     @ResponseBody
     public Object sendState(@RequestBody String estado, @PathVariable long gameId, HttpSession session) {
-        System.out.println("Estado recibido en el servidor: " + estado);
+        log.info("Estado recibido en el servidor: " + estado);
     
         User sender = entityManager.find(User.class, 
             ((User)session.getAttribute("u")).getId());
+
+
         // FIXME: comprobar que el jugador está jugando en la partida
+        Jugador_partida jugadorPartida = entityManager.createQuery(
+            "SELECT jp FROM Jugador_partida jp WHERE jp.usuario.id = :userId AND jp.partida.id = :gameId", Jugador_partida.class)
+            .setParameter("userId", sender.getId())
+            .setParameter("gameId", gameId)
+            .getSingleResult();
             
+        if (jugadorPartida == null) {
+            log.info("El jugador no está en la partida: " + gameId); // Log de error si el jugador no está en la partida
+            return Map.of("result", "BAD gameID");
+        }
+
         Partida partida = entityManager.find(Partida.class, gameId);
         partida.setInformacionPartida(estado);
         log.info("Estado guardado en la base de datos: " + estado); // Verifica si el mensaje se guarda correctamente
@@ -101,6 +120,7 @@ public class GameChatController {
         return Map.of("result", "OK");
     }
 
+    
 
     /*
      * Cosas copiadas y pegadas de la plantilla sobre los topics

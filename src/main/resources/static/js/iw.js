@@ -203,6 +203,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const gameIdInput = document.getElementById("gameId");
         config.gameId = gameIdInput ? gameIdInput.value : null;
 
+        const usernameInput = document.getElementById("username");
+        config.username = usernameInput ? usernameInput.value : null;
+        
+
         console.log("GameId: ", config.gameId);
         console.log("Config al iniciar: ", config);
 
