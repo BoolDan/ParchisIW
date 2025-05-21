@@ -14,6 +14,9 @@
     overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
+.navbar-toggler {
+    background-color: #240202;
+}
 
 .errTable tr>td:first-child {
     min-width: 200px;
