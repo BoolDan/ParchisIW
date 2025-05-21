@@ -7,39 +7,6 @@ let turnoFinalizado = false; // Indica si el turno ha finalizado
 let fichaSeleccionada; // Ficha seleccionada por el jugador
 let dadoLanzado = false; // Indica si el dado ha sido lanzado
 
-function serializaEstado() {
-    return {
-        rondasJugadas: rondasJugadas,
-        jugadorActual: jugadorActual,
-        jugadores: jugadores.map(jugador => ({
-            nombre: jugador.nombre,
-            color: jugador.color,
-            fichas: jugador.fichas.map(ficha => ({
-                id: ficha.id,
-                posicion: ficha.posicion,
-                encasa: ficha.encasa,
-            }))
-        }))
-    };
-}
-
-function deserializaEstado(datos) {
-    rondasJugadas = datos.rondasJugadas;
-    jugadorActual = datos.jugadorActual;
-    console.log("Jugadores son: ", datos.jugadores);
-    jugadores =  datos.jugadores.map(jugador => ({
-        nombre: jugador.nombre,
-        color: jugador.color,
-        fichas: jugador.fichas.map(ficha => ({
-            id: ficha.id,
-            posicion: ficha.posicion,
-            encasa: ficha.encasa,
-        }))
-    }))
-    console.log("Jugadores deserializados: ", jugadores);
-    actualizarTablero();
-}
-
 document.addEventListener('DOMContentLoaded', function() {
 
     fetch(`/partida/${config.gameId}/jugadores`)
@@ -49,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             config.jugadores = data; // lo guardas si quieres usarlo en otros sitios
             jugadores = generarJugadores(data); // <--- usamos los datos reales
 
+            actualizarListaJugadores(config.jugadores); // Actualiza la lista de jugadores en la interfaz
             tablero = generarEstructuraTablero();
             dado = new Dado();
             renderizarTablero(tablero, jugadores, dado);
@@ -361,6 +329,7 @@ function generarJugadores(datosJugadores) {
     // return listaJugadores;
 
      return datosJugadores.map(j => {
+        console.log("Datos del jugador: ", j);
         const fichas = generarFichasJugador(j.color);
         return {
             nombre: j.nombre,

@@ -91,7 +91,7 @@ public class GameChatController {
     @PostMapping("/sendState/{gameId}")
     @Transactional
     @ResponseBody
-    public Object sendState(@RequestBody String estado, @PathVariable long gameId, HttpSession session) {
+    public Object sendState(@RequestBody Map<String, Object> estado, @PathVariable long gameId, HttpSession session) {
         log.info("Estado recibido en el servidor: " + estado);
     
         User sender = entityManager.find(User.class, 
@@ -106,17 +106,28 @@ public class GameChatController {
             .getSingleResult();
             
         if (jugadorPartida == null) {
-            log.info("El jugador no está en la partida: " + gameId); // Log de error si el jugador no está en la partida
+            log.warn("El jugador no está en la partida: " + gameId); // Log de error si el jugador no está en la partida
             return Map.of("result", "BAD gameID");
         }
 
         Partida partida = entityManager.find(Partida.class, gameId);
-        partida.setInformacionPartida(estado);
-        log.info("Estado guardado en la base de datos: " + estado); // Verifica si el mensaje se guarda correctamente
-    
-        // Enviar mensaje al canal público de la partida
-        messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), estado);
-        log.info("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            String estadoJson = mapper.writeValueAsString(estado);
+
+            partida.setInformacionPartida(estadoJson);
+            log.info("Estado guardado en la base de datos: " + estadoJson); // Verifica si el mensaje se guarda correctamente
+
+            // Enviar mensaje al canal público de la partida
+            messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), estado);
+            log.info("Mensaje enviado al canal: /topic/game/" + partida.getId()); // Verifica si el mensaje se envía al canal
+        
+        } catch (JsonProcessingException e) {
+            log.error("Error al convertir el estado a JSON: " + e.getMessage());
+            return Map.of("result", "ERROR");
+        }    
+        
         return Map.of("result", "OK");
     }
 

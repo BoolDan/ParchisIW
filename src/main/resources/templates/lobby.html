@@ -38,7 +38,7 @@
                 </div>
                 <!-- Botón para unirse -->
                 <div>
-                    <form th:action="@{'/partida/' + ${partida.id}}" th:method="post">
+                    <form th:action="@{'/lobby/' + ${partida.id}}" th:method="post">
                         <button th:if="${partida.numJugadores < partida.jugadoresMax}" type="submit" class="btn btn-primary">Unirse</button>
                         <button th:unless="${partida.numJugadores < partida.jugadoresMax}" class="btn btn-secondary" disabled>Lobby lleno</button>
                     </form>

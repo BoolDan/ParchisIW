@@ -53,7 +53,7 @@ public class PartidaController {
     }
 
    @GetMapping("/lobby")
-    public String listarPartidas(Model model) {
+    public String mostrarPartidas(Model model) {
         // Obtener todas las partidas
         List<Partida> partidas = entityManager.createQuery("SELECT p FROM Partida p", Partida.class).getResultList();
         // Crear un mapa para almacenar las listas de jugadores por partida
@@ -73,6 +73,26 @@ public class PartidaController {
         return "lobby";
 
     }
+
+    @RequestMapping(value = "/lobby/{id}", method= {RequestMethod.POST, RequestMethod.GET})
+    public String mostrarLobbyPartida(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
+
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+
+        List<String> jugadores = entityManager.createQuery(
+                "SELECT u.username FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", String.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        model.addAttribute("partida", partida);
+        model.addAttribute("jugadoresEnPartida", jugadores);
+
+        return "lobbyPartida";
+    }
+    
 
     @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})
     @Transactional
@@ -155,9 +175,6 @@ public class PartidaController {
                 topicPartida.getMembers().add(usuarioActual);
                 entityManager.merge(topicPartida);
 
-                if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
-                    partida.setEstado(Partida.EstadoPartida.EN_CURSO);
-                }
                 entityManager.merge(partida);
             }
             
@@ -217,13 +234,14 @@ public class PartidaController {
 
         // Persistir la partida en la base de datos
         entityManager.persist(nuevaPartida);
+
         Topic topicPartida = new Topic();
         topicPartida.setName("Partida" + nuevaPartida.getId());
         topicPartida.setKey(UserController.generateRandomBase64Token(6));
         entityManager.persist(topicPartida);
-        // Redirigir al lobby
-        return "redirect:/lobby";
 
+        // Redirigir al lobby de la nueva partida
+        return "redirect:/lobby/" + nuevaPartida.getId();
     }
 
 

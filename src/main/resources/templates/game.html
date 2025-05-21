@@ -3,7 +3,7 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
-    <title>Parchís Pachá: Juego</title>
+    <title>Parchís: Juego</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header th:replace="~{fragments/nav.html :: nav}"></header>
@@ -68,6 +68,10 @@
                                 <p><strong>Piezas Restantes:</strong> <span id="info-restantes">4</span></p>
                                 <p><strong>Puntos Acumulados:</strong> 120</p>
                                 <p><strong>Tiempo de Juego:</strong> 15 min</p>
+                                <hr>
+                                <h5>Jugadores</h5>
+                                <ul id="lista-jugadores" class="list-group">
+                                </ul>
                             </div>
                         </div>
                     </div>

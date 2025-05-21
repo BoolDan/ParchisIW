@@ -3,6 +3,38 @@
  * Y actualiza el estado del juego cuando llegan nuevos estados por WS
  */
 
+function serializaEstado() {
+    return {
+        rondasJugadas: rondasJugadas,
+        jugadorActual: jugadorActual,
+        jugadores: jugadores.map(jugador => ({
+            nombre: jugador.nombre,
+            color: jugador.color,
+            fichas: jugador.fichas.map(ficha => ({
+                id: ficha.id,
+                posicion: ficha.posicion,
+                encasa: ficha.encasa,
+            }))
+        }))
+    };
+}
+
+function deserializaEstado(datos) {
+    rondasJugadas = datos.rondasJugadas;
+    jugadorActual = datos.jugadorActual;
+    console.log("Jugadores son: ", datos.jugadores);
+    jugadores =  datos.jugadores.map(jugador => ({
+        nombre: jugador.nombre,
+        color: jugador.color,
+        fichas: jugador.fichas.map(ficha => ({
+            id: ficha.id,
+            posicion: ficha.posicion,
+            encasa: ficha.encasa,
+        }))
+    }))
+    console.log("Jugadores deserializados: ", jugadores);
+    actualizarTablero();
+}
 
 function enviarEstado(){
     const estado = serializaEstado();
@@ -19,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(data => {
                     config.jugadores = data;
                     console.log("Jugadores ACTUALIZADOS:", config.jugadores);
+                    actualizarListaJugadores(config.jugadores);
                     // refrescar tablero si es necesario
                 });
         }
@@ -26,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Lógica principal: si contiene estado de partida, deserialízalo
         if (data.jugadores && typeof cargarEstadoDesdeServidor === 'function') {
             cargarEstadoDesdeServidor(data);
-            
         }
 
         if (typeof oldReceive === 'function') oldReceive(data);
@@ -41,7 +73,7 @@ function actualizarVistaInfoPartida(data) {
    
     // Actualizar rondas jugadas
     document.getElementById("info-rondas").textContent = data.rondasJugadas;
-
+    
     // Buscar al jugador actual (por nombre)
     const jugador = data.jugadores.find(j => j.nombre === config.username);
     if (!jugador) return;
@@ -49,6 +81,17 @@ function actualizarVistaInfoPartida(data) {
     // Calcular cuántas fichas NO están completadas
     const fichasRestantes = jugador.fichas.filter(f => !f.completada).length;
     document.getElementById("info-restantes").textContent = fichasRestantes;
+}
+
+function actualizarListaJugadores(jugadores) {
+    const listaJugadores = document.getElementById("lista-jugadores");
+    listaJugadores.innerHTML = ""; // Limpiar la lista
+
+    jugadores.forEach(jugador => {
+        const li = document.createElement("li");
+        li.textContent = `${jugador.nombre} (${jugador.color})`;
+        listaJugadores.appendChild(li);
+    });
 }
 
 
