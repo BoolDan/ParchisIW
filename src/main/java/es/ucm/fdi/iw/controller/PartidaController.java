@@ -74,25 +74,62 @@ public class PartidaController {
 
     }
 
-    @RequestMapping(value = "/lobby/{id}", method= {RequestMethod.POST, RequestMethod.GET})
-    public String mostrarLobbyPartida(@PathVariable long id, Model model, HttpServletRequest request, HttpSession session) {
-
+    @RequestMapping(value = "/lobby/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @Transactional
+    public String manejarLobby(@PathVariable long id, HttpSession session, Model model) {
+        // Obtener la partida por su ID
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
             throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
         }
+    
+        // Obtener el usuario de la sesión
+        User usuarioActual = (User) session.getAttribute("u");
+        if (usuarioActual == null) {
+            throw new IllegalStateException("No se encontró un usuario en la sesión.");
+        }
+    
+        // Comprobar si el usuario ya está en el lobby
+        boolean yaEnLobby = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
+                .setParameter("pid", id)
+                .setParameter("uid", usuarioActual.getId())
+                .getSingleResult() > 0;
+    
+        if (!yaEnLobby) {
+            // Solo lo añadimos si no está
+            if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
+                return "redirect:/lobby";
+            }
+    
+            Jugador_partida jugadorPartida = new Jugador_partida();
+            jugadorPartida.setUsuario(usuarioActual);
+            jugadorPartida.setPartida(partida);
+            entityManager.persist(jugadorPartida);
+    
+            partida.setNumJugadores(partida.getNumJugadores() + 1);
+            entityManager.merge(partida);
 
+        }
+    
+        // Obtener la lista de jugadores para mostrar en el lobby
         List<String> jugadores = entityManager.createQuery(
                 "SELECT u.username FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", String.class)
                 .setParameter("id", id)
                 .getResultList();
-
+    
+            
+        // Notificar a todos los jugadores por WebSocket
+        messagingTemplate.convertAndSend("/topic/lobby/" + partida.getId(), Map.of(
+                "tipo", "nuevoJugador",
+                "jugadores", jugadores
+        ));
+    
         model.addAttribute("partida", partida);
         model.addAttribute("jugadoresEnPartida", jugadores);
 
         return "lobbyPartida";
     }
-    
 
     @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})
     @Transactional
@@ -244,6 +281,4 @@ public class PartidaController {
         return "redirect:/lobby/" + nuevaPartida.getId();
     }
 
-
-    
 }

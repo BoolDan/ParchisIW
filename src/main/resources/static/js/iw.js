@@ -206,15 +206,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const usernameInput = document.getElementById("username");
         config.username = usernameInput ? usernameInput.value : null;
         
-
-        console.log("GameId: ", config.gameId);
-        console.log("Config al iniciar: ", config);
+        const gameStateInput = document.getElementById("gameState");
+        const gameState = gameStateInput ? gameStateInput.value : null;
 
         if (config.topics && config.topics.length > 0) {
             subs = subs.concat(config.topics.split(",").map(t => `/topic/${t}`));
         }
         if (config.gameId) {
-            subs.push(`/topic/game/${config.gameId}`);
+
+            if (gameState === "ESPERANDO_JUGADORES") {
+                subs.push(`/topic/lobby/${config.gameId}`);
+            }
+            else if (gameState === "EN_CURSO") {
+                subs.push(`/topic/game/${config.gameId}`);
+            }
         }
         ws.initialize(config.socketUrl, subs);
 
