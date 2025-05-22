@@ -6,6 +6,8 @@ let rondasJugadas = 0; // Número de rondas jugadas
 let turnoFinalizado = false; // Indica si el turno ha finalizado
 let fichaSeleccionada; // Ficha seleccionada por el jugador
 let dadoLanzado = false; // Indica si el dado ha sido lanzado
+let ganador;
+let partidafinal = false; // Indica si la partida ha terminado
 document.addEventListener('DOMContentLoaded', function() {
 
     fetch(`/partida/${config.gameId}/jugadores`)
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function obtenerInicio(color) {
     const inicios = {
-        rojo: 32,
+        rojo: 39,
         azul: 22,
         verde: 56,
         amarillo: 5,
@@ -635,8 +637,9 @@ function moverFicha(ficha, valorDado) {
     const nuevaPosicion = compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla);
 
     // Verificar si hay fichas para comer en la nueva posición
-    compruebaComerFicha(nuevaPosicion);
-
+    if (!ficha.enPasillo){
+        compruebaComerFicha(nuevaPosicion);
+    }
     // Actualizar la posición de la ficha
     ficha.posicion = nuevaPosicion;
 
@@ -753,13 +756,15 @@ function siguienteTurno(jugador) {
 }
 
 function FinalizarPartida() {
+    ganado = false;
     jugadores.forEach(jugador => {
         if (jugador.fichas.every(ficha => ficha.completada)) {
-            let ganador = jugador.nombre;
-            return true;
+            console.log(`El jugador ${jugador.nombre} ha ganado la partida`);
+            ganador = jugador.nombre;
+            partidafinal =  true;
         }
     });
-    return false;
+    return partidafinal;
 }
 
 function finalizarTurno(jugador) {
@@ -773,7 +778,7 @@ function finalizarTurno(jugador) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ganador: ganador })
+            body: JSON.stringify({ ganador: ganador})
         });
         window.location.href = `/lobby`;
     }else{
