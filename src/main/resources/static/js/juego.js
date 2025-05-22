@@ -18,18 +18,19 @@ document.addEventListener('DOMContentLoaded', function() {
             config.jugadores = data; // lo guardas si quieres usarlo en otros sitios
             jugadores = generarJugadores(data); // <--- usamos los datos reales
 
-            actualizarListaJugadores(config.jugadores); // Actualiza la lista de jugadores en la interfaz
+            actualizarListaJugadores(jugadores); // Actualiza la lista de jugadores en la interfaz
             tablero = generarEstructuraTablero();
             dado = new Dado();
-            renderizarTablero(tablero, jugadores, dado);
-            iniciarJuego(); 
-                        
+            
             // Fabricamos un "estado" inicial solo con rondas = 0
             actualizarVistaInfoPartida({
                 rondasJugadas: 0,
                 jugadorActual: 0,
                 jugadores: jugadores
             });
+
+            renderizarTablero(tablero, jugadores, dado);
+            iniciarJuego(); 
 
         })
         .catch(err => {

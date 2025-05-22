@@ -214,12 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if (config.gameId) {
 
-            if (gameState === "ESPERANDO_JUGADORES") {
-                subs.push(`/topic/lobby/${config.gameId}`);
-            }
-            else if (gameState === "EN_CURSO") {
-                subs.push(`/topic/game/${config.gameId}`);
-            }
+            subs.push(`/topic/lobby/${config.gameId}`);
+            subs.push(`/topic/game/${config.gameId}`);
+
         }
         ws.initialize(config.socketUrl, subs);
 

@@ -44,6 +44,7 @@ function enviarEstado(){
 document.addEventListener("DOMContentLoaded", () => {
     const oldReceive = ws.receive;
 
+    console.log("Recibiendo datos del servidor:");
     ws.receive = (data) => {
         // Lógica principal: si contiene estado de partida, deserialízalo
         console.log("Recibiendo datos del servidor:", data.jugadores);
