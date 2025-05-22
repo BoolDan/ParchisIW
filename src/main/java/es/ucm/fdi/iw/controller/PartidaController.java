@@ -103,7 +103,7 @@ public class PartidaController {
                 .setParameter("uid", usuarioActual.getId())
                 .getSingleResult() > 0;
         if (!esMiembro) {
-            // No es miembro, redirige o muestra error
+            // No es miembro, redirige al lobby general
             return "redirect:/lobby";
         }
         boolean todosListos = entityManager.createQuery(
@@ -270,6 +270,29 @@ public class PartidaController {
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
             throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+
+        User usuarioActual = (User) session.getAttribute("u");
+        if (usuarioActual == null) {
+            throw new IllegalStateException("No se encontró un usuario en la sesión.");
+        }
+
+        // Comprobar si el usuario está en la partida
+        boolean esMiembro = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
+                .setParameter("pid", id)
+                .setParameter("uid", usuarioActual.getId())
+                .getSingleResult() > 0;
+        
+        if (!esMiembro) {
+            // No es miembro, redirige al lobby general
+            return "redirect:/lobby";
+        }
+
+        // Comprobar si la partida está en curso
+        if (partida.getEstado() != Partida.EstadoPartida.EN_CURSO) {
+            // Aunque sea miembro, si la partida no ha comenzado, redirige al lobby de la partida
+            return "redirect:/lobby/" + id;
         }
 
         // Obtener/crear el Topic
