@@ -452,7 +452,7 @@ function lanzarDado(dado) {
 
         // Antes de tirar, verifica si es tu turno
         if (!esMiTurno()) {
-            alert("¡No es tu turno!");
+            mostrarAlertaNoTurno();
             return;
         }
 
@@ -763,4 +763,10 @@ function finalizarTurno(jugador) {
     dadoLanzado = false; // Reiniciar el estado del dado lanzado
     
     siguienteTurno(jugador); // Avanzar al siguiente turno
+}
+
+function mostrarAlertaNoTurno() {
+    const alerta = document.getElementById('turno-alerta');
+    alerta.style.display = 'block';
+    setTimeout(() => alerta.style.display = 'none', 2000); // 2 segundos
 }
