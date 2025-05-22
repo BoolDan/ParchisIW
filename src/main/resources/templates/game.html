@@ -11,72 +11,52 @@
     <!-- Mostrar mensaje si no hay partidas disponibles -->
     <div th:if="${mensaje}" class="alert alert-warning text-center" th:text="${mensaje}"></div>
 
-    <main id="game-container" class="flex-shrink-0 overflow-auto mt-5" th:data-id="${partida.id}"        
-            th:data-num-jugadores="${partida.numJugadores}">
-            
-            <input type="hidden" id="gameId" th:value="${partida.id}">
-            <input type="hidden" id="username" th:value="${#authentication.name}">
+    <main id="game-container" class="flex-shrink-0 mt-5">
+        <input type="hidden" id="gameId" th:value="${partida.id}">
+        <input type="hidden" id="username" th:value="${#authentication.name}">
 
-            <div class="container text-center min-vh-100 d-flex flex-column justify-content-center">
-                <!-- Tablero -->
-                <div class="row align-items-start">
-                    <div class="col-md-12 d-flex flex-column align-items-center">
-                        <div id="mensaje-turno" class="mb-3" style="font-weight: bold; font-size: 18px;">
-                            <p><strong>Turno de Jugador 1 (rojo)</strong></p>
-                        </div>
-                        <div id="fichas-completadas" class="fichas-completadas mb-3">
-                            <h3>Fichas Completadas</h3>
-                        </div>
-                        <!-- Contenedor del tablero -->
-                        <div id="tablero" class="tablero-container position-relative" style="width: 100%; max-width: 600px; height: 600px;">
-                        </div>
-                            <a href="/lobby" class="btn btn-danger mt-3">Abandonar partida</a>
-                    </div>
+        <div class="d-flex justify-content-center align-items-start" style="gap: 32px;">
+            <!-- Tablero a la izquierda -->
+            <div class="d-flex flex-column align-items-center" style="width: 600px;">
+                <div id="mensaje-turno" class="mb-3" style="font-weight: bold; font-size: 18px;">
+                    <p><strong>Turno de Jugador 1 (rojo)</strong></p>
                 </div>
-            
-                <!-- Fila del chat -->
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div id="chat-container" class="card">
-                            <div class="card-header bg-primary text-white">
-                                <strong>Chat</strong>
-                            </div>
-                            <div class="card-body" style="height: 300px; overflow-y: auto;">
-                                <div id="chatBox">
-                                </div>
-                            </div>
-                            <div class="card-footer bg-light">
-                                <!-- <div class="input-group">
-                                    <input type="text" id="messageInput" class="form-control" placeholder="Escribe un mensaje">
-                                    <button id="sendButton" class="btn btn-primary">Enviar</button>
-                                </div> -->
-                                
-                                    <input type="text" id="messageInput" placeholder="escribe a este usuario" />
-                                    <button id="sendButton" class="btn btn-secondary" type="submit">Enviar</button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="fichas-completadas" class="fichas-completadas mb-3">
+                    <h3>Fichas Completadas</h3>
                 </div>
-            
-                <!-- Fila de Información de la partida -->
-                <div class="row mt-4">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header">Información de la Partida</div>
-                            <div class="card-body">
-                                <p><strong>Rondas Jugadas:</strong> <span id="info-rondas">0</span></p>
-                                <p><strong>Piezas Restantes:</strong> <span id="info-restantes">4</span></p>
-                                <p><strong>Puntos Acumulados:</strong> 120</p>
-                                <p><strong>Tiempo de Juego:</strong> 15 min</p>
-                                <hr>
-                                <h5>Jugadores</h5>
-                                <ul id="lista-jugadores" class="list-group">
-                                </ul>
-                            </div>
-                        </div>
+                <!-- Contenedor del tablero -->
+                <div id="tablero" class="tablero-container position-relative"></div>
+                <a href="/lobby" class="btn btn-danger mt-3">Abandonar partida</a>
+            </div>
+            <!-- Chat a la derecha, bajado visualmente -->
+            <div class="d-flex flex-column align-items-center" style="width: 400px; margin-top: 120px;">
+                <div id="chat-container" class="card w-100" style="height: 600px;">
+                    <div class="card-header bg-primary text-white">
+                        <strong>Chat</strong>
+                    </div>
+                    <div class="card-body d-flex flex-column" style="flex: 1 1 auto; overflow-y: auto;">
+                        <div id="chatBox" style="flex: 1 1 auto; overflow-y: auto;"></div>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <input type="text" id="messageInput" placeholder="escribe en el chat" />
+                        <button id="sendButton" class="btn btn-secondary" type="submit">Enviar</button>
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Información de la partida debajo, centrada -->
+        <div class="d-flex justify-content-center mt-4">
+            <div class="card mx-auto" style="min-width: 350px; max-width: 700px;">
+                <div class="card-header">Información de la Partida</div>
+                <div class="card-body">
+                    <p><strong>Rondas Jugadas:</strong> <span id="info-rondas">0</span></p>
+                    <p><strong>Piezas Restantes:</strong> <span id="info-restantes">4</span></p>
+                    <hr>
+                    <h5>Jugadores</h5>
+                    <ul id="lista-jugadores" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
     </main>
     
     <th:block th:replace="~{fragments/footer.html :: footer}" />
