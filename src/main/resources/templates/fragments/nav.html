@@ -56,26 +56,8 @@
                             <li class="nav-item mx-2">
                                 <a class="nav-link" th:href="@{/login}" href="/login">Iniciar sesión </a>
                             </li>
-                            
-                            <!--/*
-                                Esto es un comentario "thymeleaf" - no se verá en el HTML
-                                El bloque de "debug" sólo está activado si application.properties tiene debug a "true"
-                                    (ver StartupConfig.java para ver cómo se lee de la configuración
-                                    y luego se escribe a ${application.debug})
-                            */-->
-                            <li class="nav-item debug align-self-center" th:if="${application.debug}">
-                                <form class="d-flex" th:action="@{/login}" method="post">
-                                    <input type="hidden" name="username" value="a">
-                                    <input type="hidden" name="password" value="aa">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">a</button>
-                                </form>
-                            </li>
-                            <li class="nav-item debug align-self-center" th:if="${application.debug}">
-                                <form class="d-flex" th:action="@{/login}" method="post">
-                                    <input type="hidden" name="username" value="b">
-                                    <input type="hidden" name="password" value="aa">
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">b</button>
-                                </form>
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" th:href="@{/registro}" href="/login">Registrate </a>
                             </li>
                         </th:block>
                     </ul>

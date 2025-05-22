@@ -53,11 +53,12 @@ public class PartidaController {
     }
 
    @GetMapping("/lobby")
-    public String mostrarPartidas(Model model) {
+    public String mostrarPartidas(Model model, HttpSession session) {
         // Obtener todas las partidas
         List<Partida> partidas = entityManager.createQuery("SELECT p FROM Partida p", Partida.class).getResultList();
         // Crear un mapa para almacenar las listas de jugadores por partida
         Map<Long, List<String>> jugadoresPorPartida = new HashMap<>();
+        Map<Long, Boolean> jugadorenPartida = new HashMap<>();
         for (Partida partida : partidas) {
             // Obtener los nombres de los jugadores asociados a la partida
             List<String> jugadores = entityManager.createQuery(
@@ -65,13 +66,20 @@ public class PartidaController {
                     .setParameter("id", partida.getId())
                     .getResultList();
             jugadoresPorPartida.put(partida.getId(), jugadores);
+            Boolean isinPartida = false;
+            User usuarioActual = (User) session.getAttribute("u");
+            for (String jugador: jugadores) {
+                if (jugador == usuarioActual.getUsername()) {
+                    isinPartida = true;
+                }
+            }
+            jugadorenPartida.put(partida.getId(), isinPartida);
         }
-
         // Añadir las partidas y los jugadores al modelo
         model.addAttribute("partidas", partidas);
         model.addAttribute("jugadoresPorPartida", jugadoresPorPartida);
+        model.addAttribute("jugadorenPartida", jugadorenPartida);
         return "lobby";
-
     }
 
     @RequestMapping(value = "/lobby/{id}", method = {RequestMethod.GET, RequestMethod.POST})
@@ -98,9 +106,10 @@ public class PartidaController {
     
         if (!yaEnLobby) {
             // Solo lo añadimos si no está
-            if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
+            /*if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
                 return "redirect:/lobby";
-            }
+            }*/ 
+            // Obsoleto en la nueva versión ya que si la partida esta llena no se puede entrar.
     
             Jugador_partida jugadorPartida = new Jugador_partida();
             jugadorPartida.setUsuario(usuarioActual);
@@ -123,8 +132,6 @@ public class PartidaController {
                     "listo", row[1]
             ))
             .collect(Collectors.toList());
-    
-            
         // Notificar a todos los jugadores por WebSocket
         messagingTemplate.convertAndSend("/topic/lobby/" + partida.getId(), Map.of(
                 "tipo", "nuevoJugador",
@@ -133,6 +140,7 @@ public class PartidaController {
     
         model.addAttribute("partida", partida);
         model.addAttribute("jugadoresEnPartida", jugadores);
+        model.addAttribute("jugadorActual", usuarioActual.getUsername());
 
         return "lobbyPartida";
     }

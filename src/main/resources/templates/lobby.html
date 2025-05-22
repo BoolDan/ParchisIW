@@ -38,15 +38,15 @@
                 </div>
                 <!-- Botón para unirse -->
                 <div>
-                    <form th:action="@{'/lobby/' + ${partida.id}}" th:method="post">
-                        <button th:if="${partida.numJugadores < partida.jugadoresMax}" type="submit" class="btn btn-primary">Unirse</button>
-                        <button th:unless="${partida.numJugadores < partida.jugadoresMax}" class="btn btn-secondary" disabled>Lobby lleno</button>
-                    </form>
+                   <form th:action="@{'/lobby/' + ${partida.id}}" th:method="post">
+                        <button th:if="${partida.numJugadores < partida.jugadoresMax}" and th:unless="${jugadorenPartida[partida.id]}" type="submit" class="btn btn-primary">Unirse</button>
+                        <button th:if="${jugadorenPartida[partida.id]}" type="submit" class="btn btn-secondary">Entrar a Partida</button>
+                        <button th:unless="${partida.numJugadores < partida.jugadoresMax} or ${jugadorenPartida[partida.id]}" class="btn btn-secondary" disabled>Lobby lleno</button>
+                    </form> 
                 </div>
             </div>
         </div>
     </div>
-
     <th:block th:replace="~{fragments/footer.html :: footer}" />
 
 </body>
