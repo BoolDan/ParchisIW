@@ -45,18 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const oldReceive = ws.receive;
 
     ws.receive = (data) => {
-        if (data.tipo === "nuevoJugador") {
-            fetch(`/partida/${config.gameId}/jugadores`)
-                .then(r => r.json())
-                .then(data => {
-                    config.jugadores = data;
-                    console.log("Jugadores ACTUALIZADOS:", config.jugadores);
-                    actualizarListaJugadores(config.jugadores);
-                    // refrescar tablero si es necesario
-                });
-        }
-
         // Lógica principal: si contiene estado de partida, deserialízalo
+        console.log("Recibiendo datos del servidor:", data.jugadores);
         if (data.jugadores && typeof cargarEstadoDesdeServidor === 'function') {
             cargarEstadoDesdeServidor(data);
         }
@@ -99,8 +89,6 @@ function cargarEstadoDesdeServidor(data) {
     if (data.jugadores) {
         console.log("Deserializando estado desde el servidor:", data);
         deserializaEstado(data);
-
         actualizarVistaInfoPartida(data);
-
     }
 }

@@ -140,9 +140,17 @@ public class PartidaController {
     @PostMapping("/lobby/{id}/toggleListo")
     @Transactional
     @ResponseBody
-    public void toggleListo(@PathVariable long id, @RequestBody Map<String, Object> payload) {
+    public void toggleListo(@PathVariable long id, @RequestBody Map<String, Object> payload, HttpSession session) {
         String jugador = (String) payload.get("jugador");
         boolean listo = (boolean) payload.get("listo");
+
+        User usuarioSesion = (User) session.getAttribute("u");
+        if (usuarioSesion == null) {
+            throw new IllegalStateException("No se encontró un usuario en la sesión.");
+        }
+        if (!usuarioSesion.getUsername().equals(jugador)) {
+            throw new SecurityException("No tienes permiso para cambiar el estado de otro jugador.");
+        }
     
         // Actualizar el estado del jugador en la base de datos
         Jugador_partida jugadorPartida = entityManager.createQuery(
@@ -175,7 +183,7 @@ public class PartidaController {
     @PostMapping("/lobby/{id}/comenzarPartida")
     @Transactional
     @ResponseBody
-    public void comenzarPartida(@PathVariable long id) {
+    public String comenzarPartida(@PathVariable long id) {
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
             throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
@@ -187,13 +195,36 @@ public class PartidaController {
                 .getSingleResult() == 0;
     
         if (todosListos) {
+
+            // Asignar colores a los jugadores que no tengan color
+            List<Jugador_partida> jugadoresPartida = entityManager.createQuery(
+                "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.class)
+                .setParameter("id", id)
+                .getResultList();
+
+            List<Jugador_partida.Color_Jugador> coloresDisponibles = new ArrayList<>(List.of(Jugador_partida.Color_Jugador.values()));
+            // Elimina los colores ya usados (por si acaso)
+            jugadoresPartida.stream()
+                .map(Jugador_partida::getColorJugador)
+                .filter(c -> c != null)
+                .forEach(coloresDisponibles::remove);
+
+            for (Jugador_partida jp : jugadoresPartida) {
+                if (jp.getColorJugador() == null && !coloresDisponibles.isEmpty()) {
+                    jp.setColorJugador(coloresDisponibles.remove(0));
+                    entityManager.merge(jp);
+                }
+            }
+
             partida.setEstado(Partida.EstadoPartida.EN_CURSO);
             entityManager.merge(partida);
-    
+
             messagingTemplate.convertAndSend("/topic/lobby/" + id, Map.of(
                     "tipo", "partidaIniciada"
             ));
         }
+
+        return "";
     }
 
     @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})
@@ -221,82 +252,19 @@ public class PartidaController {
             entityManager.persist(topicPartida);
         }
 
+        // Obtener los usuarios y sus colores desde Jugador_partida
+        List<Jugador_partida> jugadoresPartida = entityManager.createQuery(
+            "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.class)
+            .setParameter("id", id)
+            .getResultList();
 
-        // Si me quiero unir a la partida (POST)
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            User usuarioActual = (User) session.getAttribute("u");
-            if (usuarioActual == null) {
-                throw new IllegalStateException("No se encontró un usuario en la sesión.");
-            }
-
-             // Comprobar si ya está
-            boolean yaEnPartida = entityManager.createQuery(
-                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
-                .setParameter("pid", id)
-                .setParameter("uid", usuarioActual.getId())
-                .getSingleResult() > 0;
-
-            if (!yaEnPartida) {
-                // Solo lo añadimos si no está
-                if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
-                    model.addAttribute("error", "La partida ya está llena.");
-                    return "redirect:/lobby";
-                }
-
-                Jugador_partida jugadorPartida = new Jugador_partida();
-                jugadorPartida.setUsuario(usuarioActual);
-                jugadorPartida.setPartida(partida);
-                // Asignar un color de jugador
-                // Colores disponibles
-                List<Jugador_partida.Color_Jugador> coloresDisponibles = new ArrayList<>(
-                List.of(Jugador_partida.Color_Jugador.values()));
-
-                // Colores ya usados
-                List<Jugador_partida.Color_Jugador> coloresUsados = entityManager.createQuery(
-                    "SELECT jp.colorJugador FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.Color_Jugador.class)
-                    .setParameter("id", partida.getId())
-                    .getResultList();
-
-                coloresDisponibles.removeAll(coloresUsados);
-
-                // Asignar el primero disponible
-                if (!coloresDisponibles.isEmpty()) {
-                    jugadorPartida.setColorJugador(coloresDisponibles.get(0));
-                } else {
-                    // Fallback si todos están usados (no debería pasar)
-                    jugadorPartida.setColorJugador(Jugador_partida.Color_Jugador.ROJO);
-                }
-
-                entityManager.persist(jugadorPartida);
-                // Notificar a todos los jugadores por WebSocket
-                messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), Map.of(
-                    "tipo", "nuevoJugador"
-                ));
-
-                partida.setNumJugadores(partida.getNumJugadores() + 1);
-                topicPartida.getMembers().add(usuarioActual);
-                entityManager.merge(topicPartida);
-
-                entityManager.merge(partida);
-            }
-            
-        }
-        
-        //Recalcular la lista de usuarios y jugadores después del POST
-        List<User> usuarios = entityManager.createQuery(
-                "SELECT u FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", User.class)
-                .setParameter("id", id)
-                .getResultList();
-
-        // Asignar colores a los jugadores
-        List<String> colores = List.of("rojo", "verde", "azul", "amarillo", "morado", "cian");
-        List<Map<String, String>> jugadores = IntStream.range(0, usuarios.size())
-                .mapToObj(i -> {
-                    String nombre = usuarios.get(i).getUsername();
-                    String color = colores.get(i % colores.size());
-                    return Map.of("nombre", nombre, "color", color);
-                })
-                .collect(Collectors.toList());
+        List<Map<String, String>> jugadores = jugadoresPartida.stream()
+            .filter(jp -> jp.getColorJugador() != null)
+            .map(jp -> Map.of(
+                "nombre", jp.getUsuario().getUsername(),
+                "color", jp.getColorJugador().name().toLowerCase()
+            ))
+            .collect(Collectors.toList());
 
         // Añadir todo al modelo
         model.addAttribute("jugadores", jugadores);

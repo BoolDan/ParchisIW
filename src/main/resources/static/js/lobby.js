@@ -26,14 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function actualizarListaJugadores(jugadores) {
     const listaJugadores = document.getElementById("lista-jugadores");
-    listaJugadores.innerHTML = ""; // Limpiar la lista actual
+    const jugadorActual = document.getElementById("jugador-actual").value;
+    listaJugadores.innerHTML = "";
 
     jugadores.forEach(jugador => {
         const li = document.createElement("li");
         li.innerHTML = `
             <span>${jugador.nombre}</span>
             <button class="btn btn-sm ${jugador.listo ? 'btn-outline-success' : 'btn-outline-primary'} ms-2"
-                    onclick="toggleListo(this)" data-jugador="${jugador.nombre}">
+                    onclick="toggleListo(this)" data-jugador="${jugador.nombre}"
+                    ${jugador.nombre !== jugadorActual ? "disabled" : ""}>
                 ${jugador.listo ? "Listo" : "No listo"}
             </button>
         `;
@@ -58,6 +60,15 @@ function toggleListo(button) {
             [csrfHeader]: csrfToken
         },
         body: JSON.stringify({ jugador, listo: !estadoActual })
+    })
+    .then(() => {
+        // Intentar comenzar la partida tras cada cambio de estado
+        fetch(`/lobby/${config.gameId}/comenzarPartida`, {
+            method: "POST",
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        });
     })
     .catch(err => console.error("Error al cambiar el estado de listo:", err));
 }

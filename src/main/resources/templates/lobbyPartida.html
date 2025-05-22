@@ -15,6 +15,7 @@
 
     <input type="hidden" id="gameId" th:value="${partida.id}">
     <input type="hidden" id="gameState" th:value="${partida.estado}">
+    <input type="hidden" id="jugador-actual" th:value="${#authentication.name}">
 
     <div class="container p-4 bg-white shadow rounded mt-auto" style="max-width: 800px;">
         <h2 class="text-center mb-4">Sala de espera</h2>
@@ -24,10 +25,11 @@
             <ul id="lista-jugadores" class="list-unstyled mb-0">
                 <li th:each="jugador : ${jugadoresEnPartida}">
                     <span th:text="${jugador['nombre']}"></span>
-                    <button class="btn btn-sm" 
+                    <button class="btn btn-sm"
                             th:classappend="${jugador['listo']} ? 'btn-outline-success' : 'btn-outline-primary'"
                             th:text="${jugador['listo']} ? 'Listo' : 'No listo'"
                             th:attr="data-jugador=${jugador['nombre']}"
+                            th:disabled="${jugador['nombre']} != ${#authentication.name}"
                             onclick="toggleListo(this)">
                     </button>
                 </li>

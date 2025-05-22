@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
 
+            console.log("Data obtenida:", data);
+
             config.jugadores = data; // lo guardas si quieres usarlo en otros sitios
             jugadores = generarJugadores(data); // <--- usamos los datos reales
 
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             actualizarVistaInfoPartida({
                 rondasJugadas: 0,
                 jugadorActual: 0,
-                jugadores: data
+                jugadores: jugadores
             });
 
         })
