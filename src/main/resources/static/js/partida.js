@@ -70,6 +70,10 @@ function actualizarVistaInfoPartida(data) {
     document.getElementById("info-rondas").textContent = data.rondasJugadas;
     
     // Buscar al jugador actual (por nombre)
+    const soyYo = jugadorActual.nombre === config.username;
+    if (soyYo) {
+        mostrarPopupTurno();
+    }
     const jugador = data.jugadores.find(j => j.nombre === config.username);
     if (!jugador) return;
 
@@ -87,6 +91,14 @@ function actualizarListaJugadores(jugadores) {
         li.textContent = `${jugador.nombre} (${jugador.color})`;
         listaJugadores.appendChild(li);
     });
+}
+
+function mostrarPopupTurno() {
+    const popup = document.getElementById('popup-turno');
+    popup.style.display = 'block';
+    setTimeout(() => {
+        popup.style.display = 'none';
+    }, 1000); // MILISEGUNDOS
 }
 
 
