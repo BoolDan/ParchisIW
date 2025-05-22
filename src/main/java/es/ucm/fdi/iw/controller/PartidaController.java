@@ -82,9 +82,59 @@ public class PartidaController {
         return "lobby";
     }
 
-    @RequestMapping(value = "/lobby/{id}", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/lobby/{id}", method = RequestMethod.GET)
     @Transactional
-    public String manejarLobby(@PathVariable long id, HttpSession session, Model model) {
+    public String mostrarLobby(@PathVariable long id, HttpSession session, Model model) {
+        // Obtener la partida por su ID
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+    
+        // Obtener el usuario de la sesión
+        User usuarioActual = (User) session.getAttribute("u");
+        if (usuarioActual == null) {
+            throw new IllegalStateException("No se encontró un usuario en la sesión.");
+        }
+    
+        boolean esMiembro = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
+                .setParameter("pid", id)
+                .setParameter("uid", usuarioActual.getId())
+                .getSingleResult() > 0;
+        if (!esMiembro) {
+            // No es miembro, redirige o muestra error
+            return "redirect:/lobby";
+        }
+    
+        // Obtener la lista de jugadores para mostrar en el lobby
+        List<Map<String, Object>> jugadores = entityManager.createQuery(
+            "SELECT u.username as nombre, jp.listo as listo FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", Object[].class)
+            .setParameter("id", id)
+            .getResultList()
+            .stream()
+            .map(row -> Map.of(
+                    "nombre", row[0],
+                    "listo", row[1]
+            ))
+            .collect(Collectors.toList());
+
+        // Notificar a todos los jugadores por WebSocket
+        messagingTemplate.convertAndSend("/topic/lobby/" + partida.getId(), Map.of(
+                "tipo", "nuevoJugador",
+                "jugadores", jugadores
+        ));
+    
+        model.addAttribute("partida", partida);
+        model.addAttribute("jugadoresEnPartida", jugadores);
+        model.addAttribute("jugadorActual", usuarioActual.getUsername());
+
+        return "lobbyPartida";
+    }
+
+    @PostMapping("/lobby/{id}/unirse")
+    @Transactional
+    public String unirseLobby(@PathVariable long id, HttpSession session) {
         // Obtener la partida por su ID
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
@@ -105,12 +155,6 @@ public class PartidaController {
                 .getSingleResult() > 0;
     
         if (!yaEnLobby) {
-            // Solo lo añadimos si no está
-            /*if (partida.getNumJugadores() >= partida.getJugadoresMax()) {
-                return "redirect:/lobby";
-            }*/ 
-            // Obsoleto en la nueva versión ya que si la partida esta llena no se puede entrar.
-    
             Jugador_partida jugadorPartida = new Jugador_partida();
             jugadorPartida.setUsuario(usuarioActual);
             jugadorPartida.setPartida(partida);
@@ -118,31 +162,9 @@ public class PartidaController {
     
             partida.setNumJugadores(partida.getNumJugadores() + 1);
             entityManager.merge(partida);
-
         }
     
-        // Obtener la lista de jugadores para mostrar en el lobby
-        List<Map<String, Object>> jugadores = entityManager.createQuery(
-            "SELECT u.username as nombre, jp.listo as listo FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", Object[].class)
-            .setParameter("id", id)
-            .getResultList()
-            .stream()
-            .map(row -> Map.of(
-                    "nombre", row[0],
-                    "listo", row[1]
-            ))
-            .collect(Collectors.toList());
-        // Notificar a todos los jugadores por WebSocket
-        messagingTemplate.convertAndSend("/topic/lobby/" + partida.getId(), Map.of(
-                "tipo", "nuevoJugador",
-                "jugadores", jugadores
-        ));
-    
-        model.addAttribute("partida", partida);
-        model.addAttribute("jugadoresEnPartida", jugadores);
-        model.addAttribute("jugadorActual", usuarioActual.getUsername());
-
-        return "lobbyPartida";
+        return "redirect:/lobby/" + id;
     }
 
     @PostMapping("/lobby/{id}/toggleListo")
@@ -317,6 +339,17 @@ public class PartidaController {
         topicPartida.setName("Partida" + nuevaPartida.getId());
         topicPartida.setKey(UserController.generateRandomBase64Token(6));
         entityManager.persist(topicPartida);
+
+        // Añadir automaticamente al creador de la partida
+        User usuarioActual = (User) model.getAttribute("u");
+        if (usuarioActual != null) {
+            Jugador_partida jugadorPartida = new Jugador_partida();
+            jugadorPartida.setUsuario(usuarioActual);
+            jugadorPartida.setPartida(nuevaPartida);
+            entityManager.persist(jugadorPartida);
+            nuevaPartida.setNumJugadores(nuevaPartida.getNumJugadores() + 1);
+            entityManager.merge(nuevaPartida);
+        }
 
         // Redirigir al lobby de la nueva partida
         return "redirect:/lobby/" + nuevaPartida.getId();
