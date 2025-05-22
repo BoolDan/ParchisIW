@@ -6,7 +6,6 @@ let rondasJugadas = 0; // Número de rondas jugadas
 let turnoFinalizado = false; // Indica si el turno ha finalizado
 let fichaSeleccionada; // Ficha seleccionada por el jugador
 let dadoLanzado = false; // Indica si el dado ha sido lanzado
-
 document.addEventListener('DOMContentLoaded', function() {
 
     fetch(`/partida/${config.gameId}/jugadores`)
@@ -41,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function obtenerInicio(color) {
     const inicios = {
-        rojo: 39,
+        rojo: 32,
         azul: 22,
         verde: 56,
         amarillo: 5,
@@ -436,10 +435,10 @@ function renderizarTablero(tablero, jugadores, dado) {
     tableroContainer.appendChild(table);
 }
 
-function iniciarJuego() {
+function iniciarJuego(tipo) {
     const jugador = jugadores[jugadorActual]; // Obtener el jugador actual
     console.log(`Inicia juego para el jugador ${jugador.color}`);
-    iniciarTurno(jugador); // Iniciar el turno del jugador actual
+    iniciarTurno(jugador, tipo); // Iniciar el turno del jugador actual
 }
 
 function iniciarTurno(jugador) {
@@ -753,13 +752,33 @@ function siguienteTurno(jugador) {
     }
 }
 
+function FinalizarPartida() {
+    jugadores.forEach(jugador => {
+        if (jugador.fichas.every(ficha => ficha.completada)) {
+            let ganador = jugador.nombre;
+            return true;
+        }
+    });
+    return false;
+}
+
 function finalizarTurno(jugador) {
     console.log(`Turno de ${jugador.nombre} finalizado`);
     // Aquí puedes agregar la lógica para finalizar el turno del jugador
     turnoFinalizado = true; // Marcar el turno como finalizado
     dadoLanzado = false; // Reiniciar el estado del dado lanzado
-    
-    siguienteTurno(jugador); // Avanzar al siguiente turno
+    if (FinalizarPartida()) {
+        fetch(`/partida/${config.gameId}/finalizar`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ganador: ganador })
+        });
+        window.location.href = `/lobby`;
+    }else{
+        siguienteTurno(jugador); // Avanzar al siguiente turno
+    }
 }
 
 function mostrarAlertaNoTurno() {

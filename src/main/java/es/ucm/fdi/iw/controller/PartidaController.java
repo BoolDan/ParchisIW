@@ -338,6 +338,7 @@ public class PartidaController {
             "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.class)
             .setParameter("id", id)
             .getResultList();
+        Partida partida = entityManager.find(Partida.class, id);
 
         return jugadoresPartida.stream()
             .map(jp -> Map.of(
@@ -376,9 +377,22 @@ public class PartidaController {
             nuevaPartida.setNumJugadores(nuevaPartida.getNumJugadores() + 1);
             entityManager.merge(nuevaPartida);
         }
-
         // Redirigir al lobby de la nueva partida
         return "redirect:/lobby/" + nuevaPartida.getId();
     }
 
+
+    @PostMapping("/partida/{id}/finalizar")
+    @Transactional
+    public void finalizarPartida(@PathVariable long id, @RequestParam("ganador") String ganador) {
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+    
+        // Cambiar el estado de la partida a FINALIZADA
+        partida.setEstado(Partida.EstadoPartida.FINALIZADA);
+        partida.setResultadoFinal("El ganador de la partida es: " + ganador);
+        entityManager.merge(partida);
+    }
 }

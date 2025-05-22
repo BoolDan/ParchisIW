@@ -14,6 +14,8 @@ function serializaEstado() {
                 id: ficha.id,
                 posicion: ficha.posicion,
                 encasa: ficha.encasa,
+                completada: ficha.completada,
+                enPasillo: ficha.enPasillo,
             }))
         }))
     };
@@ -30,6 +32,8 @@ function deserializaEstado(datos) {
             id: ficha.id,
             posicion: ficha.posicion,
             encasa: ficha.encasa,
+            completada: ficha.completada,
+            enPasillo: ficha.enPasillo,
         }))
     }))
     console.log("Jugadores deserializados: ", jugadores);
