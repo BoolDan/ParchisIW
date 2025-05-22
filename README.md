@@ -104,7 +104,8 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
   - Tablero funcional que permite a los jugadores interactuar con la partida.
   - Lista de jugadores presentes en la partida.
   - **Chat en la partida**: Chat en tiempo real para que los jugadores puedan comunicarse.
-
+- **Pendiente**:
+  - Al terminar la partida te envia directamente al lobby, implementar mensaje de finalización de partida y cambiar el estado de la partida a finalizada. 
 ---
 
 ### **Vista de Administrador**
