@@ -410,6 +410,11 @@ td {
     position: relative;
 }
 
+.negro {
+    background-color: #000;
+    text-align: center;
+}
+
 .amarillo {
     background-color: #FFD700;
     text-align: center;
