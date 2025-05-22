@@ -3,15 +3,24 @@ config.gameId = document.getElementById("gameId")?.value;
 document.addEventListener("DOMContentLoaded", () => {
     console.log("gameId obtenido:", config.gameId);
     
+    const keyInput = document.getElementById("messageInput");
     const sendButton = document.getElementById("sendButton");
+    
     if (sendButton) {
         console.log("El botón de enviar existe.");
         sendButton.addEventListener("click", function () {
             console.log("Botón de enviar clickeado");
             enviarMensaje();
         });
-    } else {
-        console.log("El botón de enviar no se encontró.");
+    } 
+    
+    if (keyInput) {
+        keyInput.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                enviarMensaje();
+            }
+        });
     }
 
     const oldReceive = ws.receive;
@@ -32,6 +41,8 @@ function enviarMensaje() {
 
     console.log("Mensaje a enviar:", mensaje);
     go(`/sendMessage/${config.gameId}`, "POST", mensaje);
+
+    document.getElementById("messageInput").value = "";
 }
 
 function mostrarMensaje(message) {
