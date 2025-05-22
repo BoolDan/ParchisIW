@@ -88,4 +88,11 @@
     <script th:src="@{/js/juego.js}"onload="console.log('✅ juego.js cargado correctamente DESDE GAME.HTML');"></script>
     <script th:src="@{/js/partida.js}"onload="console.log('✅ partida.js cargado correctamente DESDE GAME.HTML');"></script>
 
+    <div id="turno-alerta"
+        class="alert text-center"
+        style="display:none; position:fixed; top:20px; left:50%; transform:translateX(-50%); z-index:9999;
+                background: #d90429; color: #fff; font-size: 1.3rem; font-weight: bold; border: 3px solid #fff; box-shadow: 0 0 10px #d90429;">
+        ¡No es tu turno!
+    </div>
+
 </body>
