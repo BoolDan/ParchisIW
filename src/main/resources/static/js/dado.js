@@ -50,33 +50,32 @@ class Dado {
     }
 
     async lanzar() {
-
         // Marcar el dado como animando y deshabilitar clics
         this.animando = true;
         this.dadoElement.style.pointerEvents = 'none';
 
         const nuevoValor = Math.floor(Math.random() * 6) + 1;
 
-        if (nuevoValor === this.valor) {
-            this.dadoElement.style.transform += ' rotateZ(1deg)';
-            await this.esperar(50);
-            this.valor = nuevoValor;
-        } else {
-            this.valor = nuevoValor;
-        }
+        // Siempre animar, aunque salga el mismo número
+        let extra = Math.floor(Math.random() * 360) + 180; // entre 180 y 540 grados
+        this.dadoElement.style.transition = "transform 1s cubic-bezier(.36,2,.57,.5)";
+        this.dadoElement.style.transform += ` rotateZ(${extra}deg)`;
+
+        await this.esperar(50); // Esperar un poco para que se vea la animación
+
+        this.valor = nuevoValor;
+        this.actualizarAnimacion();
 
         const promesa = new Promise((resolve) => {
             const handler = () => {
                 this.dadoElement.removeEventListener('transitionend', handler);
                 this.animando = false;
                 this.dadoElement.style.pointerEvents = 'auto';
-                console.log('Animación del dado terminada.');
+                this.dadoElement.style.transition = "";
                 resolve(this.valor);
             };
             this.dadoElement.addEventListener('transitionend', handler);
         });
-
-        this.actualizarAnimacion();
 
         return await promesa;
     }
