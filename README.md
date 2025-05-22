@@ -31,14 +31,16 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 4. **Lobby de Partidas**:
    - Lista de partidas en espera de jugadores.
    - Botón para crear una nueva partida.
+      - **Nuevo:** Añadida una sala de espera tras crear la partida, donde los jugadores esperan hasta que el lobby esté lleno. Una vez completo, se muestran botones de "Listo/No Listo" para cada jugador y la partida no comenzará hasta que todos los jugadores estén listos.
+
 
 5. **Configuración del Juego**:
    - Permite a los usuarios configurar las opciones de una nueva partida, como el número de jugadores, el modo de juego y el tipo de partida.
 
 6. **Vista de Juego**:
    - Tablero funcional que permite a los jugadores interactuar con la partida.
-   - Lista de jugadores presentes en la partida.
-   - **Pendiente**: Implementar un chat en tiempo real para la comunicación entre jugadores.
+   - Información de la partida con: Lista de jugadores presentes en la partida, rondas jugadas y piezas restantes para ganar la partida.
+   - Chat en tiempo real para que los jugadores puedan comunicarse.
 
 7. **Vista de Administrador**:
    - Gestión de usuarios: Banear/desbanear usuarios.
@@ -58,8 +60,6 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 ### **Landing Page - Página de Bienvenida**
 - **Implementado**:
   - Botones para acceder a las diferentes secciones del juego (jugar, reglas, clasificación).
-- **Pendiente**:
-  - (?) Mejorar el diseño visual y agregar animaciones.
 
 ---
 
@@ -82,6 +82,7 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 ### **Lobby de Partidas**
 - **Implementado**:
   - Lista de partidas en espera de jugadores.
+  - Sala de espera pre-partida que espera a que todos los jugadores estén dentro para poder empezar la partida.
   - Botón para crear una nueva partida.
 
 ---
@@ -89,6 +90,8 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 ### **Página de Configuración**
 - **Implementado**:
   - Opciones para configurar el número de jugadores, modo de juego y tipo de partida.
+- **Pendiente**:
+  - Modo de juego por equipos y tipo de partida local.
 
 ---
 
@@ -96,8 +99,7 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 - **Implementado**:
   - Tablero funcional que permite a los jugadores interactuar con la partida.
   - Lista de jugadores presentes en la partida.
-- **Pendiente**:
-  - **Chat en la partida**: Implementar un chat en tiempo real para que los jugadores puedan comunicarse.
+  - **Chat en la partida**: Chat en tiempo real para que los jugadores puedan comunicarse.
 
 ---
 
