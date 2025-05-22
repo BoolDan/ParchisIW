@@ -3,6 +3,10 @@ Práctica de la asignatura de Ingeniería Web.
 
 ---
 
+## Credenciales iniciales
+- Usuario: a , Contraseña: aa
+- Usuario: b , Contraseña: aa
+
 ## Integrantes
 - Carlos Clemente Sánchez
 - Daniel de Andrés Fernández
