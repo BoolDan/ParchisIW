@@ -1,11 +1,23 @@
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 document.addEventListener("DOMContentLoaded", () => {
     const oldReceive = ws.receive;
 
     ws.receive = (data) => {
         if (data.tipo === "nuevoJugador") {
-            console.log("Lista de jugadores actualizada:", data.jugadores);
-            
+            console.log("Lista de jugadores actualizada:", data.jugadores);   
             actualizarListaJugadores(data.jugadores);
+        }
+
+        if (data.tipo === "actualizarListos") {
+            console.log("Lista de jugadores actualizada:", data.jugadores);
+            actualizarListaJugadores(data.jugadores);
+        }
+
+        if(data.tipo === "partidaIniciada") {
+            console.log("Partida iniciada");
+            window.location.href = `/partida/${document.getElementById("gameId").value}`;
         }
 
         if (typeof oldReceive === 'function') oldReceive(data);
@@ -16,9 +28,36 @@ function actualizarListaJugadores(jugadores) {
     const listaJugadores = document.getElementById("lista-jugadores");
     listaJugadores.innerHTML = ""; // Limpiar la lista actual
 
-    jugadores.forEach(nombre => {
+    jugadores.forEach(jugador => {
         const li = document.createElement("li");
-        li.textContent = nombre;
+        li.innerHTML = `
+            <span>${jugador.nombre}</span>
+            <button class="btn btn-sm ${jugador.listo ? 'btn-outline-success' : 'btn-outline-primary'} ms-2"
+                    onclick="toggleListo(this)" data-jugador="${jugador.nombre}">
+                ${jugador.listo ? "Listo" : "No listo"}
+            </button>
+        `;
         listaJugadores.appendChild(li);
     });
+}
+
+function toggleListo(button) {
+    const jugador = button.getAttribute("data-jugador");
+    const estadoActual = button.textContent.trim() === "Listo";
+
+    // Cambiar el estado del botón localmente
+    button.textContent = estadoActual ? "No listo" : "Listo";
+    button.classList.toggle("btn-outline-primary", estadoActual);
+    button.classList.toggle("btn-outline-success", !estadoActual);
+
+    // Enviar el cambio de estado al servidor
+    fetch(`/lobby/${config.gameId}/toggleListo`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            [csrfHeader]: csrfToken
+        },
+        body: JSON.stringify({ jugador, listo: !estadoActual })
+    })
+    .catch(err => console.error("Error al cambiar el estado de listo:", err));
 }

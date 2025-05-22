@@ -28,6 +28,7 @@ CREATE TABLE Jugador_Partida (
     ID_Partida INT NOT NULL,
     ID_usuario INT NOT NULL,
     color_ficha ENUM('Rojo', 'Azul', 'Verde', 'Amarillo') NOT NULL,
+    listo BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (ID_Partida) REFERENCES Partida(ID) ON DELETE CASCADE,
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID) ON DELETE CASCADE
 );

@@ -54,4 +54,6 @@ public class Jugador_partida {
     @Column
     @Enumerated(EnumType.STRING)
     private Color_Jugador colorJugador;
+
+    private boolean listo = false;
 }

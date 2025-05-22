@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <th:block th:replace="~{fragments/head :: header}" />
     <title>Parchís: Sala de espera</title>
 </head>
@@ -19,8 +21,16 @@
 
         <div class="card-body d-flex justify-content-between align-items-center">
             <strong>Jugadores en la sala:</strong>
-            <ul id ="lista-jugadores" class="list-unstyled mb-0">
-                <li th:each="jugador : ${jugadoresEnPartida}" th:text="${jugador}"></li>
+            <ul id="lista-jugadores" class="list-unstyled mb-0">
+                <li th:each="jugador : ${jugadoresEnPartida}">
+                    <span th:text="${jugador['nombre']}"></span>
+                    <button class="btn btn-sm" 
+                            th:classappend="${jugador['listo']} ? 'btn-outline-success' : 'btn-outline-primary'"
+                            th:text="${jugador['listo']} ? 'Listo' : 'No listo'"
+                            th:attr="data-jugador=${jugador['nombre']}"
+                            onclick="toggleListo(this)">
+                    </button>
+                </li>
             </ul>
         </div>
     </div>

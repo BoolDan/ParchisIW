@@ -62,9 +62,9 @@ public class SecurityConfig {
 			.requestMatchers("/css/**", "/js/**", "/img/**", "/registro", "/", "/configuracion", "/error", "/reglas", "/torneos/clasificacionTorneos", "/torneos/clasificacionAcabados" ).permitAll()
 			.requestMatchers("/api/**").permitAll()            // <-- public api access
 				.requestMatchers("/admin/**").hasRole("ADMIN")	   // <-- administration
-				.requestMatchers("/user/**", "/game", "/lobby", "/partida/**").hasRole("USER")	   // <-- logged-in users
+				.requestMatchers("/user/**", "/game", "/lobby/", "/partida/**").hasRole("USER")	   // <-- logged-in users
 				.requestMatchers("/admin/**","/torneos/crearTorneo" ,"/torneos/crear").hasRole("ADMIN")	   // <-- administration
-				.requestMatchers("/user/**", "/game", "/lobby", "/partida/**").hasRole("USER")	   // <-- logged-in users
+				.requestMatchers("/user/**", "/game", "/lobby/", "/partida/**").hasRole("USER")	   // <-- logged-in users
 				.anyRequest().authenticated()
             )
             .formLogin(formLogin -> formLogin

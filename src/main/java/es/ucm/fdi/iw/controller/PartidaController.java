@@ -113,10 +113,16 @@ public class PartidaController {
         }
     
         // Obtener la lista de jugadores para mostrar en el lobby
-        List<String> jugadores = entityManager.createQuery(
-                "SELECT u.username FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", String.class)
-                .setParameter("id", id)
-                .getResultList();
+        List<Map<String, Object>> jugadores = entityManager.createQuery(
+            "SELECT u.username as nombre, jp.listo as listo FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", Object[].class)
+            .setParameter("id", id)
+            .getResultList()
+            .stream()
+            .map(row -> Map.of(
+                    "nombre", row[0],
+                    "listo", row[1]
+            ))
+            .collect(Collectors.toList());
     
             
         // Notificar a todos los jugadores por WebSocket
@@ -129,6 +135,65 @@ public class PartidaController {
         model.addAttribute("jugadoresEnPartida", jugadores);
 
         return "lobbyPartida";
+    }
+
+    @PostMapping("/lobby/{id}/toggleListo")
+    @Transactional
+    @ResponseBody
+    public void toggleListo(@PathVariable long id, @RequestBody Map<String, Object> payload) {
+        String jugador = (String) payload.get("jugador");
+        boolean listo = (boolean) payload.get("listo");
+    
+        // Actualizar el estado del jugador en la base de datos
+        Jugador_partida jugadorPartida = entityManager.createQuery(
+                "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.username = :username", Jugador_partida.class)
+                .setParameter("pid", id)
+                .setParameter("username", jugador)
+                .getSingleResult();
+    
+        jugadorPartida.setListo(listo);
+        entityManager.merge(jugadorPartida);
+    
+        // Notificar a todos los jugadores en el lobby
+        List<Map<String, Object>> jugadores = entityManager.createQuery(
+        "SELECT u.username as nombre, jp.listo as listo FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", Object[].class)
+                .setParameter("id", id)
+                .getResultList()
+                .stream()
+                .map(row -> Map.of(
+                        "nombre", row[0],
+                        "listo", row[1]
+                ))
+                .collect(Collectors.toList());
+    
+        messagingTemplate.convertAndSend("/topic/lobby/" + id, Map.of(
+                "tipo", "actualizarListos",
+                "jugadores", jugadores
+        ));
+    }
+
+    @PostMapping("/lobby/{id}/comenzarPartida")
+    @Transactional
+    @ResponseBody
+    public void comenzarPartida(@PathVariable long id) {
+        Partida partida = entityManager.find(Partida.class, id);
+        if (partida == null) {
+            throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
+        }
+    
+        boolean todosListos = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :id AND jp.listo = false", Long.class)
+                .setParameter("id", id)
+                .getSingleResult() == 0;
+    
+        if (todosListos) {
+            partida.setEstado(Partida.EstadoPartida.EN_CURSO);
+            entityManager.merge(partida);
+    
+            messagingTemplate.convertAndSend("/topic/lobby/" + id, Map.of(
+                    "tipo", "partidaIniciada"
+            ));
+        }
     }
 
     @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})
