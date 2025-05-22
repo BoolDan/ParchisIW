@@ -739,14 +739,11 @@ function actualizarTablero() {
 
 
 function siguienteTurno(jugador) {
-
+    rondasJugadas++; // Incrementar el número de rondas jugadas 
     jugadorSender = jugadorActual;
     jugadorActual = (jugadorActual + 1) % jugadores.length; // Cambiar al siguiente jugador
     console.log(`-------------------------------------------------------------`);
     console.log(`Turno del jugador ${jugadores[jugadorActual].color}`);
-    cambioturno = document.getElementById('mensaje-turno');
-    cambioturno.innerHTML = "<p><strong>Turno de "+ jugadorActual + jugadores[jugadorActual].color +"</strong></p>"
-    rondasJugadas++; // Incrementar el número de rondas jugadas 
 
     if (config.socketUrl) {
         if (jugador == jugadores[jugadorSender]){

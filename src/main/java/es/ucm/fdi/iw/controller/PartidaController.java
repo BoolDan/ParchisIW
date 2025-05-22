@@ -106,7 +106,13 @@ public class PartidaController {
             // No es miembro, redirige o muestra error
             return "redirect:/lobby";
         }
-    
+        boolean todosListos = entityManager.createQuery(
+                "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :id AND jp.listo = false", Long.class)
+                .setParameter("id", id)
+                .getSingleResult() == 0;
+        if (todosListos){
+            return "redirect:/partida/" + partida.getId();
+        }
         // Obtener la lista de jugadores para mostrar en el lobby
         List<Map<String, Object>> jugadores = entityManager.createQuery(
             "SELECT u.username as nombre, jp.listo as listo FROM User u JOIN Jugador_partida jp ON u.id = jp.usuario.id WHERE jp.partida.id = :id", Object[].class)
@@ -162,8 +168,7 @@ public class PartidaController {
     
             partida.setNumJugadores(partida.getNumJugadores() + 1);
             entityManager.merge(partida);
-        }
-    
+        } 
         return "redirect:/lobby/" + id;
     }
 
@@ -213,7 +218,7 @@ public class PartidaController {
     @PostMapping("/lobby/{id}/comenzarPartida")
     @Transactional
     @ResponseBody
-    public String comenzarPartida(@PathVariable long id) {
+    public void comenzarPartida(@PathVariable long id) {
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
             throw new IllegalArgumentException("Partida no encontrada con ID: " + id);
@@ -253,8 +258,6 @@ public class PartidaController {
                     "tipo", "partidaIniciada"
             ));
         }
-
-        return "";
     }
 
     @RequestMapping(value = "/partida/{id}", method = {RequestMethod.GET, RequestMethod.POST})

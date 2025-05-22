@@ -213,10 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
             subs = subs.concat(config.topics.split(",").map(t => `/topic/${t}`));
         }
         if (config.gameId) {
-
             subs.push(`/topic/lobby/${config.gameId}`);
             subs.push(`/topic/game/${config.gameId}`);
-
         }
         ws.initialize(config.socketUrl, subs);
 

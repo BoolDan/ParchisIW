@@ -27,20 +27,32 @@ document.addEventListener("DOMContentLoaded", () => {
 function actualizarListaJugadores(jugadores) {
     const listaJugadores = document.getElementById("lista-jugadores");
     const jugadorActual = document.getElementById("jugador-actual").value;
+    const maxjugadores = document.getElementById("maximoPartida");
     listaJugadores.innerHTML = "";
 
-    jugadores.forEach(jugador => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <span>${jugador.nombre}</span>
-            <button class="btn btn-sm ${jugador.listo ? 'btn-outline-success' : 'btn-outline-primary'} ms-2"
-                    onclick="toggleListo(this)" data-jugador="${jugador.nombre}"
-                    ${jugador.nombre !== jugadorActual ? "disabled" : ""}>
-                ${jugador.listo ? "Listo" : "No listo"}
-            </button>
-        `;
-        listaJugadores.appendChild(li);
-    });
+    if (jugadores.length >= maxjugadores.value) {
+        jugadores.forEach(jugador => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${jugador.nombre}</span>
+                <button class="btn btn-sm ${jugador.listo ? 'btn-outline-success' : 'btn-outline-primary'} ms-2"
+                        onclick="toggleListo(this)" data-jugador="${jugador.nombre}"
+                        ${jugador.nombre !== jugadorActual ? "disabled" : ""}>
+                    ${jugador.listo ? "Listo" : "No listo"}
+                </button>
+            `;
+            listaJugadores.appendChild(li);
+        });
+    }else{
+        jugadores.forEach(jugador => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <span>${jugador.nombre}</span>
+                <button class="btn btn-sm btn-outline-primary" data-jugador="${jugador.nombre}" disabled>Esperando...</button>
+            `;
+            listaJugadores.appendChild(li);
+        });
+    }
 }
 
 function toggleListo(button) {
