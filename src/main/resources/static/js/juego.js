@@ -8,6 +8,18 @@ let fichaSeleccionada; // Ficha seleccionada por el jugador
 let dadoLanzado = false; // Indica si el dado ha sido lanzado
 let ganador;
 let partidafinal = false; // Indica si la partida ha terminado
+let inicios = {
+        rojo: 39,//39
+        azul: 22,//22
+        verde: 56,
+        amarillo: 5,
+    };
+let ultimasCasillas = {
+        rojo: 34,
+        azul: 17,
+        verde: 51,
+        amarillo: 68,
+    };
 document.addEventListener('DOMContentLoaded', function() {
 
     fetch(`/partida/${config.gameId}/jugadores`)
@@ -16,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             console.log("Data obtenida:", data);
 
-            config.jugadores = data; // lo guardas si quieres usarlo en otros sitios
-            jugadores = generarJugadores(data); // <--- usamos los datos reales
+            config.jugadores = data.jugadores; // lo guardas si quieres usarlo en otros sitios
+            jugadores = generarJugadores(data.jugadores); // <--- usamos los datos reales
 
             actualizarListaJugadores(jugadores); // Actualiza la lista de jugadores en la interfaz
             tablero = generarEstructuraTablero();
@@ -31,32 +43,24 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             renderizarTablero(tablero, jugadores, dado);
+            if (data.movimientos_turno != null){
+                deserializarEstado(data.movimientos_turno);
+            }
             iniciarJuego(); 
 
-        })
-        .catch(err => {
-            console.error("Error al cargar jugadores:", err);
-        });
+    })
+    .catch(err => {
+        console.error("Error al cargar informacion de partida:", err);
+    });
+    
 
 });
 
 function obtenerInicio(color) {
-    const inicios = {
-        rojo: 39,
-        azul: 22,
-        verde: 56,
-        amarillo: 5,
-    };
     return inicios[color] || null; // Devuelve la posición de inicio según el color
 }
 
 function obtenerUltimaCasilla(color) {
-    const ultimasCasillas = {
-        rojo: 34,
-        azul: 17,
-        verde: 51,
-        amarillo: 68,
-    };
     return ultimasCasillas[color] || null; // Devuelve la última casilla según el color
 }
 
@@ -563,7 +567,12 @@ function compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla) {
         }
         // Ficha está en pasillo 
         else {
-            posicion++;
+            if (posicion < 8){
+                posicion++;
+            }
+            else {
+                console.log("La ficha ya ha llegado a su destino");
+            }
         }
 
         // VERIFICA MURALLA
@@ -611,7 +620,7 @@ function sacarFichaDeCasa(jugador, ficha) {
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
 }
 
-function compruebaComerFicha(nuevaPosicion) {
+function compruebaComerFicha(ficha, nuevaPosicion) {
     // Verificar si hay una ficha en la nueva posición que no sea del jugador actual
     const fichaEnDestino = jugadores
         .filter(j => j !== jugadores[jugadorActual]) // Excluir al jugador actual
@@ -624,9 +633,14 @@ function compruebaComerFicha(nuevaPosicion) {
         );
 
     if (fichaEnDestino) {
-        console.log(`Ficha ${fichaEnDestino.color}-${fichaEnDestino.id} comida y enviada a casa.`);
-        fichaEnDestino.encasa = true;
-        fichaEnDestino.posicion = -1; // Enviar la ficha comida a casa
+        if (fichaEnDestino.posicion != inicios[fichaEnDestino.color]){
+            console.log(`Ficha ${fichaEnDestino.color}-${fichaEnDestino.id} comida y enviada a casa.`);
+            fichaEnDestino.encasa = true;
+            fichaEnDestino.posicion = -1;// Enviar la ficha comida a casa
+            moverFicha(ficha, 20);
+        }else{
+            console.log(`No puedes comer la ficha ${fichaEnDestino.color}-${fichaEnDestino.id} porque está en su casilla de inicio.`);
+        }
     }
 }
 
@@ -636,12 +650,12 @@ function moverFicha(ficha, valorDado) {
     // Calcular la nueva posición considerando murallas y reglas del tablero
     const nuevaPosicion = compruebaMurallasEnElCamino(ficha, valorDado, ultimaCasilla);
 
-    // Verificar si hay fichas para comer en la nueva posición
-    if (!ficha.enPasillo){
-        compruebaComerFicha(nuevaPosicion);
-    }
     // Actualizar la posición de la ficha
     ficha.posicion = nuevaPosicion;
+    // Verificar si hay fichas para comer en la nueva posición
+    if (!ficha.enPasillo){
+        compruebaComerFicha(ficha, nuevaPosicion);
+    }
 
     console.log(`Ficha ${ficha.color}-${ficha.id} movida a la posición ${nuevaPosicion}`);
     actualizarTablero(); // Actualizar el tablero después de mover la ficha
@@ -649,6 +663,9 @@ function moverFicha(ficha, valorDado) {
 
 function actualizarTablero() {
     
+    if (partidafinal){
+        window.location.href = `/lobby`;
+    }
     const tableroContainer = document.getElementById('tablero');
     if (!tableroContainer) {
         console.error("No se encontró el contenedor del tablero.");
@@ -773,6 +790,7 @@ function finalizarTurno(jugador) {
     turnoFinalizado = true; // Marcar el turno como finalizado
     dadoLanzado = false; // Reiniciar el estado del dado lanzado
     if (FinalizarPartida()) {
+        enviarEstado();
         fetch(`/partida/${config.gameId}/finalizar`, {
             method: 'POST',
             headers: {

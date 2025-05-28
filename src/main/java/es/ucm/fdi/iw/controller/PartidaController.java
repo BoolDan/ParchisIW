@@ -333,20 +333,28 @@ public class PartidaController {
 
     @GetMapping("/partida/{id}/jugadores")
     @ResponseBody
-    public List<Map<String, String>> obtenerJugadores(@PathVariable long id) {
+    public Map<String, Object> obtenerJugadores(@PathVariable long id) {
         List<Jugador_partida> jugadoresPartida = entityManager.createQuery(
             "SELECT jp FROM Jugador_partida jp WHERE jp.partida.id = :id", Jugador_partida.class)
             .setParameter("id", id)
             .getResultList();
         Partida partida = entityManager.find(Partida.class, id);
 
-        return jugadoresPartida.stream()
+        List<Map<String,String>> jugadores = jugadoresPartida.stream()
             .map(jp -> Map.of(
                 "nombre", jp.getUsuario().getUsername(),
                 "color", jp.getColorJugador().name().toLowerCase()
             ))
             .collect(Collectors.toList());
+
+        Map<String, Object> partidaInfo = new HashMap<>();
+        partidaInfo.put("jugadores", jugadores);
+        if (partida.getMovimientos_turno() != null){
+            partidaInfo.put("movimientos_turno", partida.getMovimientos_turno());
+        }
+        return partidaInfo;
     }
+    
 
     @PostMapping("/partida/crear")
     @Transactional
