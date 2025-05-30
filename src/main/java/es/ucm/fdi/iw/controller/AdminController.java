@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.model.Lorem;
 import es.ucm.fdi.iw.model.Torneo;
+import es.ucm.fdi.iw.model.Partida;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.Message;
 import jakarta.persistence.EntityManager;
@@ -67,6 +68,9 @@ public class AdminController {
         model.addAttribute("torneos", 
             entityManager.createQuery("select t from Torneo t").getResultList());
 
+        model.addAttribute("partidas", 
+            entityManager.createQuery("select p from Partida p where p.estado = 'EN_CURSO'").getResultList());
+
         model.addAttribute("mensajes", 
             entityManager.createQuery("select m from Message m where m.reported=true").getResultList());
 
@@ -102,6 +106,20 @@ public class AdminController {
         }
         return torneos.stream().map(Torneo::toTransfer).collect(Collectors.toList());
     }
+
+    @GetMapping("/partidas")
+    @ResponseBody
+    public List<Partida.Transfer> getPartidasEnCurso() {
+        log.info("Buscando partidas en curso");
+        List<Partida> partida = entityManager.createQuery("SELECT p FROM Partida p WHERE p.estado = :estado", Partida.class)
+            .setParameter("estado", Partida.EstadoPartida.EN_CURSO)
+            .getResultList();
+        return partida.stream()
+        .map(Partida::toTransfer)
+        .collect(Collectors.toList());
+    }
+    
+
 
     @PostMapping("/toggle/{id}")
     @Transactional

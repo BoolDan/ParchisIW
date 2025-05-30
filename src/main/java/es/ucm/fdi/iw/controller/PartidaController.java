@@ -152,7 +152,13 @@ public class PartidaController {
         if (usuarioActual == null) {
             throw new IllegalStateException("No se encontró un usuario en la sesión.");
         }
-    
+        
+        // Comprobar si la partida ya está llena
+        
+        if (partida.getNumJugadores() > partida.getJugadoresMax()) {
+            // La partida está llena, redirigir al lobby general
+            return "redirect:/lobby";
+        }
         // Comprobar si el usuario ya está en el lobby
         boolean yaEnLobby = entityManager.createQuery(
                 "SELECT COUNT(jp) FROM Jugador_partida jp WHERE jp.partida.id = :pid AND jp.usuario.id = :uid", Long.class)
@@ -284,7 +290,7 @@ public class PartidaController {
                 .setParameter("uid", usuarioActual.getId())
                 .getSingleResult() > 0;
         
-        if (!esMiembro) {
+        if (!esMiembro && !usuarioActual.getRoles().contains(User.Role.ADMIN.toString())) {
             // No es miembro, redirige al lobby general
             return "redirect:/lobby";
         }
@@ -349,8 +355,8 @@ public class PartidaController {
 
         Map<String, Object> partidaInfo = new HashMap<>();
         partidaInfo.put("jugadores", jugadores);
-        if (partida.getMovimientos_turno() != null){
-            partidaInfo.put("movimientos_turno", partida.getMovimientos_turno());
+        if (partida.getInformacionPartida() != null){
+            partidaInfo.put("movimientos_turno", partida.getInformacionPartida());
         }
         return partidaInfo;
     }

@@ -90,6 +90,21 @@
                         </ul>
                     </div>
                 </div>
+
+                <div class="col-md-4">
+                    <div class="section-card flex-column h-100 scrollable-column">
+                        <h3 class="section-title">Partidas</h3>
+                        <ul>
+                            <li th:each="partida : ${partidas}">
+                                <a class="btn btn-outline-success"
+                                   th:text="${partida.id}"
+                                   th:href="@{'/partida/' + ${partida.id}}">
+                                    Partida ID: <span th:text="${partida.id}">12345</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         

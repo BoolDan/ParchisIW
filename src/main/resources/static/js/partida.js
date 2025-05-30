@@ -57,6 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.jugadores && typeof cargarEstadoDesdeServidor === 'function') {
             cargarEstadoDesdeServidor(data);
         }
+        if (data.valor && typeof cargarDadoDesdeServidor === 'function'){
+            cargarDadoDesdeServidor(data);
+        }
 
         if (typeof oldReceive === 'function') oldReceive(data);
     };
@@ -111,3 +114,19 @@ function cargarEstadoDesdeServidor(data) {
         actualizarVistaInfoPartida(data);
     }
 }
+
+function deserializarDado(data) {
+    valorDado = data.valor;
+
+    dado.setValor(valorDado); // Actualiza la animación del dado con el nuevo valor
+}
+
+function cargarDadoDesdeServidor(data) {    
+    if (data.valor) {
+        console.log("Deserializando dado desde el servidor:", data);
+        deserializarDado(data);
+    }
+}
+
+
+

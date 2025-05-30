@@ -20,6 +20,10 @@ let ultimasCasillas = {
         verde: 51,
         amarillo: 68,
     };
+
+const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
 document.addEventListener('DOMContentLoaded', function() {
 
     fetch(`/partida/${config.gameId}/jugadores`)
@@ -35,12 +39,16 @@ document.addEventListener('DOMContentLoaded', function() {
             tablero = generarEstructuraTablero();
             dado = new Dado();
             
+            if (!data.informacion_partida){
             // Fabricamos un "estado" inicial solo con rondas = 0
-            actualizarVistaInfoPartida({
-                rondasJugadas: 0,
-                jugadorActual: 0,
-                jugadores: jugadores
-            });
+                actualizarVistaInfoPartida({
+                    rondasJugadas: 0,
+                    jugadorActual: 0,
+                    jugadores: jugadores
+                });
+            }else{
+                deserializarEstado(data.informacion_partida);
+            }
 
             renderizarTablero(tablero, jugadores, dado);
             if (data.movimientos_turno != null){
@@ -448,7 +456,43 @@ function iniciarJuego(tipo) {
 }
 
 function iniciarTurno(jugador) {
-    lanzarDado(dado); // Lanzar el dado al iniciar el turno
+    lanzarDadoApi(dado); // Lanzar el dado desde el server al iniciar el turno
+    //lanzarDado(dado); // Lanzar el dado al iniciar el turno
+}
+
+function lanzarDadoApi(dado) {
+    const dadoElement = dado.getElemento();
+    dadoElement.addEventListener('click', async () => {
+        fetch(`/api/dado/${config.gameId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                [csrfHeader]: csrfToken
+            }
+        })
+        .then(data => {
+            console.log("JSON del dado: ", data);
+            
+        })
+        .catch(err => console.error("Error al obtener valor del dado", err));
+        
+        if (!esMiTurno()) {
+            mostrarAlertaNoTurno();
+            return;
+        }
+
+        if (dadoLanzado) {
+            console.log("El dado ya ha sido lanzado");
+            return; // Evitar lanzar el dado varias veces
+        }
+
+        if (!dado.animando) {
+            dadoLanzado = true;
+            const valor = await dado.lanzar();
+            console.log("Dado lanzado con valor:", dado.valor);
+            habilitarFichasClicables(dado.valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
+        }
+    });
 }
 
 function lanzarDado(dado) {
@@ -469,8 +513,8 @@ function lanzarDado(dado) {
         if (!dado.animando) {
             dadoLanzado = true;
             const valor = await dado.lanzar();
-            console.log("Dado lanzado con valor:", valor);
-            habilitarFichasClicables(valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
+            console.log("Dado lanzado con valor:", dado.valor);
+            habilitarFichasClicables(dado.valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
         }
     }); // Eliminar el evento después de lanzarlo una vez
 }

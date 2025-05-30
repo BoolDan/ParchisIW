@@ -1,17 +1,23 @@
 package es.ucm.fdi.iw.controller;
 
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.ucm.fdi.iw.model.Partida;
 import jakarta.persistence.EntityManager;
 
 
@@ -29,6 +35,9 @@ public class ApiController {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     private static final Logger log = LogManager.getLogger(ApiController.class);
 
@@ -51,5 +60,22 @@ public class ApiController {
     public Map<String,Long> usersCount() {
         return Map.of("count", 
             (Long)entityManager.createQuery("SELECT COUNT(u) FROM User u").getSingleResult());
+    }
+
+
+    
+    @PostMapping("/dado/{id}")
+
+    public Map<String,Object> valorDado(@PathVariable long id) {
+        Random random = new Random();
+
+        int dado = random.nextInt(6) + 1;
+
+        Partida partida = entityManager.find(Partida.class, id);
+
+        messagingTemplate.convertAndSend("/topic/game/" + partida.getId(), Map.of("valor", dado));
+        log.info("Dado lanzado: " + dado + " para la partida con id: " + id);
+        
+        return Map.of("valor", dado);
     }
 }

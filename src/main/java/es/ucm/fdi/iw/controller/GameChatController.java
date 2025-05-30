@@ -109,6 +109,7 @@ public class GameChatController {
             log.warn("El jugador no está en la partida: " + gameId); // Log de error si el jugador no está en la partida
             return Map.of("result", "BAD gameID");
         }
+        //Paso intermedio en el que comprobemos el estado de la partida.
 
         Partida partida = entityManager.find(Partida.class, gameId);
 

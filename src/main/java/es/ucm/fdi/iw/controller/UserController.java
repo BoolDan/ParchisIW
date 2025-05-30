@@ -177,6 +177,20 @@ public class UserController {
 		return "user";
 	}	
 
+
+	@PostMapping("/contrareporte/{id}")
+	public List<Message.Transfer> conseguirReportes(@PathVariable long id) {
+
+		User user = entityManager.find(User.class, id); 
+		List<Message> mensajes = entityManager.createQuery("SELECT m FROM Message m WHERE m.emisor = :user AND m.reported = true", Message.class)
+			.setParameter("user", user)
+			.getResultList();
+
+		return mensajes.stream()
+			.map(Message::toTransfer)
+			.collect(Collectors.toList());
+	}
+
     /**
      * Returns the default profile pic
      * 

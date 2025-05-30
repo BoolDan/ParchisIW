@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/head :: header}" />
+    <title>Contrareportes de <span th:text="${user.username}">Usuario</span></title>
+    <style>
+        .contrareporte-form {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="~{fragments/nav.html :: nav}"></header>
+    <main class="container mt-4">
+        <h1 class="text-center mb-4">Mensajes reportados de <span th:text="${user.username}">Usuario</span></h1>
+        <div id="reportes-lista">
+            <!-- Aquí se mostrarán los mensajes reportados -->
+        </div>
+    </main>
+    <th:block th:replace="~{fragments/footer.html :: footer}" />
+
+    <script>
+        // Suponemos que tienes el id del usuario disponible en una variable Thymeleaf
+        const userId = /*[[${user.id}]]*/ 0;
+
+        // Cargar mensajes reportados vía AJAX
+        fetch(`/user/contrareporte/${userId}`)
+            .then(res => res.json())
+            .then(mensajes => {
+                const contenedor = document.getElementById('reportes-lista');
+                if (mensajes.length === 0) {
+                    contenedor.innerHTML = '<div class="alert alert-info text-center">No hay mensajes reportados.</div>';
+                    return;
+                }
+                mensajes.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = "card mb-3";
+                    div.innerHTML = `
+                        <div class="card-body">
+                            <p><strong>Fecha:</strong> ${m.dateSent ? m.dateSent.replace('T', ' ').substring(0, 16) : ''}</p>
+                            <p><strong>Texto:</strong> ${m.text}</p>
+                            <button class="btn btn-warning btn-sm" onclick="mostrarContrareporte(this)">Escribir contrareporte</button>
+                            <form class="contrareporte-form" onsubmit="enviarContrareporte(event, ${m.id})">
+                                <textarea class="form-control mt-2" name="contrareporte" rows="2" placeholder="Escribe tu contrareporte aquí..." required></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar</button>
+                            </form>
+                        </div>
+                    `;
+                    contenedor.appendChild(div);
+                });
+            });
+
+        function mostrarContrareporte(btn) {
+            const form = btn.nextElementSibling;
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function enviarContrareporte(event, mensajeId) {
+            event.preventDefault();
+            const form = event.target;
+            const texto = form.contrareporte.value;
+            fetch(`/user/contrareporte/${mensajeId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ texto })
+            })
+            .then(res => {
+                if (res.ok) {
+                    form.innerHTML = '<div class="alert alert-success mt-2">Contrareporte enviado correctamente.</div>';
+                } else {
+                    form.innerHTML = '<div class="alert alert-danger mt-2">Error al enviar el contrareporte.</div>';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

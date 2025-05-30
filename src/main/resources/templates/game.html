@@ -3,6 +3,8 @@
 
 <head>
     <th:block th:replace="~{fragments/head :: header}" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Parchís: Juego</title>
 </head>
 <body class="d-flex flex-column min-vh-100">

@@ -12,6 +12,10 @@ class Dado {
         this.actualizarAnimacion(); // Mostrar la cara inicial rotando el cubo
     }
 
+    setValor(valor){
+        this.valor = valor;
+    }
+
     crearCaras() {
         const posiciones = {
             1: [[1, 1]],
@@ -54,7 +58,7 @@ class Dado {
         this.animando = true;
         this.dadoElement.style.pointerEvents = 'none';
 
-        const nuevoValor = Math.floor(Math.random() * 6) + 1;
+        //const nuevoValor = Math.floor(Math.random() * 6) + 1;
 
         // Siempre animar, aunque salga el mismo número
         let extra = Math.floor(Math.random() * 360) + 180; // entre 180 y 540 grados
@@ -63,7 +67,7 @@ class Dado {
 
         await this.esperar(50); // Esperar un poco para que se vea la animación
 
-        this.valor = nuevoValor;
+        //this.valor = nuevoValor;
         this.actualizarAnimacion();
 
         const promesa = new Promise((resolve) => {

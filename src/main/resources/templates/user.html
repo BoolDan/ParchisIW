@@ -47,6 +47,16 @@
                 </form>
             </div>
         </div>
+        <div class="container">
+    <div th:if="${user.enabled}" class="alert alert-success text-center mt-4">
+        El usuario <span th:text="${user.username}">Paco</span> no se encuentra baneado
+    </div>
+    <div th:unless="${user.enabled}" class="alert alert-danger text-center mt-4">
+        El usuario <span th:text="${user.username}">Paco</span> está baneado
+
+        <a id="contrareporte" th:href="@{'/contrareporte'}" class="btn btn-warning mt-2">Apelar</a>
+    </div>
+</div>
     </main>
 
     <th:block th:replace="~{fragments/footer.html :: footer}" />
