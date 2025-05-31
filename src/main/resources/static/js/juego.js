@@ -39,21 +39,23 @@ document.addEventListener('DOMContentLoaded', function() {
             tablero = generarEstructuraTablero();
             dado = new Dado();
             
-            if (!data.informacion_partida){
+            if (!data.movimientos_turno){
             // Fabricamos un "estado" inicial solo con rondas = 0
                 actualizarVistaInfoPartida({
                     rondasJugadas: 0,
                     jugadorActual: 0,
                     jugadores: jugadores
                 });
+                renderizarTablero(tablero, jugadores, dado);
             }else{
-                deserializarEstado(data.informacion_partida);
+                let info = data.movimientos_turno;
+                if (typeof info === "string") {
+                    info = JSON.parse(info);
+                }
+                renderizarTablero(tablero, jugadores, dado);
+                deserializaEstado(info);
             }
-
-            renderizarTablero(tablero, jugadores, dado);
-            if (data.movimientos_turno != null){
-                deserializarEstado(data.movimientos_turno);
-            }
+            
             iniciarJuego(); 
 
     })
