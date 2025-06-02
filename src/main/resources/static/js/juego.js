@@ -458,7 +458,13 @@ function iniciarJuego(tipo) {
 }
 
 function iniciarTurno(jugador) {
-    lanzarDadoApi(dado); // Lanzar el dado desde el server al iniciar el turno
+    if (!dadoLanzado){
+        lanzarDadoApi(dado); // Lanzar el dado desde el server al iniciar el turno
+        enviarEstado(); // Enviar el estado del juego al servidor
+    }else{
+        habilitarFichasClicables(dado.valor, jugadores[jugadorActual]); // Habilitar fichas clicables si el dado ya ha sido lanzado
+    }
+    
     //lanzarDado(dado); // Lanzar el dado al iniciar el turno
 }
 

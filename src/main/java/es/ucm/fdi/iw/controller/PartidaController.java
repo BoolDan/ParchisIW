@@ -356,7 +356,7 @@ public class PartidaController {
         Map<String, Object> partidaInfo = new HashMap<>();
         partidaInfo.put("jugadores", jugadores);
         if (partida.getInformacionPartida() != null){
-            partidaInfo.put("movimientos_turno", partida.getInformacionPartida());
+            partidaInfo.put("informacion_partida", partida.getInformacionPartida());
         }
         return partidaInfo;
     }

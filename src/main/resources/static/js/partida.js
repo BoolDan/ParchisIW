@@ -8,6 +8,8 @@ function serializaEstado() {
         rondasJugadas: rondasJugadas,
         jugadorActual: jugadorActual,
         partidafinal: partidafinal,
+        valorDado: dado.valor,
+        dadoLanzado: dadoLanzado,
         jugadores: jugadores.map(jugador => ({
             nombre: jugador.nombre,
             color: jugador.color,
@@ -26,6 +28,8 @@ function deserializaEstado(datos) {
     rondasJugadas = datos.rondasJugadas;
     jugadorActual = datos.jugadorActual;
     partidafinal = datos.partidafinal;
+    dado.valor = datos.valorDado;
+    dadoLanzado = datos.dadoLanzado;
     console.log("Jugadores son: ", datos.jugadores);
     jugadores =  datos.jugadores.map(jugador => ({
         nombre: jugador.nombre,
