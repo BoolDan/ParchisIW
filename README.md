@@ -140,3 +140,24 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 - **Estilo de botones cerrados**: https://getbootstrap.com/docs/5.3/components/close-button/
 - **Emojis en HTML**: https://www.w3schools.com/html/html_emojis.asp
 - **Posicionamiento en Bootstrap**: https://getbootstrap.com/docs/5.0/utilities/position/
+
+
+# Entrega post-examen
+
+## Integrantes:
+- Daniel de Andrés Fernández
+- Mario Gallego Hernández
+- Mauricio Nilton Calderón Barazorda
+
+## Mejoras:
+### Demasiados jugadores
+- Creemos haber solucionado el problema de que mediante post a `/lobby/{id}/unirse` puedan unirse más jugadores a las partidas pero no somos capaces de reproducir el problema por lo que no lo podemos confirmar.
+### Soluciones a ejercicios de examen:
+- Dado tirado por el servidor: Cambiado el código para que el dado sea el valor devuelto de `/dado/{idPartida}` desde ApiController.
+- Indicador en perfil: Se ha añadido un indicador en el perfil que avisa si has sido reportado (No se ha añadido la funcionalidad de contra-reporte).
+-Admin puede ver partidas en curso: Hemos cambiado algunos parámetros de seguridad para que a pesar de no permitir a usuarios que no estén en la partida el poder observar la partida, en caso de tener el rol de administrador sí podrá verlo.
+
+### Cambios extra:
+- Partida iniciada: Nos habiamos dado cuenta de que al salir y entrar de la partida, al usuario se le reiniciaba el tablero y no recibía el estado de la partida correctamente reiniciando de cero una partida ya en curso. Ahora al entrar en la partida de nuevo recibe el estado de la partida correctamente y no ve el tablero vacío.
+
+
