@@ -155,7 +155,7 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 ### Soluciones a ejercicios de examen:
 - Dado tirado por el servidor: Cambiado el código para que el dado sea el valor devuelto de `/dado/{idPartida}` desde ApiController.
 - Indicador en perfil: Se ha añadido un indicador en el perfil que avisa si has sido reportado (No se ha añadido la funcionalidad de contra-reporte).
--Admin puede ver partidas en curso: Hemos cambiado algunos parámetros de seguridad para permitir al administrador (y solo al administrador) observar las partidas que se encuentran en curso, aunque es capaz de ver todos los cambios en el tablero en tiempo real ya que se subscribe tanto al chat de actualizaciones de la partida como al chat de la partida, por ello también es capaz de escribir en el chat si así lo desea, no se le considera un jugador de la partida así que no tendrá piezas ni podrá tirar del dado (el aviso de no es tu turno aparece).
+- Admin puede ver partidas en curso: Hemos cambiado algunos parámetros de seguridad para permitir al administrador (y solo al administrador) observar las partidas que se encuentran en curso, aunque es capaz de ver todos los cambios en el tablero en tiempo real ya que se subscribe tanto al chat de actualizaciones de la partida como al chat de la partida, por ello también es capaz de escribir en el chat si así lo desea, no se le considera un jugador de la partida así que no tendrá piezas ni podrá tirar del dado (el aviso de no es tu turno aparece).
 
 
 ### Cambios extra:
