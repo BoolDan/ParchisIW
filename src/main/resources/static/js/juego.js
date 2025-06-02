@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tablero = generarEstructuraTablero();
             dado = new Dado();
             
-            if (!data.movimientos_turno){
+            if (!data.informacion_partida){
             // Fabricamos un "estado" inicial solo con rondas = 0
                 actualizarVistaInfoPartida({
                     rondasJugadas: 0,
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 renderizarTablero(tablero, jugadores, dado);
             }else{
-                let info = data.movimientos_turno;
+                let info = data.informacion_partida;
                 if (typeof info === "string") {
                     info = JSON.parse(info);
                 }
