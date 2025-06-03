@@ -155,7 +155,7 @@ public class PartidaController {
         
         // Comprobar si la partida ya está llena
         
-        if (partida.getNumJugadores() > partida.getJugadoresMax()) {
+        if (partida.getNumJugadores()+1 > partida.getJugadoresMax()) {
             // La partida está llena, redirigir al lobby general
             return "redirect:/lobby";
         }
