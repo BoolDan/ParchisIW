@@ -133,13 +133,13 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 
 ## Material Utilizado para la Implementación
 - **Estilo de botones**: https://www.eniun.com/botones-css-estilos/
-- **Estilo de cartas**: https://getbootstrap.com/docs/4.0/components/card/
-- **Espaciado de elementos**: https://getbootstrap.com/docs/4.0/utilities/spacing/
+- **Estilo de cartas**: https://getbootstrap.com/docs/5.3/components/card/
+- **Espaciado de elementos**: https://getbootstrap.com/docs/5.3/utilities/spacing/
 - **Estilo del chat**: https://www.youtube.com/watch?v=3JyQ2_wBqBU
-- **Columnas de Bootstrap**: https://getbootstrap.com/docs/5.0/layout/columns/
+- **Columnas de Bootstrap**: https://getbootstrap.com/docs/5.3/layout/columns/
 - **Estilo de botones cerrados**: https://getbootstrap.com/docs/5.3/components/close-button/
 - **Emojis en HTML**: https://www.w3schools.com/html/html_emojis.asp
-- **Posicionamiento en Bootstrap**: https://getbootstrap.com/docs/5.0/utilities/position/
+- **Posicionamiento en Bootstrap**: https://getbootstrap.com/docs/5.3/utilities/position/
 
 
 # Entrega post-examen
