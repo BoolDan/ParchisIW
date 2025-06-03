@@ -157,7 +157,7 @@ public class PartidaController {
         
         if (partida.getNumJugadores()+1 > partida.getJugadoresMax()) {
             // La partida está llena, redirigir al lobby general
-            return "redirect:/lobby";
+            return "redirect:/lobby?lleno=true";
         }
         // Comprobar si el usuario ya está en el lobby
         boolean yaEnLobby = entityManager.createQuery(

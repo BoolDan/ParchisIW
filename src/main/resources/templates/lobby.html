@@ -8,6 +8,11 @@
 </head>
 
 <body class="d-flex justify-content-center flex-column min-vh-100">
+    <script>
+        if (window.location.search.includes('lleno=true')) {
+            alert('El lobby está lleno. No puedes unirte a esta partida.');
+        }
+    </script>
 
     <header th:replace="~{fragments/nav.html :: nav}"></header>
 
