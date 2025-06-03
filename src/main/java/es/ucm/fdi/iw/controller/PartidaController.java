@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
@@ -140,7 +141,7 @@ public class PartidaController {
 
     @PostMapping("/lobby/{id}/unirse")
     @Transactional
-    public String unirseLobby(@PathVariable long id, HttpSession session) {
+    public String unirseLobby(@PathVariable long id, HttpSession session, RedirectAttributes redirectAttributes) {
         // Obtener la partida por su ID
         Partida partida = entityManager.find(Partida.class, id);
         if (partida == null) {
@@ -157,7 +158,8 @@ public class PartidaController {
         
         if (partida.getNumJugadores()+1 > partida.getJugadoresMax()) {
             // La partida está llena, redirigir al lobby general
-            return "redirect:/lobby?lleno=true";
+            redirectAttributes.addFlashAttribute("error", "La partida a la que intentaste unirte está llena.");
+            return "redirect:/lobby";
         }
         // Comprobar si el usuario ya está en el lobby
         boolean yaEnLobby = entityManager.createQuery(
