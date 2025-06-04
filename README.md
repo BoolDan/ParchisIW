@@ -148,6 +148,8 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 - Daniel de Andrés Fernández
 - Mario Gallego Hernández
 - Mauricio Nilton Calderón Barazorda
+- Carla Acebes Montalvillo
+- Carlos Clemente Sánchez
 
 ## Mejoras:
 ### Demasiados jugadores
