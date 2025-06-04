@@ -162,5 +162,4 @@ La versión actual del proyecto **ParchisIW** es una plataforma funcional que pe
 
 ### Cambios extra:
 - Partida iniciada: Nos habiamos dado cuenta de que al salir y entrar de la partida, al usuario se le reiniciaba el tablero y no recibía el estado de la partida correctamente reiniciando de cero una partida ya en curso. Ahora al entrar en la partida de nuevo recibe el estado de la partida correctamente y no ve el tablero vacío.
-
-
+- Adicionalemnte aprovechando que hemos implementado las tiradas de dado desde el servidor ahora todos los dados de la partida muestran la tirada realizada por el servidor con el dado animado, esta implementación se ha hecho a última hora con lo cual el código puede ser un poco crudo.
