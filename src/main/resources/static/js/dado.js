@@ -5,7 +5,7 @@ class Dado {
         this.dadoElement = document.createElement('div');
         this.dadoElement.id = 'dado';
         this.dadoElement.className = 'dado';
-        document.body.appendChild(this.dadoElement);
+      //  document.body.appendChild(this.dadoElement);
         console.log(`Dado creado el contenedor desde dado.js`);
 
         this.crearCaras(); // Crear las caras del dado
@@ -95,6 +95,11 @@ class Dado {
         };
 
         const transformacion = rotaciones[this.valor] || "rotateX(0deg) rotateY(0deg)";
+        if (this.animando) {
+            this.dadoElement.style.transition = "transform 0.15s";
+        } else {
+            this.dadoElement.style.transition = "";
+        }
         this.dadoElement.style.transform = transformacion;
     }
 
@@ -104,5 +109,30 @@ class Dado {
 
     getElemento() {
         return this.dadoElement;
+    }
+
+  lanzarAnimacion(valorFinal) {
+        this.animando = true;
+        this.dadoElement.style.pointerEvents = 'none';
+
+        let giros = 7;
+        const animar = () => {
+            if (giros > 0) {
+                const random = Math.floor(Math.random() * 6) + 1;
+                this.valor = random;
+                this.actualizarAnimacion();
+                giros--;
+                setTimeout(animar, 80); // un poco más lento para que se vea
+            } else {
+                // Muestra la cara real con transición
+                setTimeout(() => {
+                    this.valor = valorFinal;
+                    this.actualizarAnimacion();
+                    this.animando = false;
+                    this.dadoElement.style.pointerEvents = 'auto';
+                }, 120);
+            }
+        };
+        animar();
     }
 }

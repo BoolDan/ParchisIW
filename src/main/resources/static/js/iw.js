@@ -16,6 +16,19 @@ const ws = {
     receive: (text) => {
         
         console.log(text);
+        
+        //no estoy segura de que esto este bien en esta zona pero no se me ocurre otro sitio 
+        //por que si no no se conseguia los datos del dado 
+        if (text.valor !== undefined) {
+            dado.lanzarAnimacion(text.valor);
+            if (typeof esMiTurno === "function" && esMiTurno()) {
+                dado.valor = text.valor;
+                dadoLanzado = true;
+                habilitarFichasClicables(dado.valor, jugadores[jugadorActual]);
+            }
+            return;
+        }
+
         let p = document.querySelector("#nav-unread");
         if (p) {
             p.textContent = +p.textContent + 1;
@@ -215,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (config.gameId) {
             subs.push(`/topic/lobby/${config.gameId}`);
             subs.push(`/topic/game/${config.gameId}`);
+            subs.push(`/topic/partida/${config.gameId}`);
         }
         ws.initialize(config.socketUrl, subs);
 

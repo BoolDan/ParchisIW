@@ -62,6 +62,24 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(err => {
         console.error("Error al cargar informacion de partida:", err);
     });
+    //pongo el set time out para q se suscriba bien y asegurar que el stompclient esta conectado
+     setTimeout(() => {
+        if (ws.stompClient && config.gameId) {
+            ws.stompClient.subscribe(`/topic/partida/${config.gameId}`, (msg) => {
+            const data = JSON.parse(msg.body);
+            if (data.tipo === "dado" || data.valor !== undefined) {
+                console.log("valor dado en eventlistener", data.valor);
+                dado.lanzarAnimacion(data.valor); // animar dado para todos
+                if (esMiTurno()) {
+                    dado.valor = data.valor;
+                    dadoLanzado = true; // Solo aquí marcas el dado como lanzado
+                    habilitarFichasClicables(dado.valor, jugadores[jugadorActual]);
+                }
+            }
+        });
+            console.log("Suscrito a /topic/partida/" + config.gameId);
+        }
+    }, 500);
     
 
 });
@@ -471,35 +489,25 @@ function iniciarTurno(jugador) {
 function lanzarDadoApi(dado) {
     const dadoElement = dado.getElemento();
     dadoElement.addEventListener('click', async () => {
+        if (!esMiTurno()) {
+            mostrarAlertaNoTurno();
+            return;
+        }
+        if (dadoLanzado) {
+            console.log("El dado ya ha sido lanzado");
+            return;
+        }
+        if (dado.animando) {
+            return;
+        }
+        // Aquí haces el fetch al backend
         fetch(`/api/dado/${config.gameId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 [csrfHeader]: csrfToken
             }
-        })
-        .then(data => {
-            console.log("JSON del dado: ", data);
-            
-        })
-        .catch(err => console.error("Error al obtener valor del dado", err));
-        
-        if (!esMiTurno()) {
-            mostrarAlertaNoTurno();
-            return;
-        }
-
-        if (dadoLanzado) {
-            console.log("El dado ya ha sido lanzado");
-            return; // Evitar lanzar el dado varias veces
-        }
-
-        if (!dado.animando) {
-            dadoLanzado = true;
-            const valor = await dado.lanzar();
-            console.log("Dado lanzado con valor:", dado.valor);
-            habilitarFichasClicables(dado.valor, jugadores[jugadorActual]); // Manejar el click de las fichas posibles
-        }
+        });
     });
 }
 
